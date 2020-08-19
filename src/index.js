@@ -1,29 +1,17 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { Route, BrowserRouter, useHistory } from "react-router-dom";
-
-
-import PG_Mock from "./pages/PG_Mock";
-import PG_Login from "./pages/PG_Login";
-const rootEl = document.getElementById("root");
-
-function App() {
-  const history = useHistory();
-
-  return (
-    <BrowserRouter>
-      <Route path="/" exact component={() => <PG_Mock text={`Home page`} />} />
-      <Route path="/login" exact component={PG_Login} />
-      {/* <Route component={PanelLogin} path="/login" exact /> */}
-    </BrowserRouter>
-  );
-}
-
-
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,
-  rootEl
+  document.getElementById('root')
 );
+
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://bit.ly/CRA-PWA
+serviceWorker.unregister();
