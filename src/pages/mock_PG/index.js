@@ -3,7 +3,7 @@ import { useHistory, Link } from "react-router-dom";
 
 import "./style.scss";
 
-const mock_PG = (props) => {
+const Mock_PG = (props) => {
   return (
     <>
       <header>
@@ -19,4 +19,4 @@ const mock_PG = (props) => {
   );
 };
 
-export default mock_PG;
+export default Mock_PG;
