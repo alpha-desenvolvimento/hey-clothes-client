@@ -1,7 +1,7 @@
 import React from "react";
 import { useHistory, Link } from "react-router-dom";
 
-import apis from "./../../API";
+import apis from "../../API";
 // apis.heyClothesHeroku.Auth.user
 // apis.heyClothesHeroku.Auth.token
 // import "./style.scss";
