@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import apis from "./../../API";
+import apis from "../../API";
 
 const AuthForm_CMP = () => {
-  const [values, setValues] = useState({ pwd: null, user: null });
-  const [token, setToken] = useState(null);
+  const [values, setValues] = useState({ pwd: undefined, user: undefined });
+  const [token, setToken] = useState(undefined);
 
   function handleInputChange(event) {
     const { name, value } = event.target;
