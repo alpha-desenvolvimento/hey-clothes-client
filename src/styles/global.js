@@ -14,6 +14,7 @@ export default createGlobalStyle`
         box-sizing: border-box;
     }
     body {
+        min-height:100vh;
         -webkit-font-smoothing: antialiased !important;
     }
     body html #root {
