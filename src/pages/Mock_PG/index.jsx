@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useHistory, Link } from "react-router-dom";
+import { AuthContext } from "../../AuthContext";
 
 import "./style.scss";
 
 const Mock_PG = (props) => {
+  const { currentUser, setCurrentUser } = useContext(AuthContext);
+
   return (
     <>
       <header>
@@ -15,6 +18,9 @@ const Mock_PG = (props) => {
           <Link to="/">Home</Link>
         </li>
       </ul>
+      <button onClick={() => {console.log(currentUser)}}>Log current User</button>
+      <button onClick={() => {setCurrentUser({token: "token ai"})}}>set current User</button>
+      <button onClick={() => {setCurrentUser(null)}}>empty current User</button>
     </>
   );
 };

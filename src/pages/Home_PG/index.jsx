@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import AuthForm_CMP from "../../components/AuthForm_CMP";
+import LoginForm from "../../components/LoginForm_CMP";
 import "./style.scss";
 
 const Home_PG = () => {
@@ -19,7 +19,7 @@ const Home_PG = () => {
         <h1>Hey Clothes System</h1>
       </header>
       <div>
-        <AuthForm_CMP />
+        <LoginForm />
       </div>
     </>
   );
