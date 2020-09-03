@@ -8,33 +8,21 @@ const NavBar = () => {
     <Nav>
         <NavItemsWrapper>
             <NavItem>
-                <NavLink>
+                <NavLink to="/Home">
                     <FiHome />
                     <LinkText>INICIO</LinkText>
                 </NavLink>
             </NavItem>
             <NavItem>
-                <NavLink>
+                <NavLink to="/Mock">
                     <FiCoffee />
-                    <LinkText>LALALALA</LinkText>
+                    <LinkText>Mock</LinkText>
                 </NavLink>
             </NavItem>
             <NavItem>
-                <NavLink>
+                <NavLink to="/">
                     <FiCoffee />
-                    <LinkText>LALALALA</LinkText>
-                </NavLink>
-            </NavItem>
-            <NavItem>
-                <NavLink>
-                    <FiCoffee />
-                    <LinkText>LALALALA</LinkText>
-                </NavLink>
-            </NavItem>
-            <NavItem>
-                <NavLink>
-                    <FiCoffee />
-                    <LinkText>LALALALA</LinkText>
+                    <LinkText>/</LinkText>
                 </NavLink>
             </NavItem>
         </NavItemsWrapper>

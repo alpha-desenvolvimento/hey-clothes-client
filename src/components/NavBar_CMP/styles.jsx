@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { mediaQuery } from '../../styles/global'
+import { NavLink as RouterLink } from 'react-router-dom'
 
 export const LinkText = styled.span`
     font-size: 1.6rem;
@@ -55,7 +56,7 @@ export const NavItem = styled.li`
     }
 `
 
-export const NavLink = styled.a`
+export const NavLink = styled(RouterLink)`
   cursor: pointer;
   display: inline-flex;
   position: relative;
