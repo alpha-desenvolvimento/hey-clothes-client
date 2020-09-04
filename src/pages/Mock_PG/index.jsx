@@ -1,26 +1,19 @@
 import React, { useContext } from "react";
-import { useHistory, Link } from "react-router-dom";
 import { AuthContext } from "../../AuthContext";
 
-import "./style.scss";
+import NavBar, { Main } from '../../components/NavBar_CMP'
 
-const Mock_PG = (props) => {
+const Mock_PG = () => {
   const { currentUser, setCurrentUser } = useContext(AuthContext);
 
   return (
     <>
-      <header>
-        <h1>Mock page</h1>
-        <h3>{props.text}</h3>
-      </header>
-      <ul>
-        <li>
-          <Link to="/">Home</Link>
-        </li>
-      </ul>
-      <button onClick={() => {console.log(currentUser)}}>Log current User</button>
-      <button onClick={() => {setCurrentUser({token: "token ai"})}}>set current User</button>
-      <button onClick={() => {setCurrentUser(null)}}>empty current User</button>
+      <NavBar />
+      <Main>
+        <button onClick={() => {console.log(currentUser)}}>Log current User</button>
+        <button onClick={() => {setCurrentUser({token: "token ai"})}}>set current User</button>
+        <button onClick={() => {setCurrentUser(null)}}>empty current User</button>
+      </Main>
     </>
   );
 };
