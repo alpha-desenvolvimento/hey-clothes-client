@@ -11,9 +11,7 @@ const ProductForm = ({ prodId, ...rest }) => {
   const [currentProduct, setCurrentProduct] = useState(null);
 
   useEffect(() => {
-    console.log(prodId);
     setCurrentProduct(produtos[prodId]);
-    console.log("currentProduct", currentProduct);
   });
 
   function sucessLoad() {
