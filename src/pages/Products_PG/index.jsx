@@ -3,9 +3,7 @@ import React from 'react';
 import NavBar, { Main } from '../../components/NavBar_CMP'
 import CardContainer from '../../components/CardContainer_CMP'
 import Card from '../../components/ProductCard_CMP'
-import Drawer from '../../components/Drawer_CMP'
-
-import useDrawerUtils from '../../hooks/useDrawerUtils'
+import Drawer, { useDrawerUtils } from '../../components/Drawer_CMP'
 
 const Products_PG = () => {
     const [isOpen, hideDrawer, openDrawer] = useDrawerUtils();
