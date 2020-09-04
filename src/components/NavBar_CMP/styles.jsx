@@ -81,3 +81,7 @@ export const NavLink = styled(RouterLink)`
     margin: 0 0 0 2rem;
   }
 `
+export const Main = styled.main`
+    /* Este componente é um Wrapper que considera a largura da NavBar e deve ser usado sempre que a Nav for usada */
+    margin-left: 8rem;
+`

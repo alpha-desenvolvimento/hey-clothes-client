@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { FiCoffee, FiHome } from "react-icons/fi";
-import { NavBar as Nav, NavItemsWrapper, NavItem, NavLink, LinkText} from './styles';
+import { NavBar as Nav, NavItemsWrapper, NavItem, NavLink, LinkText, Main} from './styles';
 
 const NavBar = () => {
     return(
@@ -20,6 +20,12 @@ const NavBar = () => {
                 </NavLink>
             </NavItem>
             <NavItem>
+                <NavLink to="/Products">
+                    <FiCoffee />
+                    <LinkText>Products</LinkText>
+                </NavLink>
+            </NavItem>
+            <NavItem>
                 <NavLink to="/">
                     <FiCoffee />
                     <LinkText>/</LinkText>
@@ -31,3 +37,4 @@ const NavBar = () => {
 }
 
 export default NavBar
+export { Main }
