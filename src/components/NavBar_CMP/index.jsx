@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { FiCoffee, FiHome } from "react-icons/fi";
+import { FiCoffee, FiHome, FiSettings } from "react-icons/fi";
 import { NavBar as Nav, NavItemsWrapper, NavItem, NavLink, LinkText, Main} from './styles';
 
 const NavBar = () => {
@@ -27,7 +27,7 @@ const NavBar = () => {
             </NavItem>
             <NavItem>
                 <NavLink to="/">
-                    <FiCoffee />
+                    <FiSettings />
                     <LinkText>/</LinkText>
                 </NavLink>
             </NavItem>
