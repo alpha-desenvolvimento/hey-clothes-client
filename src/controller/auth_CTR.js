@@ -30,11 +30,6 @@ async function token(token) {
 function logoff() {
   window.localStorage.removeItem("section");
   window.location.reload(false);
-  
-  // setCurrentUser(null);
-
-
-  // return ;
 }
 
 export default { user, token, logoff };

@@ -1,3 +1,7 @@
+/**@deprecate 
+ * CUIDADO AO UTILIZAR, DESENVOLVIMENTO INCOMPLETO!!!!!
+*/
+
 import React from "react";
 import ReactDOM from "react-dom";
 

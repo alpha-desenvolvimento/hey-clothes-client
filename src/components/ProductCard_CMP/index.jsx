@@ -8,14 +8,10 @@ import {
   PriceText,
 } from "./styles";
 
-const ProductCard = ({ product, openDrawer, setCurrentProduct, ...rest }) => {
-  const OpenDrawerWithCurrentProduct = () => {
-    setCurrentProduct(product);
-    openDrawer();
-  };
+const ProductCard = ({ product, openDrawer, ...rest }) => {
 
   return (
-    <CardWrapper onClick={OpenDrawerWithCurrentProduct}>
+    <CardWrapper {...rest}>
       <CardImage src={product.photo} />
       <CardDescription>
         <NameText>{product.name}</NameText>

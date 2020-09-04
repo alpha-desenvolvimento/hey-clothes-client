@@ -20,7 +20,7 @@ export const DrawerBody = styled.div`
     top: 0;
     z-index: 1100;
 
-
+    overflow-y: auto;
     width: 80%;
     height:100%;
     background: #c4c4c4;

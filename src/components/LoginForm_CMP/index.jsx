@@ -18,6 +18,7 @@ const Login = ({ history }) => {
     event.preventDefault();
 
     setCurrentUser(null);
+    window.localStorage.setItem("section", null);
 
     await AuthCTR.user({ ...userValues }).then((resp) => {
       if (resp.status == "success") setCurrentUser({ ...resp });
@@ -36,7 +37,7 @@ const Login = ({ history }) => {
     setValues(nValue);
   }
 
-  if (currentUser) return <Redirect to="/Products" />;
+  if (currentUser) return <Redirect to="/p" />;
 
   return (
     <Wrapper>

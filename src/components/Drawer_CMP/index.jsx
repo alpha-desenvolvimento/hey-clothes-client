@@ -1,37 +1,40 @@
-import React from 'react';
+import React from "react";
 import ReactDOM from "react-dom";
+import { Link } from "react-router-dom";
 
-import { Overlay, DrawerBody } from './styles'; 
+import { Overlay, DrawerBody } from "./styles";
 
-const Drawer = ({ isOpen, hide, children }) => {
-    return(
-        isOpen ? ReactDOM.createPortal(
-            <>
-                <Overlay onClick={hide} />
-                <DrawerBody>
-                    {children}
-                </DrawerBody>
-            </>,
-            document.body
-        ): null
-    )
-}
+const Drawer = ({ isOpen, hide, children, closeUrl }) => {
+  return isOpen
+    ? ReactDOM.createPortal(
+        <>
+          <Link to={closeUrl}>
+            <Overlay onClick={hide} />
+          </Link>
+          <DrawerBody>{children}</DrawerBody>
+        </>,
+        document.body
+      )
+    : null;
+};
 
 export default Drawer;
 
 export const useDrawerUtils = () => {
-    const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = React.useState(false);
 
-    const hideDrawer = () => {
-        setIsOpen(false)
-    }
+  const hideDrawer = () => {
+    document.querySelector("body").classList.remove("no-scoll");
+    setIsOpen(false);
+  };
 
-    const openDrawer = () =>{
-        setIsOpen(true);
-    }
+  const openDrawer = () => {
+    document.querySelector("body").classList.add("no-scoll");
+    setIsOpen(true);
+  };
 
-    return [isOpen, hideDrawer, openDrawer];
-}
+  return [isOpen, hideDrawer, openDrawer];
+};
 
 /*
 @author Igor Bedesqui

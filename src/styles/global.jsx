@@ -7,6 +7,9 @@ export const mediaQuery = breakpoints.map(
 );
 
 export default createGlobalStyle`
+    .no-scoll{
+        overflow-y: hidden !important;
+    }
     * {
         margin: 0;
         padding: 0;
