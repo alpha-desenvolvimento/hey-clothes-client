@@ -1,40 +1,60 @@
-import React from 'react';
+import React from "react";
 
-import { FiCoffee, FiHome, FiSettings } from "react-icons/fi";
-import { NavBar as Nav, NavItemsWrapper, NavItem, NavLink, LinkText, Main} from './styles';
+import {
+  FiCoffee,
+  FiHome,
+  FiLogOut,
+  FiShoppingCart,
+  FiUser,
+  FiSettings,
+} from "react-icons/fi";
+
+import {
+  NavBar as Nav,
+  NavItemsWrapper,
+  NavItem,
+  NavLink,
+  LinkText,
+  Main,
+} from "./styles";
+
+import Auth from "../../controller/auth_CTR";
 
 const NavBar = () => {
-    return(
+  return (
     <Nav>
-        <NavItemsWrapper>
-            <NavItem>
-                <NavLink to="/Home">
-                    <FiHome />
-                    <LinkText>INICIO</LinkText>
-                </NavLink>
-            </NavItem>
-            <NavItem>
-                <NavLink to="/Mock">
-                    <FiCoffee />
-                    <LinkText>Mock</LinkText>
-                </NavLink>
-            </NavItem>
-            <NavItem>
-                <NavLink to="/Products">
-                    <FiCoffee />
-                    <LinkText>Products</LinkText>
-                </NavLink>
-            </NavItem>
-            <NavItem>
-                <NavLink to="/">
-                    <FiSettings />
-                    <LinkText>/</LinkText>
-                </NavLink>
-            </NavItem>
-        </NavItemsWrapper>
-    </Nav>
-    )
-}
+      <NavItemsWrapper>
+        <NavItem>
+          <NavLink to="/p">
+            <FiShoppingCart />
+            <LinkText>Products</LinkText>
+          </NavLink>
+        </NavItem>
 
-export default NavBar
-export { Main }
+        <NavItem>
+          <NavLink to="/p">
+            <FiUser />
+            <LinkText>Users</LinkText>
+          </NavLink>
+        </NavItem>
+
+        <NavItem>
+          <NavLink to="/p">
+            <FiSettings />
+            <LinkText>Config</LinkText>
+          </NavLink>
+        </NavItem>
+
+        <NavItem>
+          <NavLink onClick={Auth.logoff} to="/">
+            <FiLogOut />
+            <LinkText>Logoff</LinkText>
+          </NavLink>
+        </NavItem>
+      </NavItemsWrapper>
+    </Nav>
+  );
+};
+
+export default NavBar;
+export { Main };
