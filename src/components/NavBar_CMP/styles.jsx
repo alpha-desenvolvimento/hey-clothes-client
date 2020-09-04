@@ -83,8 +83,12 @@ export const NavLink = styled(RouterLink)`
   }
 `
 export const Main = styled.main`
-    /* Este componente é um Wrapper que considera a largura da NavBar e deve ser usado sempre que a Nav for usada */
+    /* Este componente é um Wrapper que considera a largura e altura da NavBar e deve ser usado sempre que a Nav for usada */
+    min-height: 100vh;
+    padding: 1rem;
+    margin-bottom: 8rem;
     ${mediaQuery[0]}{
         margin-left: 8rem;
+        margin-bottom: 0;
     }  
 `
