@@ -1,60 +1,78 @@
-import React, { useCallback, useContext } from "react";
+import React, { useCallback, useContext, useState, useEffect } from "react";
 import { withRouter, Redirect } from "react-router";
 
 import { AuthContext } from "../../AuthContext";
-import Button from '../Button_CMP'
-import {
-    Heading,
-    FormWrapper,
-    Input,
-    Label,
-    Wrapper
-} from './styles'
+import Button from "../Button_CMP";
+import { Heading, FormWrapper, Input, Label, Wrapper } from "./styles";
 
+import AuthCTR from "../../controller/auth_CTR";
+
+import ModalMessage, { useModalUtils } from "../ModalMessage_CMP";
 
 const Login = ({ history }) => {
-    const handleLogin = useCallback(
-      async (event) => {
-        event.preventDefault();
-        const { email, password } = event.target.elements;
-        try {
-          //Aqui vai a lógica de autenticação, exemplo:
-          //await app.auth().signInWithEmailAndPassword(email.value, password.value);
-          setCurrentUser({
-            token: "tokenaleatorio"
-          })
-          history.push("/"); //push redireciona pra alguma rota caso a autenticação funcione
-        } catch (error) {
-          alert(error);
-        }
-      },
-      [history]
-    );
-  
-    const { currentUser, setCurrentUser } = useContext(AuthContext);
-  
-    if (currentUser) {
-      return <Redirect to="/Mock" />;
-    }
-  
-    return (
-      <Wrapper>
-        <FormWrapper>
-          <Heading>Log in</Heading>
-          <form onSubmit={handleLogin}>
-            <Label> Email </Label>
-            <Input name="email" type="email" placeholder="Email" />
-            <Label> Password </Label>
-            <Input name="password" type="password" placeholder="Password" />
-            <Button
-              primary
-              type="submit"
-            > Entrar </Button>
-          </form>
-          <Button onClick={() => {console.log(currentUser)}}>Log current User</Button>
-        </FormWrapper>
-      </Wrapper>
-    );
-  };
-  
-  export default withRouter(Login);
+  const { currentUser, setCurrentUser } = useContext(AuthContext);
+  const { errorText, setErrorText } = useState("");
+  const [userValues, setValues] = useState({ pwd: undefined, user: undefined });
+
+  const handleLogin = useCallback(async (event, setErrorText) => {
+    event.preventDefault();
+
+    setCurrentUser(null);
+
+    await AuthCTR.user({ ...userValues }).then((resp) => {
+      if (resp.status == "success") setCurrentUser({ ...resp });
+      else {
+        // setErrorText(resp.error);
+      }
+    });
+  }, []);
+
+  function handleInputChange(event) {
+    const { name, value } = event.target;
+
+    let nValue = userValues;
+    nValue[name] = value;
+
+    setValues(nValue);
+  }
+
+  if (currentUser) return <Redirect to="/Products" />;
+
+  return (
+    <Wrapper>
+      <FormWrapper>
+        <Heading>Log in</Heading>
+        <form onSubmit={handleLogin}>
+          <Label> Email </Label>
+          <Input
+            name="user"
+            type="email"
+            value={userValues.user}
+            placeholder="meu@email.com"
+            onInput={handleInputChange}
+          />
+          <Label> Password </Label>
+          <Input
+            name="pwd"
+            type="password"
+            value={userValues.pwd}
+            placeholder="Password"
+            onInput={handleInputChange}
+          />
+          <div>{errorText}</div>
+          <Button primary type="submit">
+            Entrar
+          </Button>
+        </form>
+      </FormWrapper>
+    </Wrapper>
+  );
+};
+
+export default withRouter(Login);
+
+{
+  /*  */
+}
+
+// <button onClick={openDrawer}>Drawer</button>
