@@ -10,6 +10,7 @@ export const LinkText = styled.span`
 
 export const NavBar = styled.nav`
     position: fixed;
+    z-index: 1000;
     bottom: 0;
     width: 100vw;
     height: 8rem;
@@ -83,5 +84,7 @@ export const NavLink = styled(RouterLink)`
 `
 export const Main = styled.main`
     /* Este componente é um Wrapper que considera a largura da NavBar e deve ser usado sempre que a Nav for usada */
-    margin-left: 8rem;
+    ${mediaQuery[0]}{
+        margin-left: 8rem;
+    }  
 `
