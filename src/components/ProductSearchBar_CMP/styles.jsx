@@ -17,6 +17,7 @@ export const MainContainer = styled.form`
   right: 0;
   background-color: rgb(255 255 255 / 0.7);
   padding: 3vh 10vw;
+  height: 10rem;
 `;
 
 export const SearchInputContainer = styled.div`

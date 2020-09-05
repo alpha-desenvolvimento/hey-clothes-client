@@ -12,7 +12,7 @@ import {
 
 import HerokuServer from "../../API/HerokuServer";
 
-import { Produtos as produtos } from "../../pages/Products_PG/dbProd";
+// import { Produtos as produtos } from "../../pages/Products_PG/dbProd";
 
 const ProductForm = ({ prodId, isCreate, ...rest }) => {
   const { register, handleSubmit, errors } = useForm();

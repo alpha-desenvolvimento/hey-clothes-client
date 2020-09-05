@@ -8,7 +8,7 @@ import ProductForm from "../../components/ProductForm_CMP";
 import ProductCreateButton from "../../components/ProductCreateButton_CMP";
 import ProductSearchBar from "../../components/ProductSearchBar_CMP";
 
-import { Produtos as data } from "./mockData";
+// import { Produtos as data } from "./mockData";
 
 import { useParams, useHistory } from "react-router-dom";
 
@@ -83,6 +83,7 @@ const Products_PG = () => {
       <Main>
         <ProductSearchBar />
         <ProductCreateButton />
+        <div style={{ paddingTop: "10rem" }}></div>
         {products ? (
           <CardContainer>
             {products.map((product) => (

@@ -5,6 +5,7 @@ export const CardWrapper = styled.div`
     flex-direction: column;
 
     width: 100%;
+    max-width: 26rem;
     margin: 1rem auto;
     border: 0;
     border-radius: 1rem;
