@@ -1,30 +1,30 @@
-import React, { useCallback, useContext, useState, useEffect } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import { withRouter, Redirect } from "react-router";
 
 import { AuthContext } from "../../AuthContext";
 import Button from "../Button_CMP";
-import { Heading, FormWrapper, Input, Label, Wrapper } from "./styles";
+import { Heading, FormWrapper, Input, Label, Wrapper, Error } from "./styles";
 
 // import AuthCTR from "../../controller/auth_CTR";
-import HerokuServer from '../../API/HerokuServer'
+import HerokuServer from "../../API/HerokuServer";
 
 const Login = ({ history }) => {
   const { currentUser, setCurrentUser } = useContext(AuthContext);
-  const { errorText, setErrorText } = useState("");
   const [userValues, setValues] = useState({ pwd: undefined, user: undefined });
 
-  const handleLogin = useCallback(async (event, setErrorText) => {
+  const handleLogin = useCallback(async (event) => {
     event.preventDefault();
-
-    setCurrentUser(null);
     window.localStorage.setItem("section", null);
-
-    await HerokuServer.Auth.user({ ...userValues }).then((resp) => {
-      if (resp.status == "success") setCurrentUser({ ...resp });
-      else {
-        // setErrorText(resp.error);
-      }
-    });
+    const { user, pwd } = userValues;
+    setCurrentUser(null);
+    if (!user) {
+    }
+    if (!pwd) {
+    } else {
+      await HerokuServer.Auth.user({ user, pwd }).then((resp) => {
+        if (resp.status == "success") setCurrentUser({ ...resp });
+      });
+    }
   }, []);
 
   function handleInputChange(event) {
@@ -59,8 +59,11 @@ const Login = ({ history }) => {
             placeholder="Password"
             onInput={handleInputChange}
           />
-          <div>{errorText}</div>
-          <Button primary type="submit">
+          <Button
+            primary
+            type="submit"
+            style={{ margin: "5rem auto 2rem", display: "block" }}
+          >
             Entrar
           </Button>
         </form>
@@ -70,9 +73,3 @@ const Login = ({ history }) => {
 };
 
 export default withRouter(Login);
-
-{
-  /*  */
-}
-
-// <button onClick={openDrawer}>Drawer</button>
