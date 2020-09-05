@@ -6,6 +6,7 @@ import Card from "../../components/ProductCard_CMP";
 import Drawer, { useDrawerUtils } from "../../components/Drawer_CMP";
 import ProductForm from "../../components/ProductForm_CMP";
 import ProductCreateButton from "../../components/ProductCreateButton_CMP";
+import ProductSearchBar from "../../components/ProductSearchBar_CMP";
 
 import { Produtos as data } from "./mockData";
 
@@ -15,7 +16,8 @@ import HerokuServer from "../../API/HerokuServer";
 
 const Products_PG = () => {
   const [isOpen, hideDrawer, openDrawer] = useDrawerUtils();
-  const [products, setProducts] = useState(null);
+  const [products, setProducts] = useState([]);
+  const [actionExecuted, setActionExecuted] = useState(false);
 
   const [isCreate, setIsCreate] = useState(false);
 
@@ -24,22 +26,42 @@ const Products_PG = () => {
   const [prodID, setProdID] = useState(useParams().id);
 
   useEffect(() => {
-    setProducts(data);
+    // window.location.reload(false);
 
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const action = urlParams.get("action");
 
-    console.log("action", action);
     if (prodID) {
       openDrawer();
-    } else {
+    } else if (!actionExecuted) {
+      setActionExecuted(true);
+
       switch (action) {
         case "create":
-          console.log("is create!");
           setIsCreate(true);
           openDrawer();
+          setActionExecuted(false);
+
           break;
+        case "search":
+          const name = urlParams.get("name");
+
+          const params = {
+            name: name || "",
+          };
+
+          HerokuServer.Product.list({ ...params }).then((resp) => {
+            console.log("resp", resp);
+            setProducts(resp);
+          });
+
+          break;
+        default:
+          HerokuServer.Product.list().then((resp) => {
+            console.log("resp", resp);
+            setProducts(resp);
+          });
       }
     }
   });
@@ -50,7 +72,6 @@ const Products_PG = () => {
   };
 
   function handleProduct(openProdId) {
-    // if (prodID) openDrawer();
     setProdID(openProdId);
     history.push(`/p/${openProdId}`);
     openDrawer();
@@ -60,10 +81,8 @@ const Products_PG = () => {
     <>
       <NavBar />
       <Main>
+        <ProductSearchBar />
         <ProductCreateButton />
-        <div style={{ margin: "4rem auto" }}>
-          <h1 style={{ width: "100%", textAlign: "center" }}>PESQUISA</h1>
-        </div>
         {products ? (
           <CardContainer>
             {products.map((product) => (

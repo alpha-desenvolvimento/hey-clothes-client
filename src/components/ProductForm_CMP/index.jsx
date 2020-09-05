@@ -20,11 +20,9 @@ const ProductForm = ({ prodId, isCreate, ...rest }) => {
   const [currentProduct, setCurrentProduct] = useState(null);
 
   useEffect(() => {
-    if (isCreate) {
-      setCurrentProduct(HerokuServer.Product.mockProd);
-    } else {
-      setCurrentProduct(produtos[prodId]);
-    }
+    if (isCreate) setCurrentProduct(HerokuServer.Product.mockProd);
+    else
+      HerokuServer.Product.get(prodId).then((resp) => setCurrentProduct(resp));
   });
 
   function sucessLoad() {
