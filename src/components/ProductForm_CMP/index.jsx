@@ -1,17 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
-import { Form, Input, Label, ErrorText, PhotoContainer,ProductPhoto } from "./styles";
+import {
+  Form,
+  Input,
+  Label,
+  ErrorText,
+  PhotoContainer,
+  ProductPhoto,
+} from "./styles";
+
+import HerokuServer from "../../API/HerokuServer";
 
 import { Produtos as produtos } from "../../pages/Products_PG/dbProd";
 
-const ProductForm = ({ prodId, ...rest }) => {
+const ProductForm = ({ prodId, isCreate, ...rest }) => {
   const { register, handleSubmit, errors } = useForm();
   const onSubmit = (data) => console.log(data);
   const [currentProduct, setCurrentProduct] = useState(null);
 
   useEffect(() => {
-    setCurrentProduct(produtos[prodId]);
+    if (isCreate) {
+      setCurrentProduct(HerokuServer.Product.mockProd);
+    } else {
+      setCurrentProduct(produtos[prodId]);
+    }
   });
 
   function sucessLoad() {
@@ -42,9 +55,10 @@ const ProductForm = ({ prodId, ...rest }) => {
 
           <Label htmlFor="productPhoto">Link da Foto do Produto</Label>
           <PhotoContainer>
-            {currentProduct.pictures.map((picture, index) => (
-              <ProductPhoto key={index} src={picture} />
-            ))}
+            {currentProduct.length > 0 &&
+              currentProduct.pictures.map((picture, index) => (
+                <ProductPhoto key={index} src={picture} />
+              ))}
           </PhotoContainer>
           {/* <Input
             name="productPhoto"
