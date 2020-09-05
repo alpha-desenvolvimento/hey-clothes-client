@@ -18,7 +18,8 @@ import {
   Main,
 } from "./styles";
 
-import Auth from "../../controller/auth_CTR";
+// import Auth from "../../controller/auth_CTR";
+import HerokuServer from "../../API/HerokuServer";
 
 const NavBar = () => {
   return (
@@ -46,7 +47,7 @@ const NavBar = () => {
         </NavItem>
 
         <NavItem>
-          <NavLink onClick={Auth.logoff} to="/">
+          <NavLink onClick={HerokuServer.Auth.logoff} to="/">
             <FiLogOut />
             <LinkText>Logoff</LinkText>
           </NavLink>
