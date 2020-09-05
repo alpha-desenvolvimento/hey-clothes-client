@@ -33,14 +33,14 @@ const NavBar = () => {
         </NavItem>
 
         <NavItem>
-          <NavLink to="/p">
+          <NavLink to="/u">
             <FiUser />
             <LinkText>Users</LinkText>
           </NavLink>
         </NavItem>
 
         <NavItem>
-          <NavLink to="/p">
+          <NavLink to="/">
             <FiSettings />
             <LinkText>Config</LinkText>
           </NavLink>
