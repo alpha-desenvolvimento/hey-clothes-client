@@ -5,9 +5,8 @@ import { AuthContext } from "../../AuthContext";
 import Button from "../Button_CMP";
 import { Heading, FormWrapper, Input, Label, Wrapper } from "./styles";
 
-import AuthCTR from "../../controller/auth_CTR";
-
-import ModalMessage, { useModalUtils } from "../ModalMessage_CMP";
+// import AuthCTR from "../../controller/auth_CTR";
+import HerokuServer from '../../API/HerokuServer'
 
 const Login = ({ history }) => {
   const { currentUser, setCurrentUser } = useContext(AuthContext);
@@ -20,7 +19,7 @@ const Login = ({ history }) => {
     setCurrentUser(null);
     window.localStorage.setItem("section", null);
 
-    await AuthCTR.user({ ...userValues }).then((resp) => {
+    await HerokuServer.Auth.user({ ...userValues }).then((resp) => {
       if (resp.status == "success") setCurrentUser({ ...resp });
       else {
         // setErrorText(resp.error);
