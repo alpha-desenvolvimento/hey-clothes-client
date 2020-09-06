@@ -1,18 +1,22 @@
-// import React, { useContext } from "react";
-// import { Redirect } from "react-router-dom";
-
 import { users } from "./database";
 
 const mockUser = {
   id: null,
   email: "",
   password: "",
-  nome: "Cadastrar usuário",
+  name: "Cadastrar usuário",
 };
 
 export default class User {
   static async list() {
     return users;
+  }
+  static async get(args = { id: null }) {
+    const { id } = args;
+
+    for (const user of users) if (user.id == id) return user;
+    
+    return null;
   }
 
   static mockUser = mockUser;

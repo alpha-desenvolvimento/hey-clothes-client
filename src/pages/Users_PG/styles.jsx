@@ -17,8 +17,17 @@ export const Table = styled.table`
     }
 
     td {
+      position: relative;
+
       border-bottom: 1px solid rgb(0 0 0 / 0.3);
       padding: 0.5rem 1rem 0.3rem;
+
+      .icon {
+        position: absolute;
+        right: 0.3rem;
+        top: 1rem;
+        cursor: pointer;
+      }
     }
   }
   tr th {

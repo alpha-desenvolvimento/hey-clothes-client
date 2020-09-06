@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
-import { Form } from "./styles";
+import { Form, Input, Label } from "./styles";
 
 import HerokuServer from "../../API/HerokuServer";
 
@@ -11,9 +11,15 @@ const UserForm = ({ userID, isCreate, ...rest }) => {
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
-    if (isCreate) currentUser(HerokuServer.User.mockUser);
-    // else
-    //   HerokuServer.Product.get(userID).then((resp) => setCurrentProduct(resp));
+    console.log(userID)
+
+    if (isCreate) setCurrentUser(HerokuServer.User.mockUser);
+    else
+      HerokuServer.User.get({ id: userID }).then((resp) =>
+        setCurrentUser(resp)
+      );
+
+    console.log(currentUser);
   });
 
   function sucessLoad() {
@@ -24,32 +30,37 @@ const UserForm = ({ userID, isCreate, ...rest }) => {
           <br />
           <br />
           <br />
-          {/* <Label htmlFor="productName">Nome do Produto</Label> */}
-          {/* <Input
-            name="productName"
-            defaultValue={currentProduct.name}
+          <Label htmlFor="userName">Nome</Label>
+          <Input
+            name="userName"
+            defaultValue={isCreate ? "" : currentUser.name}
             ref={register({ required: true })}
-          /> */}
+          />
           {/* {errors.productName && <ErrorText>Este campo é necessário</ErrorText>} */}
-          {/* <Label htmlFor="productPrice">Preço do Produto</Label> */}
-          {/* <Input
-            name="productPrice"
-            defaultValue={currentProduct.price}
-            ref={register({ required: true, min: 0.01 })}
-          /> */}
+          <Label htmlFor="userEmail">E-mail</Label>
+          <Input
+            name="userEmail"
+            defaultValue={currentUser.email}
+            ref={register({ required: true })}
+          />
 
-          {/* {errors.productPrice && (
-            <ErrorText>Este campo é necessário</ErrorText>
-          )} */}
+          <Label htmlFor="password1">Senha</Label>
+          <Input
+            name="password1"
+            type="password"
+            // defaultValue={currentUser.password}
+            ref={register({ required: true })}
+          />
 
-          {/* <Label htmlFor="productPhoto">Link da Foto do Produto</Label> */}
-          {/* <PhotoContainer>
-            {currentProduct.length > 0 &&
-              currentProduct.pictures.map((picture, index) => (
-                <ProductPhoto key={index} src={picture} />
-              ))}
-          </PhotoContainer> */}
-          {/* <button type="submit">Salvar</button> */}
+          <Label htmlFor="password2">Confirme a senha</Label>
+          <Input
+            name="password2"
+            type="password"
+            // defaultValue={currentUser.email}
+            ref={register({ required: true })}
+          />
+
+          <button type="submit">Salvar</button>
         </Form>
       </>
     );

@@ -4,3 +4,10 @@ export const Form = styled.form`
   display: flex;
   flex-direction: column;
 `;
+
+export const Input = styled.input``;
+
+
+export const Label = styled.label`
+  font-size: 2.4rem;
+`;

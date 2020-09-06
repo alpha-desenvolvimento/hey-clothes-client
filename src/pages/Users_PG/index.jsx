@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from "react";
-
 import NavBar, { Main } from "../../components/NavBar_CMP";
-// import CardContainer from "../../components/CardContainer_CMP";
-// import Card from "../../components/ProductCard_CMP";
 import Drawer, { useDrawerUtils } from "../../components/Drawer_CMP";
-import UserForm from "../../components/UserForm_CMP";
-// import ProductCreateButton from "../../components/ProductCreateButton_CMP";
-// import ProductSearchBar from "../../components/ProductSearchBar_CMP";
-
 import { useParams, useHistory } from "react-router-dom";
+import { FiEdit } from "react-icons/fi";
 
 import HerokuServer from "../../API/HerokuServer";
+
+import UserForm from "../../components/UserForm_CMP";
+import CreateButton from "../../components/CreateButton_CMP";
 
 import { Table } from "./styles";
 
@@ -26,23 +23,27 @@ const Users_PG = () => {
 
   useEffect(() => {
     if (userID) {
-      //   openDrawer();
+      openDrawer();
     } else {
       const queryString = window.location.search;
       const urlParams = new URLSearchParams(queryString);
       const action = urlParams.get("action");
 
+      console.log(action);
+
+      // if (!actionExecuted)
       switch (action) {
-        //     case "create":
-        //       setIsCreate(true);
-        //       openDrawer();
-        //       setActionExecuted(false);
-        //       break;
-        //     case "search":
-        //       const name = urlParams.get("name");
-        //       const params = {
-        //         name: name || "",
-        //       };
+        case "create":
+          console.log("is create");
+          setIsCreate(true);
+          openDrawer();
+          break;
+        case "search":
+          const name = urlParams.get("name");
+          //       const params = {
+          //         name: name || "",
+          break;
+        // };
         //       HerokuServer.Product.list({ ...params }).then((resp) => {
         //         console.log("resp", resp);
         //         setProducts(resp);
@@ -56,24 +57,19 @@ const Users_PG = () => {
       }
     }
 
-    console.log(users);
   });
-
+  // console.log('history.location.pathname',history.location.pathname);
+  
   const hideAndClearCurrentProduct = () => {
     setUserID(null);
     hideDrawer();
   };
 
-  function handleUser(userId) {
-    setUserID(userId);
-    history.push(`/u/${userId}`);
-    openDrawer();
-  }
-
   return (
     <>
       <NavBar />
       <Main>
+        <CreateButton dest="/u?action=create" />
         <Table>
           <tr>
             <th className="h3-font-size">Nome</th>
@@ -81,13 +77,19 @@ const Users_PG = () => {
           </tr>
           {users && (
             <>
-              {users.map((user) => (
-                <tr
-                  className="h5-font-size"
-                  key={user.id}
-                  onClick={handleUser(user.id)}
-                >
-                  <td>{user.nome}</td>
+              {users.map((user, index) => (
+                <tr className="h5-font-size" key={user.id}>
+                  <td>
+                    <span className="h6-font-size">{`${index}. `}</span>
+                    {user.nome}
+                    <FiEdit
+                      className="icon p-font-size"
+                      onClick={() => {
+                        history.push(`/u/${user.id}`);
+                        window.location.reload(false);
+                      }}
+                    />
+                  </td>
                   <td>{user.email}</td>
                 </tr>
               ))}
@@ -96,9 +98,9 @@ const Users_PG = () => {
         </Table>
       </Main>
 
-      {/* <Drawer isOpen={isOpen} hide={hideAndClearCurrentProduct} closeUrl="/p">
-        <ProductForm prodId={prodID} isCreate={isCreate} />
-      </Drawer> */}
+      <Drawer isOpen={isOpen} hide={hideAndClearCurrentProduct} closeUrl="/u">
+        <UserForm prodId={userID} isCreate={isCreate} />
+      </Drawer>
     </>
   );
 };
