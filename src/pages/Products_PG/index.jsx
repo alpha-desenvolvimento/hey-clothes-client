@@ -5,7 +5,7 @@ import CardContainer from "../../components/CardContainer_CMP";
 import Card from "../../components/ProductCard_CMP";
 import Drawer, { useDrawerUtils } from "../../components/Drawer_CMP";
 import ProductForm from "../../components/ProductForm_CMP";
-import ProductCreateButton from "../../components/ProductCreateButton_CMP";
+import CreateButton from "../../components/CreateButton_CMP";
 import ProductSearchBar from "../../components/ProductSearchBar_CMP";
 
 // import { Produtos as data } from "./mockData";
@@ -82,13 +82,13 @@ const Products_PG = () => {
       <NavBar />
       <Main>
         <ProductSearchBar />
-        <ProductCreateButton />
+        <CreateButton dest="/p?action=create" />
         <div style={{ paddingTop: "10rem" }}></div>
         {products ? (
           <CardContainer>
-            {products.map((product) => (
+            {products.map((product, index) => (
               <Card
-                key={product.id}
+                key={product.id + "-" + index}
                 product={product}
                 onClick={() => handleProduct(product.id)}
               />
