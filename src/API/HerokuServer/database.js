@@ -130,7 +130,8 @@ export const produtos = [
       "https://images.unsplash.com/photo-1564584217132-2271feaeb3c5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80",
       "https://images.unsplash.com/photo-1564584217132-2271feaeb3c5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80",
     ],
-  },{
+  },
+  {
     id: "CMSMASCCNRN1",
     name: "Camisa cinza 2",
     price: "30,00",
@@ -264,6 +265,33 @@ export const produtos = [
   },
 ];
 
-export const user = [
-  { email: "e@mail.com", password: "123456", token: "tokenvalido" },
+export const users = [
+  {
+    id: 1,
+    email: "e@mail.com",
+    password: "123456",
+    token: "tokenvalido",
+    nome: "Usuário teste 1",
+  },
+  {
+    id: 2,
+    email: "2e@email.com",
+    password: "123456",
+    token: "tokenvalido",
+    nome: "Usuário teste 2",
+  },
+  {
+    id: 3,
+    email: "3e@email.com",
+    password: "123456",
+    token: "tokenvalido",
+    nome: "Usuário teste 3",
+  },
+  {
+    id: 4,
+    email: "4e@email.com",
+    password: "123456",
+    token: "tokenvalido",
+    nome: "Usuário teste 4",
+  },
 ];
