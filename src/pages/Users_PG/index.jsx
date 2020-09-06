@@ -8,6 +8,7 @@ import HerokuServer from "../../API/HerokuServer";
 
 import UserForm from "../../components/UserForm_CMP";
 import CreateButton from "../../components/CreateButton_CMP";
+import UserSearchBar from "../../components/UserSearchBar_CMP";
 
 import { Table } from "./styles";
 
@@ -58,7 +59,6 @@ const Users_PG = () => {
     }
 
   });
-  // console.log('history.location.pathname',history.location.pathname);
   
   const hideAndClearCurrentProduct = () => {
     setUserID(null);
@@ -70,6 +70,7 @@ const Users_PG = () => {
       <NavBar />
       <Main>
         <CreateButton dest="/u?action=create" />
+        <UserSearchBar />
         <Table>
           <tr>
             <th className="h3-font-size">Nome</th>
@@ -81,7 +82,7 @@ const Users_PG = () => {
                 <tr className="h5-font-size" key={user.id}>
                   <td>
                     <span className="h6-font-size">{`${index}. `}</span>
-                    {user.nome}
+                    {user.name}
                     <FiEdit
                       className="icon p-font-size"
                       onClick={() => {
@@ -99,7 +100,7 @@ const Users_PG = () => {
       </Main>
 
       <Drawer isOpen={isOpen} hide={hideAndClearCurrentProduct} closeUrl="/u">
-        <UserForm prodId={userID} isCreate={isCreate} />
+        <UserForm userID={userID} isCreate={isCreate} />
       </Drawer>
     </>
   );

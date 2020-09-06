@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
-import { Form, Input, Label } from "./styles";
+import { Form, Input, Label } from "../ProductForm_CMP/styles";
 
 import HerokuServer from "../../API/HerokuServer";
 
@@ -11,11 +11,12 @@ const UserForm = ({ userID, isCreate, ...rest }) => {
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
-    console.log(userID)
+    console.log("userID", userID);
 
     if (isCreate) setCurrentUser(HerokuServer.User.mockUser);
     else
       HerokuServer.User.get({ id: userID }).then((resp) =>
+        // console.log(resp)
         setCurrentUser(resp)
       );
 
@@ -30,6 +31,7 @@ const UserForm = ({ userID, isCreate, ...rest }) => {
           <br />
           <br />
           <br />
+
           <Label htmlFor="userName">Nome</Label>
           <Input
             name="userName"
