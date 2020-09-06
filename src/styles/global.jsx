@@ -24,5 +24,12 @@ export default createGlobalStyle`
     body html #root {
         height: 100%;
     }
+    .glass-effect{
+        box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .2);   
+        border-radius: 5px;
+        background-color: rgba(255, 255, 255, .15);
     
+        backdrop-filter: blur(5px);
+        color:red
+    }
 `;
