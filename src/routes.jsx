@@ -14,6 +14,7 @@ function Routes() {
       <Switch>
         <PrivateRoute exact path="/p/:id" component={Products} />
         <PrivateRoute exact path="/p" component={Products} />
+        <PrivateRoute exact path="/u/:id" component={Users} />
         <PrivateRoute exact path="/u" component={Users} />
         {/* <PrivateRoute exact path="/Mock" component={Mock}/> */}
         <Route exact path="/" component={Home} />
