@@ -1,27 +1,27 @@
 import React, { useState } from "react";
 
 import LoginForm from "../../components/LoginForm_CMP";
-import "./style.scss";
+import { Img, Main } from "./styles";
+
+import LargeLogo from "../../assets/img/logos/large_heyclothes.png";
 
 const Home_PG = () => {
   const [user, setUser] = useState("");
   const [pwd, setPwd] = useState("");
 
-  function handleInputChange(event) {}
+  // function handleInputChange(event) {}
 
-  async function handleSubmit(event) {
-    event.preventDefault();
-  }
+  // async function handleSubmit(event) {
+  //   event.preventDefault();
+  // }
 
   return (
-    <>
-      <header>
-        <h1>Hey Clothes System</h1>
-      </header>
+    <Main>
+      <Img src={LargeLogo} alt="logo" />
       <div>
-        <LoginForm />
+        <LoginForm className="form-wrapper"/>
       </div>
-    </>
+    </Main>
   );
 };
 

@@ -13,9 +13,7 @@ export const FormWrapper = styled.div`
   background-color: #f8f8f8;
   box-shadow: 8px 8px 6px 0px rgba(50, 50, 50, 0.1);
 `;
-export const Heading = styled.h1`
-  font-size: 4.8rem;
-`;
+
 export const Label = styled.label`
   text-align: left;
   display: block;
@@ -34,10 +32,10 @@ export const Input = styled.input`
   font-family: "Montserrat", sans-serif;
   font-size: 2.4rem;
   transition: all 0.3s;
-  border-bottom: 2px solid #bebed2;
+  /* border-bottom: 2px solid #bebed2; */
   color: #78788c;
 
-  &:focus {
+  /* &:focus {
     border-bottom: 2px solid #78788c;
-  }
+  } */
 `;

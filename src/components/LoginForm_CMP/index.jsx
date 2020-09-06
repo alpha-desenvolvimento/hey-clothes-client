@@ -3,12 +3,12 @@ import { withRouter, Redirect } from "react-router";
 
 import { AuthContext } from "../../AuthContext";
 import Button from "../Button_CMP";
-import { Heading, FormWrapper, Input, Label, Wrapper, Error } from "./styles";
+import { FormWrapper, Input, Label, Wrapper, Error } from "./styles";
 
 // import AuthCTR from "../../controller/auth_CTR";
 import HerokuServer from "../../API/HerokuServer";
 
-const Login = ({ history }) => {
+const Login = ({ history, className }) => {
   const { currentUser, setCurrentUser } = useContext(AuthContext);
   const [userValues, setValues] = useState({ pwd: undefined, user: undefined });
 
@@ -40,8 +40,8 @@ const Login = ({ history }) => {
 
   return (
     <Wrapper>
-      <FormWrapper>
-        <Heading>Log in</Heading>
+      <FormWrapper className={className}>
+        <h3>Log in</h3>
         <form onSubmit={handleLogin}>
           <Label> Email </Label>
           <Input
