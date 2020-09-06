@@ -2,7 +2,7 @@ import styled from "styled-components";
 import colors from "../../styles/colors";
 
 const mainBgColor = `rgba(${colors.primary.rgb.r},${colors.primary.rgb.g},${colors.primary.rgb.b},0.3)`;
-const formBgColor = `rgba(${colors.secondary.rgb.r},${colors.secondary.rgb.g},${colors.secondary.rgb.b},0.3)`;
+// const formBgColor = `rgba(${colors.secondary.rgb.r},${colors.secondary.rgb.g},${colors.secondary.rgb.b}, 1)`;
 
 export const Img = styled.img`
   display: block;
@@ -17,12 +17,15 @@ export const Main = styled.main`
   padding: 3rem;
 
   .form-wrapper {
-    background-color: ${formBgColor};
+    background-color: ${colors.secondary.hex};
     color: ${colors.white.hex};
     
   }
   h3 {
     text-align: right;
+  }
+  label{
+    color: ${colors.white.hex};
   }
   input {
     color: ${colors.white.hex};
