@@ -6,11 +6,13 @@ import HerokuServer from "../../API/HerokuServer";
 
 import { Button } from "./styles";
 
-const ProductCreateButton = () => {
+const CreateButton = ({ dest }) => {
   const history = useHistory();
 
   function handleClick() {
-    history.push("/p?action=create");
+    console.log(dest);
+    history.push(dest);
+    window.location.reload(false);
   }
 
   return (
@@ -22,4 +24,4 @@ const ProductCreateButton = () => {
   );
 };
 
-export default ProductCreateButton;
+export default CreateButton;
