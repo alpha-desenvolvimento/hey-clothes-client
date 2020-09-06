@@ -18,6 +18,7 @@ export const CardWrapper = styled.div`
         box-shadow: 0 4px 10px 0 hsla(0, 0%, 0%, 0.4);
     }
 `
+
 export const CardImage = styled.img`
     width: 100%;
     display: block;
@@ -25,6 +26,7 @@ export const CardImage = styled.img`
     object-fit: cover;
     border-radius: 1rem 1rem 0 0;
 `
+
 export const CardDescription = styled.div`
     height: 8rem;
     padding: 1rem 2rem;

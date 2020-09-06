@@ -8,6 +8,7 @@ import {
   ErrorText,
   PhotoContainer,
   ProductPhoto,
+  IdText,
 } from "./styles";
 
 import HerokuServer from "../../API/HerokuServer";
@@ -30,6 +31,7 @@ const ProductForm = ({ prodId, isCreate, ...rest }) => {
       <>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <h4>{currentProduct.name}</h4>
+          {currentProduct.id && <IdText>ID: {currentProduct.id}</IdText>}
           <br />
           <br />
           <br />
@@ -47,13 +49,30 @@ const ProductForm = ({ prodId, isCreate, ...rest }) => {
             ref={register({ required: true, min: 0.01 })}
           />
 
+          <Label htmlFor="productBrand">Marca</Label>
+          <Input
+            name="productBrand"
+            defaultValue={currentProduct.brand}
+            ref={register({ required: true })}
+          />
+
+          <Label htmlFor="productCategory">Categoria</Label>
+          <Input
+            name="productCategory"
+            defaultValue={currentProduct.category}
+            ref={register({ required: true })}
+          />
+
           {errors.productPrice && (
             <ErrorText>Este campo é necessário</ErrorText>
           )}
 
-          <Label htmlFor="productPhoto">Link da Foto do Produto</Label>
+          <Label htmlFor="productPhoto">Fotos do Produto</Label>
           <PhotoContainer>
-            {currentProduct.length > 0 &&
+            {currentProduct.photo && (
+              <ProductPhoto src={currentProduct.photo} />
+            )}
+            {currentProduct.pictures.length > 0 &&
               currentProduct.pictures.map((picture, index) => (
                 <ProductPhoto key={index} src={picture} />
               ))}
