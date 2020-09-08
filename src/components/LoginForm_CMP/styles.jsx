@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { fontSize } from "../../styles/typography";
+import { colors } from "../../styles/colors";
 
 export const Wrapper = styled.div`
   width: 100%;
@@ -38,4 +40,18 @@ export const Input = styled.input`
   /* &:focus {
     border-bottom: 2px solid #78788c;
   } */
+`;
+
+export const ErrorMessage = styled.span`
+  font-size: ${fontSize.p}rem;
+  margin: 2rem 0rem 1rem;
+  display: block;
+  background-color: ${colors.tertiary.hex};
+  padding: 1rem;
+  text-align: center;
+  display: none;
+
+  &.show {
+    display: block;
+  }
 `;
