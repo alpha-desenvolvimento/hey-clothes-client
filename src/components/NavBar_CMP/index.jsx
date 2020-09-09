@@ -1,6 +1,6 @@
 import React from "react";
 
-import { FiLogOut, FiShoppingCart, FiUser, FiSettings } from "react-icons/fi";
+import { FiLogOut, FiShoppingCart, FiUser, FiTag } from "react-icons/fi";
 
 import {
   NavBar as Nav,
@@ -32,9 +32,9 @@ const NavBar = () => {
         </NavItem>
 
         <NavItem>
-          <NavLink to="/">
-            <FiSettings />
-            <LinkText>Config</LinkText>
+          <NavLink to="/c">
+            <FiTag />
+            <LinkText>Categories</LinkText>
           </NavLink>
         </NavItem>
 
