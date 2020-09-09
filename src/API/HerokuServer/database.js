@@ -92,17 +92,21 @@ export const categories = [
   {
     id: "A01",
     desc: "Camisa casual",
+    active: true,
   },
   {
     id: "A02",
     desc: "Camisa social",
+    active: true,
   },
   {
     id: "B01",
     desc: "Calça jeans",
+    active: false,
   },
   {
     id: "B02",
     desc: "Calça moletom",
+    active: true,
   },
 ];

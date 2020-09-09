@@ -10,6 +10,7 @@ export default class Category {
   static mockCategory = {
     id: null,
     desc: "Nova categoria",
+    active: true,
   };
 
   static async list(args = { desc: "" }) {
