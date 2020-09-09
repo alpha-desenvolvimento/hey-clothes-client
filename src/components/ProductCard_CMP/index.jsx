@@ -23,7 +23,7 @@ const ProductCard = ({ product, openDrawer, ...rest }) => {
 
   return (
     <CardWrapper {...rest}>
-      <CardImage src={product.photo} />
+      <CardImage img={product.photo} />
       <CardDescription>
         <NameText>{sanitizeString()}</NameText>
         <PriceText>R$ {product.price}</PriceText>
