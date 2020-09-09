@@ -1,7 +1,7 @@
 import Auth from "./auth";
 import Product from "./product";
 import User from "./user";
-import Category from "./Category";
+import Category from "./category";
 
 export default class HerokuServer {
   static Auth = Auth;
