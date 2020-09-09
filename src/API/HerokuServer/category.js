@@ -12,13 +12,13 @@ export default class Category {
     desc: "Nova categoria",
   };
 
-  static async list(args = { name: "" }) {
-    const { name } = args;
+  static async list(args = { desc: "" }) {
+    const { desc } = args;
 
     const resps = [];
 
     for (const category of categories) {
-      if (category.name.toLowerCase().includes(name.toLowerCase()))
+      if (category.desc.toLowerCase().includes(desc.toLowerCase()))
         resps.push(category);
     }
 
