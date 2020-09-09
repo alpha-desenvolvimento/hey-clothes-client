@@ -11,11 +11,11 @@ import {
 const ProductCard = ({ product, openDrawer, ...rest }) => {
   function sanitizeString() {
     const limit = 17;
-    if (product.name.length <= 17) return product.name;
+    if (product.name.length <= limit) return product.name;
 
     var aux = "";
 
-    for (let i = 0; i <= 17 - 3; i++) aux += product.name[i];
+    for (let i = 0; i <= limit - 3; i++) aux += product.name[i];
     aux += "...";
 
     return aux;
