@@ -87,3 +87,22 @@ export const users = [
     name: "Usuário teste 4",
   },
 ];
+
+export const categories = [
+  {
+    id: "A01",
+    desc: "Camisa casual",
+  },
+  {
+    id: "A02",
+    desc: "Camisa social",
+  },
+  {
+    id: "B01",
+    desc: "Calça jeans",
+  },
+  {
+    id: "B02",
+    desc: "Calça moletom",
+  },
+];
