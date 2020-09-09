@@ -1,13 +1,6 @@
 import React from "react";
 
-import {
-  FiCoffee,
-  FiHome,
-  FiLogOut,
-  FiShoppingCart,
-  FiUser,
-  FiSettings,
-} from "react-icons/fi";
+import { FiLogOut, FiShoppingCart, FiUser, FiSettings } from "react-icons/fi";
 
 import {
   NavBar as Nav,
@@ -20,7 +13,6 @@ import {
 
 import HerokuServer from "../../API/HerokuServer";
 
-  
 const NavBar = () => {
   return (
     <Nav>
