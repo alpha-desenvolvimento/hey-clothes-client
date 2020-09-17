@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useHistory } from "react-router-dom";
 import { FiPlus } from "react-icons/fi";
 
-import HerokuServer from "../../API/HerokuServer";
+// import HerokuServer from "../../API/HerokuServer";
 
 import { Button } from "./styles";
 
