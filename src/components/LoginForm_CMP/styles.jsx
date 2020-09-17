@@ -3,12 +3,13 @@ import { fontSize } from "../../styles/typography";
 import { colors } from "../../styles/colors";
 
 export const Wrapper = styled.div`
-  width: 100%;
+  width: auto;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
+
 export const FormWrapper = styled.div`
   padding: 2rem;
   border-radius: 1rem;
@@ -25,21 +26,27 @@ export const Label = styled.label`
 `;
 export const Input = styled.input`
   width: 100%;
-  padding: 10px;
   box-sizing: border-box;
   background: none;
   outline: none;
   resize: none;
-  border: 0;
+
   font-family: "Montserrat", sans-serif;
   font-size: 2.4rem;
-  transition: all 0.3s;
-  /* border-bottom: 2px solid #bebed2; */
-  color: #78788c;
+  color: #f2f2f299;
 
-  /* &:focus {
-    border-bottom: 2px solid #78788c;
-  } */
+  padding: 10px;
+
+  border: 0;
+  border-bottom: 2px solid
+    ${(props) => (props.error ? "#bf165099" : "#f2f2f299")};
+
+  transition: all 0.3s;
+
+  &:focus {
+    border-bottom: 2px solid
+      ${(props) => (props.error ? "#802038cc" : "#f2f2f2cc")};
+  }
 `;
 
 export const ErrorMessage = styled.span`
@@ -54,4 +61,14 @@ export const ErrorMessage = styled.span`
   &.show {
     display: block;
   }
+`;
+
+export const ForgotPwdText = styled.a`
+  width: auto;
+  display: block;
+  text-align: center;
+  margin: 4rem auto 0;
+  text-decoration: none;
+  color: #f2f2f2;
+  font-size: ${fontSize.p}rem;
 `;
