@@ -1,6 +1,3 @@
-import React, { useContext } from "react";
-import { Redirect } from "react-router-dom";
-
 import { users } from "./database";
 
 export default class Auth {
@@ -8,7 +5,7 @@ export default class Auth {
     const { user, pwd } = args;
 
     for (const u of users)
-      if (user == u.email && pwd == u.password) {
+      if (user === u.email && pwd === u.password) {
         const section = {
           name: u.name,
           token: "MockToKeN",
