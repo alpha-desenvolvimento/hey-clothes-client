@@ -12,20 +12,23 @@ const Login = ({ history, className }) => {
   const { currentUser, setCurrentUser } = useContext(AuthContext);
   const [userValues, setValues] = useState({ pwd: undefined, user: undefined });
 
-  const handleLogin = useCallback(async (event) => {
-    event.preventDefault();
-    window.localStorage.setItem("section", null);
-    const { user, pwd } = userValues;
-    setCurrentUser(null);
-    if (!user) {
-    }
-    if (!pwd) {
-    } else {
-      await HerokuServer.Auth.user({ user, pwd }).then((resp) => {
-        if (resp.status == "success") setCurrentUser({ ...resp });
-      });
-    }
-  }, []);
+  const handleLogin = useCallback(
+    async (event) => {
+      event.preventDefault();
+      window.localStorage.setItem("section", null);
+      const { user, pwd } = userValues;
+      setCurrentUser(null);
+      if (!user) {
+      }
+      if (!pwd) {
+      } else {
+        await HerokuServer.Auth.user({ user, pwd }).then((resp) => {
+          if (resp.status === "success") setCurrentUser({ ...resp });
+        });
+      }
+    },
+    [setCurrentUser, userValues]
+  );
 
   function handleInputChange(event) {
     const { name, value } = event.target;
