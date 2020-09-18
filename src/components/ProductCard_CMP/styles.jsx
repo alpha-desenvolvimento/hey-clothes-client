@@ -34,18 +34,19 @@ export const CardImage = styled.div`
 export const CardDescription = styled.div`
   height: 8rem; /*Altura do pai - altura do CardImage*/
   padding: 1rem 2rem;
-  background-color: #c4c4c4;
+  background-color: #625656;
   border-radius: 0 0 1rem 1rem;
+  overflow-y: auto;
 `;
 
 export const NameText = styled.h1`
   font-size: 2.4rem;
   font-weight: 700;
-  color: #000000d0;
+  color: #f2f2f2d0;
 `;
 
 export const PriceText = styled.h3`
   font-size: 2.4rem;
   font-weight: 500;
-  color: #00000090;
+  color: #f2f2f290;
 `;
