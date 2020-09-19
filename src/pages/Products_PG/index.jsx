@@ -26,9 +26,10 @@ const Products_PG = () => {
   const [actionExecuted, setActionExecuted] = useState(false);
   const [isCreate, setIsCreate] = useState(false);
 
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [nextPageExists, setNextPageExists] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [error, setError] = useState(null);
   const [isBadRequest, setIsBadRequest] = useState(false);
 
   const fetchAndSetPageData = useCallback((page) => {
@@ -72,15 +73,20 @@ const Products_PG = () => {
     }
   }, [actionExecuted, fetchAndSetPageData, openDrawer, page, prodID]);
 
-  const fetchPageData = (page) => {
+  const fetchPageData = (page, query) => {
     setIsBadRequest(false);
     setIsLoaded(false);
+    let url = `${process.env.REACT_APP_API_URL}/api/products/page/${page}`;
+    if (query) url += `?prodName=${query}`;
     axios //TODO colocar url em uma variavel de .env ou algo assim pra produção
-      .get(`http://localhost:5000/api/products/page/${page}`)
+      .get(url)
       .then((resp) => {
         console.log("resp", resp);
-        setProducts(resp.data.data.result.products.rows);
-        setNextPageExists(resp.data.data.result.next);
+        // resp.header. TODO coloda o erro que vem no header
+        !resp.data.products.lenght
+          ? setProducts(resp.data.products)
+          : setError("Não foram encontrados itens");
+        setNextPageExists(resp.data.next);
       })
       .catch((err) => {
         console.log(err);
@@ -88,6 +94,7 @@ const Products_PG = () => {
       })
       .finally(() => {
         setIsLoaded(true);
+        setIsBadRequest(false);
       });
   };
 
@@ -119,20 +126,20 @@ const Products_PG = () => {
     <>
       <NavBar />
       <Main>
-        <ProductSearchBar />
+        <ProductSearchBar currentPage={page} handleFetchData={fetchPageData} />
         <div style={{ paddingTop: "10rem" }}></div>
         {isBadRequest ? (
-          <h1>Erro ao efetuar pesquisa</h1>
+          <h1>{error}</h1>
         ) : !isLoaded ? (
           <h1>To carregando</h1>
         ) : (
           <>
             <CreateButton dest="/p?action=create" />
-            <h1>EU SOU A PAGINA {page} </h1>
+            <h1>EU SOU A PAGINA {page + 1} </h1>
             {products ? (
               <>
                 {/*TODO add styling to arrows */}
-                {page > 1 && (
+                {page > 0 && (
                   <h1 onClick={handlePreviousPage}>
                     Anterior
                     <FiChevronLeft />
@@ -154,7 +161,7 @@ const Products_PG = () => {
                   ))}
                 </CardContainer>
                 {/*TODO add styling to arrows */}
-                {page > 1 && (
+                {page > 0 && (
                   <h1 onClick={handlePreviousPage}>
                     Anterior
                     <FiChevronLeft />
