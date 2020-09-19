@@ -1,13 +1,11 @@
 import React, { useContext } from "react";
 import { withRouter, Redirect } from "react-router";
 import { useForm } from "react-hook-form";
+import axios from "axios";
 
 import { AuthContext } from "../../AuthContext";
 import Button from "../Button_CMP";
 import { FormWrapper, Input, Label, Wrapper, ForgotPwdText } from "./styles";
-
-// import AuthCTR from "../../controller/auth_CTR";
-import HerokuServer from "../../API/HerokuServer";
 
 const Login = ({ history, className }) => {
   const { register, handleSubmit, errors } = useForm({
@@ -17,18 +15,22 @@ const Login = ({ history, className }) => {
   const { currentUser, setCurrentUser } = useContext(AuthContext);
 
   const handleLogin = async (formValues) => {
-    console.log(formValues);
     window.localStorage.setItem("section", null);
     const { user, pwd } = formValues;
     setCurrentUser(null);
-    if (!user) {
-    }
-    if (!pwd) {
-    } else {
-      await HerokuServer.Auth.user({ user, pwd }).then((resp) => {
-        if (resp.status === "success") setCurrentUser({ ...resp });
+
+    const url = `${process.env.REACT_APP_API_URL}/api/auth/user`;
+    await axios
+      .post(url, { user, pwd })
+      .then((resp) => {
+        if (resp.data.auth) {
+          setCurrentUser({ ...resp.data });
+          window.localStorage.setItem("section", JSON.stringify(resp.data));
+        } 
+      })
+      .catch((resp) => {
+        console.log(resp);
       });
-    }
   };
 
   if (currentUser) return <Redirect to="/p" />;
