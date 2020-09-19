@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { NavLink } from "react-router-dom";
+
 import { mediaQuery } from "../../styles/global";
 
 export const CardsWrapper = styled.section`
@@ -18,7 +20,7 @@ export const CardsWrapper = styled.section`
   }
 `;
 
-export const Card = styled.article`
+export const NavCard = styled(NavLink)`
   display: flex;
   flex-direction: column;
 
@@ -32,6 +34,9 @@ export const Card = styled.article`
   box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
 
   transition: all 200ms ease-in-out;
+
+  text-decoration: none;
+  color: #000;
 
   &:hover {
     cursor: pointer;
