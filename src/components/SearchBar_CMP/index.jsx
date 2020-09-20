@@ -13,11 +13,13 @@ import {
 // import { useForm } from "react-hook-form";
 // import HerokuServer from "../../API/HerokuServer";
 
-const ProductSearchBar = ({ currentPage, handleFetchData }) => {
+const ProductSearchBar = ({ query, handleFetchData }) => {
   const { register, handleSubmit } = useForm();
 
   async function doSearch(formValues) {
-    handleFetchData(currentPage, formValues.searchValue);
+    query
+      ? handleFetchData(query, formValues.searchValue)
+      : handleFetchData(formValues.searchValue);
   }
 
   return (
