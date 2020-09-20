@@ -25,7 +25,7 @@ const Categories_PG = () => {
   const fetchPageData = (query) => {
     setIsBadRequest(false);
     setIsLoaded(false);
-    let url = `${process.env.REACT_APP_API_URL}/api/category/`;
+    let url = `${process.env.REACT_APP_API_URL}/api/category/list`;
     query && (url += `?catName=${query}`);
     axios
       .get(url)
