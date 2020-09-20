@@ -8,7 +8,7 @@ import HerokuServer from "../../API/HerokuServer";
 
 import CategoryForm from "../../components/CategoryForm_CMP";
 import CreateButton from "../../components/CreateButton_CMP";
-import CategoriesSearchBar from "../../components/CategoriesSearchBar_CMP";
+import SearchBar from "../../components/SearchBar_CMP";
 
 import { Table } from "./styles";
 
@@ -70,7 +70,7 @@ const Providers_PG = () => {
       <NavBar />
       <Main>
         <CreateButton dest="/c?action=create" />
-        <CategoriesSearchBar />
+        <SearchBar />
         <Table>
           <tr>
             <th className="h3-font-size">Fornecedor</th>

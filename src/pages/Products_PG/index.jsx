@@ -6,7 +6,7 @@ import Card from "../../components/ProductCard_CMP";
 import Drawer, { useDrawerUtils } from "../../components/Drawer_CMP";
 import ProductForm from "../../components/ProductForm_CMP";
 import CreateButton from "../../components/CreateButton_CMP";
-import ProductSearchBar from "../../components/ProductSearchBar_CMP";
+import ProductSearchBar from "../../components/SearchBar_CMP";
 
 // import { Produtos as data } from "./mockData";
 
@@ -126,7 +126,7 @@ const Products_PG = () => {
     <>
       <NavBar />
       <Main>
-        <ProductSearchBar currentPage={page} handleFetchData={fetchPageData} />
+        <ProductSearchBar query={page} handleFetchData={fetchPageData} />
         <div style={{ paddingTop: "10rem" }}></div>
         {isBadRequest ? (
           <h1>{error}</h1>
