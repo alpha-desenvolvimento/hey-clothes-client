@@ -26,15 +26,13 @@ const Categories_PG = () => {
     setIsBadRequest(false);
     setIsLoaded(false);
     let url = `${process.env.REACT_APP_API_URL}/api/category/`;
-    query ? (url += query) : (url += "list");
-    axios //TODO colocar url em uma variavel de .env ou algo assim pra produção
+    query && (url += `?catName=${query}`);
+    axios
       .get(url)
       .then((resp) => {
         console.log("resp", resp);
         // resp.header. TODO coloda o erro que vem no header
-        !resp.data.lenght
-          ? setCategories(resp.data)
-          : setError("Não foram encontrados itens");
+        setCategories(resp.data);
       })
       .catch((err) => {
         console.log(err);
@@ -84,7 +82,7 @@ const Categories_PG = () => {
       <NavBar />
       <Main>
         <CreateButton dest="/c/category?action=create" />
-        <SearchBar />
+        <SearchBar handleFetchData={fetchPageData} />
         {isBadRequest ? (
           <h1>{error}</h1>
         ) : !isLoaded ? (
