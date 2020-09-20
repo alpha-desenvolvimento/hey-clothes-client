@@ -126,7 +126,7 @@ const Products_PG = () => {
     <>
       <NavBar />
       <Main>
-        <ProductSearchBar query={page} handleFetchData={fetchPageData} />
+        <ProductSearchBar page={page} handleFetchData={fetchPageData} />
         <div style={{ paddingTop: "10rem" }}></div>
         {isBadRequest ? (
           <h1>{error}</h1>
