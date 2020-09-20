@@ -72,7 +72,7 @@ const Providers_PG = () => {
     }
   }, []);
 
-  const hideAndClearCurrentCategory = () => {
+  const hideAndClearCurrentProvider = () => {
     setProviderId(null);
     hideDrawer();
   };
@@ -113,7 +113,7 @@ const Providers_PG = () => {
 
       <Drawer
         isOpen={isOpen}
-        hide={hideAndClearCurrentCategory}
+        hide={hideAndClearCurrentProvider}
         closeUrl="/c/provider"
       >
         <CategoryForm categoryId={providerId} isCreate={isCreate} />
