@@ -6,7 +6,7 @@ import Drawer, { useDrawerUtils } from "../../components/Drawer_CMP";
 import { useParams } from "react-router-dom";
 import { FiPhone } from "react-icons/fi";
 
-import CategoryForm from "../../components/CategoryForm_CMP";
+import ProviderForm from "../../components/ProviderForm_CMP";
 import CreateButton from "../../components/CreateButton_CMP";
 import SearchBar from "../../components/SearchBar_CMP";
 
@@ -72,6 +72,10 @@ const Providers_PG = () => {
     }
   }, []);
 
+  useEffect(() => {
+    providerId && openDrawer();
+  });
+
   const hideAndClearCurrentProvider = () => {
     setProviderId(null);
     hideDrawer();
@@ -93,7 +97,12 @@ const Providers_PG = () => {
               {providers && (
                 <>
                   {providers.map((provider, index) => (
-                    <Card key={"Card-" + provider.id}>
+                    <Card
+                      key={"Card-" + provider.id}
+                      onClick={() => {
+                        setProviderId(provider.id);
+                      }}
+                    >
                       <CardText>Id: {provider.id}</CardText>
                       <CardText primary>{provider.name}</CardText>
                       <CardDetails>
@@ -116,7 +125,7 @@ const Providers_PG = () => {
         hide={hideAndClearCurrentProvider}
         closeUrl="/c/provider"
       >
-        <CategoryForm categoryId={providerId} isCreate={isCreate} />
+        <ProviderForm categoryId={providerId} isCreate={isCreate} />
       </Drawer>
     </>
   );

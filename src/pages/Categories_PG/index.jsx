@@ -3,7 +3,7 @@ import axios from "axios";
 
 import NavBar, { Main } from "../../components/NavBar_CMP";
 import Drawer, { useDrawerUtils } from "../../components/Drawer_CMP";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { FiTag } from "react-icons/fi";
 
 import CategoryForm from "../../components/CategoryForm_CMP";
@@ -13,6 +13,8 @@ import SearchBar from "../../components/SearchBar_CMP";
 import { CardContainer, Card, CardDetails, CardText } from "./styles";
 
 const Categories_PG = () => {
+  const history = useHistory();
+
   const [isOpen, hideDrawer, openDrawer] = useDrawerUtils();
   const [categories, setCategories] = useState([]);
   const [categoryId, setCategoryId] = useState(useParams().id);
@@ -59,7 +61,6 @@ const Categories_PG = () => {
 
       console.log(action);
 
-      // if (!actionExecuted)
       switch (action) {
         case "create":
           console.log("is create");
@@ -71,6 +72,12 @@ const Categories_PG = () => {
       }
     }
   }, []);
+
+  const handleCategory = (openCatId) => {
+    setCategoryId(openCatId);
+    history.push(`/c/category/${openCatId}`);
+    openDrawer();
+  };
 
   const hideAndClearCurrentCategory = () => {
     setCategoryId(null);
@@ -94,6 +101,9 @@ const Categories_PG = () => {
                 <>
                   {categories.map((category, index) => (
                     <Card
+                      onClick={() => {
+                        handleCategory(category.id);
+                      }}
                       active={category.isActive}
                       key={"Card-" + category.id}
                     >
@@ -123,7 +133,11 @@ const Categories_PG = () => {
         hide={hideAndClearCurrentCategory}
         closeUrl="/c/category"
       >
-        <CategoryForm categoryId={categoryId} isCreate={isCreate} />
+        <CategoryForm
+          refreshData={fetchAndSetPageData}
+          categoryId={categoryId}
+          isCreate={isCreate}
+        />
       </Drawer>
     </>
   );

@@ -1,51 +1,71 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import axios from "axios";
 
-import { Form, Input, Label } from "../ProductForm_CMP/styles";
+import { Form, Input, Label } from "./styles";
 
-import HerokuServer from "../../API/HerokuServer";
-
-const CategoryForm = ({ categoryId, isCreate, ...rest }) => {
+const CategoryForm = ({ categoryId, isCreate, refreshData }) => {
   const { register, handleSubmit, errors } = useForm();
-  const onSubmit = (data) => console.log(data);
   const [currentCategory, setCurrentCategory] = useState(null);
+
+  const fetchAndSetData = () => {
+    let url = `${process.env.REACT_APP_API_URL}/api/category/${categoryId}`;
+    axios
+      .get(url)
+      .then((resp) => {
+        console.log("resp", resp);
+        // resp.header. TODO coloda o erro que vem no header
+        setCurrentCategory(resp.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   useEffect(() => {
     console.log("categoryId", categoryId);
 
-    if (isCreate) setCurrentCategory(HerokuServer.Category.mockCategory);
-    else
-      HerokuServer.Category.get({ id: categoryId }).then((resp) =>
-        // console.log(resp)
-        setCurrentCategory(resp)
-      );
+    if (isCreate) {
+    } else {
+      fetchAndSetData();
+    }
 
     console.log(currentCategory);
-  });
+  }, []);
+
+  const onSubmit = (formData) => {
+    const url = `${process.env.REACT_APP_API_URL}/api/category/update`;
+    let id = currentCategory.id;
+    let name = formData.categoryName;
+    let isActive = formData.categoryActive ? 1 : 0;
+    console.log("id", id, "Nome", name, "isActive", isActive);
+
+    axios.post(url, { id, name, isActive }).then((resp) => {
+      refreshData();
+      fetchAndSetData();
+    });
+  };
 
   function sucessLoad() {
     return (
       <>
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <h4>{currentCategory.desc}</h4>
-          <br />
-          <br />
-          <br />
+          <h4>{currentCategory.name}</h4>
 
-          <Label htmlFor="categoryDesc">Descrição</Label>
+          <Label htmlFor="categoryName">Nome</Label>
           <Input
-            name="categoryDesc"
-            defaultValue={isCreate ? "" : currentCategory.desc}
+            name="categoryName"
+            defaultValue={isCreate ? "" : currentCategory.name}
             ref={register({ required: true })}
           />
           {/* {errors.productName && <ErrorText>Este campo é necessário</ErrorText>} */}
 
           <Label htmlFor="categoryActive">Ativo</Label>
           <input
-            type="checkbox"
             name="categoryActive"
-            defaultValue={currentCategory.active}
-            ref={register()}
+            type="checkbox"
+            defaultChecked={currentCategory.isActive == 1 ? true : false}
+            ref={register}
           />
 
           <button type="submit">Salvar</button>
