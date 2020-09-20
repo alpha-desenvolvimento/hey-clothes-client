@@ -1,30 +1,56 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import axios from "axios";
+
 import NavBar, { Main } from "../../components/NavBar_CMP";
 import Drawer, { useDrawerUtils } from "../../components/Drawer_CMP";
-import { useParams, useHistory } from "react-router-dom";
-import { FiEdit, FiTag } from "react-icons/fi";
-
-import HerokuServer from "../../API/HerokuServer";
+import { useParams } from "react-router-dom";
+import { FiPhone } from "react-icons/fi";
 
 import CategoryForm from "../../components/CategoryForm_CMP";
 import CreateButton from "../../components/CreateButton_CMP";
 import SearchBar from "../../components/SearchBar_CMP";
 
-import { Table } from "./styles";
+import { CardContainer, Card, CardDetails, CardText } from "./styles";
 
 const Providers_PG = () => {
-  //TODO REFATORAR ESSE COMPONENTE INTEIRO, ELE AINDA É UMA COPIA DE CATEGORIES_PG
   const [isOpen, hideDrawer, openDrawer] = useDrawerUtils();
-  const [categories, setCategories] = useState([]);
-  const [categoryId, setCategoryId] = useState(useParams().id);
-  const [actionExecuted, setActionExecuted] = useState(false);
-
+  const [providers, setProviders] = useState([]);
+  const [providerId, setProviderId] = useState(useParams().id);
   const [isCreate, setIsCreate] = useState(false);
 
-  const history = useHistory();
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [error, setError] = useState(null);
+  const [isBadRequest, setIsBadRequest] = useState(false);
+
+  const fetchPageData = (query) => {
+    setIsBadRequest(false);
+    setIsLoaded(false);
+    let url = `${process.env.REACT_APP_API_URL}/api/provider/list`;
+    query && (url += `?provName=${query}`);
+    axios
+      .get(url)
+      .then((resp) => {
+        console.log("resp", resp);
+        // resp.header. TODO coloda o erro que vem no header
+        setProviders(resp.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsBadRequest(true);
+      })
+      .finally(() => {
+        setIsLoaded(true);
+        setIsBadRequest(false);
+      });
+  };
+
+  const fetchAndSetPageData = useCallback((query) => {
+    fetchPageData(query);
+  }, []);
 
   useEffect(() => {
-    if (categoryId) {
+    fetchAndSetPageData("");
+    if (providerId) {
       openDrawer();
     } else {
       const queryString = window.location.search;
@@ -37,31 +63,17 @@ const Providers_PG = () => {
       switch (action) {
         case "create":
           console.log("is create");
-          setIsCreate(true);
-          openDrawer();
+          setIsCreate(true, openDrawer());
           break;
-        case "search":
-          const name = urlParams.get("name");
-          //       const params = {
-          //         name: name || "",
-          break;
-        // };
-        //       HerokuServer.Category.list({ ...params }).then((resp) => {
-        //         console.log("resp", resp);
-        //         setCategorys(resp);
-        //       });
-        //       break;
+
         default:
-          HerokuServer.Category.list().then((resp) => {
-            console.log("resp", resp);
-            setCategories(resp);
-          });
+          break;
       }
     }
-  }, [isOpen]);
+  }, []);
 
   const hideAndClearCurrentCategory = () => {
-    setCategoryId(null);
+    setProviderId(null);
     hideDrawer();
   };
 
@@ -69,48 +81,42 @@ const Providers_PG = () => {
     <>
       <NavBar />
       <Main>
-        <CreateButton dest="/c?action=create" />
-        <SearchBar />
-        <Table>
-          <tr>
-            <th className="h3-font-size">Fornecedor</th>
-            <th className="h3-font-size">Telefone</th>
-          </tr>
-          {categories && (
-            <>
-              {categories.map((category, index) => (
-                <tr className="h5-font-size" key={category.id}>
-                  <td>
-                    <span className="h6-font-size">{`${index} - ${category.id}. `}</span>
-                    {category.desc}
-                    <FiEdit
-                      className="icon p-font-size"
-                      onClick={() => {
-                        history.push(`/c/${category.id}`);
-                        window.location.reload(false);
-                      }}
-                    />
-                  </td>
-                  <td>
-                    {category.active ? (
-                      <>
-                        <FiTag style={{ color: "green" }} /> Ativo
-                      </>
-                    ) : (
-                      <>
-                        <FiTag style={{ color: "red" }} /> Inativo
-                      </>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </>
-          )}
-        </Table>
+        <CreateButton dest="/c/provider?action=create" />
+        <SearchBar handleFetchData={fetchPageData} />
+        {isBadRequest ? (
+          <h1>{error}</h1>
+        ) : !isLoaded ? (
+          <h1>To carregando</h1>
+        ) : (
+          <>
+            <CardContainer>
+              {providers && (
+                <>
+                  {providers.map((provider, index) => (
+                    <Card key={"Card-" + provider.id}>
+                      <CardText>Id: {provider.id}</CardText>
+                      <CardText primary>{provider.name}</CardText>
+                      <CardDetails>
+                        <CardText>
+                          <FiPhone />
+                          {provider.phone}
+                        </CardText>
+                      </CardDetails>
+                    </Card>
+                  ))}
+                </>
+              )}
+            </CardContainer>
+          </>
+        )}
       </Main>
 
-      <Drawer isOpen={isOpen} hide={hideAndClearCurrentCategory} closeUrl="/c">
-        <CategoryForm categoryId={categoryId} isCreate={isCreate} />
+      <Drawer
+        isOpen={isOpen}
+        hide={hideAndClearCurrentCategory}
+        closeUrl="/c/provider"
+      >
+        <CategoryForm categoryId={providerId} isCreate={isCreate} />
       </Drawer>
     </>
   );
