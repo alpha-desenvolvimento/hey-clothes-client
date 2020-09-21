@@ -26,6 +26,10 @@ const CategoryForm = ({ providerId, isCreate, refreshData }) => {
     console.log("providerId", providerId);
 
     if (isCreate) {
+      setCurrentProvider({
+        name: "",
+        phone: "",
+      });
     } else {
       fetchAndSetData();
     }
@@ -34,9 +38,10 @@ const CategoryForm = ({ providerId, isCreate, refreshData }) => {
   }, []);
 
   const onSubmit = (formData) => {
-    const url = `${process.env.REACT_APP_API_URL}/api/provider/update`;
+    const action = isCreate ? "create" : "update";
+    const url = `${process.env.REACT_APP_API_URL}/api/provider/${action}`;
 
-    const id = currentProvider.id;
+    const id = !isCreate && currentProvider.id;
     const name = formData.providerName;
     const phone = formData.providerPhone;
 
@@ -51,18 +56,18 @@ const CategoryForm = ({ providerId, isCreate, refreshData }) => {
     return (
       <>
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <h4>{currentProvider.name}</h4>
+          <h4>{isCreate ? "Novo fornecedor" : currentProvider.name}</h4>
 
           <Label htmlFor="providerName">Nome</Label>
-          <input
+          <Input
             type="text"
             defaultValue={currentProvider.name}
             name="providerName"
             ref={register({ required: true, maxLength: 80 })}
           />
 
-          <Label htmlFor="providerPhone">Ativo</Label>
-          <input
+          <Label htmlFor="providerPhone">Telefone</Label>
+          <Input
             type="text"
             defaultValue={currentProvider.phone}
             name="providerPhone"

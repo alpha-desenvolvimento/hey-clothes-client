@@ -85,6 +85,7 @@ const Providers_PG = () => {
   };
 
   const hideAndClearCurrentProvider = () => {
+    setIsCreate(false);
     setProviderId(null);
     hideDrawer();
   };
@@ -93,7 +94,11 @@ const Providers_PG = () => {
     <>
       <NavBar />
       <Main>
-        <CreateButton dest="/c/provider?action=create" />
+        <CreateButton
+          setIsCreate={setIsCreate}
+          openDrawer={openDrawer}
+          dest="/c/provider?action=create"
+        />
         <SearchBar handleFetchData={fetchPageData} />
         {isBadRequest ? (
           <h1>{error}</h1>
