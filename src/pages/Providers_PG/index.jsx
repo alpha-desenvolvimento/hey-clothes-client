@@ -3,7 +3,7 @@ import axios from "axios";
 
 import NavBar, { Main } from "../../components/NavBar_CMP";
 import Drawer, { useDrawerUtils } from "../../components/Drawer_CMP";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { FiPhone } from "react-icons/fi";
 
 import ProviderForm from "../../components/ProviderForm_CMP";
@@ -13,6 +13,8 @@ import SearchBar from "../../components/SearchBar_CMP";
 import { CardContainer, Card, CardDetails, CardText } from "./styles";
 
 const Providers_PG = () => {
+  const history = useHistory();
+
   const [isOpen, hideDrawer, openDrawer] = useDrawerUtils();
   const [providers, setProviders] = useState([]);
   const [providerId, setProviderId] = useState(useParams().id);
@@ -76,6 +78,12 @@ const Providers_PG = () => {
     providerId && openDrawer();
   });
 
+  const handleProvider = (openProvId) => {
+    setProviderId(openProvId);
+    history.push(`/c/provider/${openProvId}`);
+    openDrawer();
+  };
+
   const hideAndClearCurrentProvider = () => {
     setProviderId(null);
     hideDrawer();
@@ -100,7 +108,7 @@ const Providers_PG = () => {
                     <Card
                       key={"Card-" + provider.id}
                       onClick={() => {
-                        setProviderId(provider.id);
+                        handleProvider(provider.id);
                       }}
                     >
                       <CardText>Id: {provider.id}</CardText>
@@ -125,7 +133,11 @@ const Providers_PG = () => {
         hide={hideAndClearCurrentProvider}
         closeUrl="/c/provider"
       >
-        <ProviderForm categoryId={providerId} isCreate={isCreate} />
+        <ProviderForm
+          refreshData={fetchAndSetPageData}
+          providerId={providerId}
+          isCreate={isCreate}
+        />
       </Drawer>
     </>
   );
