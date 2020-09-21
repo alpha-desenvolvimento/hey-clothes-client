@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useParams, useHistory } from "react-router-dom";
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import axios from "axios";
 
 import NavBar, { Main } from "../../components/NavBar_CMP";
 import CardContainer from "../../components/CardContainer_CMP";
@@ -8,13 +11,8 @@ import ProductForm from "../../components/ProductForm_CMP";
 import CreateButton from "../../components/CreateButton_CMP";
 import ProductSearchBar from "../../components/SearchBar_CMP";
 
-// import { Produtos as data } from "./mockData";
-
-import { useParams, useHistory } from "react-router-dom";
-import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
-
+import { BreadcrumbNav, BreadCrumbItem, BreadCrumbItemText } from "./styles";
 import HerokuServer from "../../API/HerokuServer";
-import axios from "axios";
 
 const Products_PG = () => {
   const [isOpen, hideDrawer, openDrawer] = useDrawerUtils();
@@ -99,6 +97,7 @@ const Products_PG = () => {
   };
 
   const hideAndClearCurrentProduct = () => {
+    setIsCreate(false);
     setProdID(null);
     hideDrawer();
   };
@@ -131,7 +130,7 @@ const Products_PG = () => {
         {isBadRequest ? (
           <h1>{error}</h1>
         ) : !isLoaded ? (
-          <h1>To carregando</h1>
+          <h1>Loading...</h1>
         ) : (
           <>
             <CreateButton
@@ -139,57 +138,65 @@ const Products_PG = () => {
               openDrawer={openDrawer}
               dest="/p?action=create"
             />
-            <h1>EU SOU A PAGINA {page + 1} </h1>
-            {products ? (
-              <>
-                {/*TODO add styling to arrows */}
-                {page > 0 && (
-                  <h1 onClick={handlePreviousPage}>
-                    Anterior
-                    <FiChevronLeft />
-                  </h1>
-                )}
-                {nextPageExists && (
-                  <h1 onClick={handleNextPage}>
-                    Proxima
-                    <FiChevronRight />
-                  </h1>
-                )}
-                <CardContainer>
-                  {products.map((product, index) => (
-                    <Card
-                      key={product.id + "-" + index}
-                      product={product}
-                      onClick={() => handleProduct(product.id)}
-                    />
-                  ))}
-                </CardContainer>
-                {/*TODO add styling to arrows */}
-                {page > 0 && (
-                  <h1 onClick={handlePreviousPage}>
-                    Anterior
-                    <FiChevronLeft />
-                  </h1>
-                )}
-                {nextPageExists && (
-                  <h1 onClick={handleNextPage}>
-                    Proxima
-                    <FiChevronRight />
-                  </h1>
-                )}
-              </>
-            ) : (
-              <h1>Loading</h1>
-            )}
+            <BreadCrumbs
+              handleNextPage={handleNextPage}
+              handlePreviousPage={handlePreviousPage}
+              nextPageExists={nextPageExists}
+              page={page}
+            />
+            <CardContainer>
+              {products.map((product, index) => (
+                <Card
+                  key={product.id + "-" + index}
+                  product={product}
+                  onClick={() => handleProduct(product.id)}
+                />
+              ))}
+            </CardContainer>
+            <BreadCrumbs
+              handleNextPage={handleNextPage}
+              handlePreviousPage={handlePreviousPage}
+              nextPageExists={nextPageExists}
+              page={page}
+            />
           </>
         )}
       </Main>
 
       <Drawer isOpen={isOpen} hide={hideAndClearCurrentProduct} closeUrl="/p">
-        <ProductForm prodId={prodID} isCreate={isCreate} />
+        <ProductForm
+          refreshData={fetchAndSetPageData}
+          prodId={prodID}
+          isCreate={isCreate}
+        />
       </Drawer>
     </>
   );
 };
 
 export default Products_PG;
+
+const BreadCrumbs = ({
+  page,
+  handlePreviousPage,
+  nextPageExists,
+  handleNextPage,
+}) => {
+  return (
+    <BreadcrumbNav>
+      {page > 0 && (
+        <BreadCrumbItem onClick={handlePreviousPage}>
+          <FiChevronLeft />
+          <BreadCrumbItemText>página Anterior</BreadCrumbItemText>
+        </BreadCrumbItem>
+      )}
+      <BreadCrumbItem>pg. {page + 1} </BreadCrumbItem>
+      {nextPageExists && (
+        <BreadCrumbItem onClick={handleNextPage}>
+          <BreadCrumbItemText>Proxima página</BreadCrumbItemText>
+          <FiChevronRight />
+        </BreadCrumbItem>
+      )}
+    </BreadcrumbNav>
+  );
+};
