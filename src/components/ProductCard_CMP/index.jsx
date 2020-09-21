@@ -8,6 +8,9 @@ import {
   PriceText,
 } from "./styles";
 
+const stockImage =
+  "https://www.creativefabrica.com/wp-content/uploads/2018/11/Clean-clothes-icon-by-rudezstudio-580x386.jpg";
+
 const ProductCard = ({ product, openDrawer, ...rest }) => {
   function sanitizeString() {
     const limit = 17;
@@ -23,7 +26,7 @@ const ProductCard = ({ product, openDrawer, ...rest }) => {
 
   return (
     <CardWrapper {...rest}>
-      <CardImage img={product.photo} />
+      <CardImage img={product.imgA ? product.imgA : stockImage} />
       <CardDescription>
         <NameText>{sanitizeString()}</NameText>
         <PriceText>R$ {product.price}</PriceText>
