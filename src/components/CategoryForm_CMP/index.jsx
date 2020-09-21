@@ -35,12 +35,15 @@ const CategoryForm = ({ categoryId, isCreate, refreshData }) => {
 
   const onSubmit = (formData) => {
     const url = `${process.env.REACT_APP_API_URL}/api/category/update`;
-    let id = currentCategory.id;
-    let name = formData.categoryName;
-    let isActive = formData.categoryActive ? 1 : 0;
-    console.log("id", id, "Nome", name, "isActive", isActive);
+    const auxId = currentCategory.id;
+    var updatedCategory = {
+      id: auxId,
+      name: formData.categoryName,
+      isActive: formData.categoryActive ? 1 : 0,
+    };
 
-    axios.post(url, { id, name, isActive }).then((resp) => {
+    axios.post(url, { ...updatedCategory }).then((resp) => {
+      console.log("updatedCategory resp", resp);
       refreshData();
       fetchAndSetData();
     });
