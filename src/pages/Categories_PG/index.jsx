@@ -79,6 +79,7 @@ const Categories_PG = () => {
   };
 
   const hideAndClearCurrentCategory = () => {
+    setIsCreate(false);
     setCategoryId(null);
     hideDrawer();
   };
@@ -87,7 +88,11 @@ const Categories_PG = () => {
     <>
       <NavBar />
       <Main>
-        <CreateButton dest="/c/category?action=create" />
+        <CreateButton
+          setIsCreate={setIsCreate}
+          openDrawer={openDrawer}
+          dest="/c/category?action=create"
+        />
         <SearchBar handleFetchData={fetchPageData} />
         {isBadRequest ? (
           <h1>{error}</h1>

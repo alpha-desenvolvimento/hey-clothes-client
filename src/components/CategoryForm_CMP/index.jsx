@@ -26,6 +26,10 @@ const CategoryForm = ({ categoryId, isCreate, refreshData }) => {
     console.log("categoryId", categoryId);
 
     if (isCreate) {
+      setCurrentCategory({
+        name: "",
+        isActive: 0,
+      });
     } else {
       fetchAndSetData();
     }
@@ -34,26 +38,32 @@ const CategoryForm = ({ categoryId, isCreate, refreshData }) => {
   }, []);
 
   const onSubmit = (formData) => {
-    const url = `${process.env.REACT_APP_API_URL}/api/category/update`;
-    const auxId = currentCategory.id;
-    var updatedCategory = {
-      id: auxId,
-      name: formData.categoryName,
-      isActive: formData.categoryActive ? 1 : 0,
-    };
+    const action = isCreate ? "create" : "update";
+    console.log(action);
+    const url = `${process.env.REACT_APP_API_URL}/api/category/${action}`;
 
-    axios.post(url, { ...updatedCategory }).then((resp) => {
-      console.log("updatedCategory resp", resp);
-      refreshData();
-      fetchAndSetData();
-    });
+    const id = !isCreate && currentCategory.id;
+    const name = formData.categoryName;
+    const isActive = formData.categoryActive ? "1" : "0";
+
+    isCreate // isActive não pode ser 0 no create se não o js acha que é "false" na query
+      ? axios.post(url, { name, isActive }).then((resp) => {
+          console.log("updatedCategory resp", resp);
+          refreshData();
+          fetchAndSetData();
+        })
+      : axios.post(url, { id, name, isActive }).then((resp) => {
+          console.log("updatedCategory resp", resp);
+          refreshData();
+          fetchAndSetData();
+        });
   };
 
   function sucessLoad() {
     return (
       <>
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <h4>{currentCategory.name}</h4>
+          <h4>{isCreate ? "Nova Categoria" : currentCategory.name}</h4>
 
           <Label htmlFor="categoryName">Nome</Label>
           <Input
