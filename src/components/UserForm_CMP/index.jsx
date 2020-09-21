@@ -1,27 +1,52 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import axios from "axios";
 
 import { Form, Input, Label } from "../ProductForm_CMP/styles";
 
-import HerokuServer from "../../API/HerokuServer";
-
-const UserForm = ({ userID, isCreate, ...rest }) => {
-  const { register, handleSubmit, errors } = useForm();
-  const onSubmit = (data) => console.log(data);
+const UserForm = ({ userID, isCreate, refreshData }) => {
+  const { register, handleSubmit, watch } = useForm();
   const [currentUser, setCurrentUser] = useState(null);
+
+  const fetchAndSetData = () => {
+    let url = `${process.env.REACT_APP_API_URL}/api/users/${userID}`;
+    axios
+      .get(url)
+      .then((resp) => {
+        console.log("resp", resp);
+        // resp.header. TODO coloda o erro que vem no header
+        setCurrentUser(resp.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   useEffect(() => {
     console.log("userID", userID);
 
-    if (isCreate) setCurrentUser(HerokuServer.User.mockUser);
-    else
-      HerokuServer.User.get({ id: userID }).then((resp) =>
-        // console.log(resp)
-        setCurrentUser(resp)
-      );
+    if (isCreate) {
+    } else {
+      fetchAndSetData();
+    }
 
     console.log(currentUser);
-  });
+  }, []);
+
+  const onSubmit = (formData) => {
+    const url = `${process.env.REACT_APP_API_URL}/api/users/update`;
+    const id = currentUser.id;
+    const name = formData.userName;
+    //const isActive = formData.userActive ? 1 : 0;
+    const email = formData.userEmail;
+    const password = formData.userPassword;
+    console.log("data onSubmit", { id, name, email, password });
+    axios.post(url, { id, name, email, password }).then((resp) => {
+      console.log("updatedUser resp", resp);
+      refreshData();
+      fetchAndSetData();
+    });
+  };
 
   function sucessLoad() {
     return (
@@ -46,21 +71,32 @@ const UserForm = ({ userID, isCreate, ...rest }) => {
             ref={register({ required: true })}
           />
 
-          <Label htmlFor="password1">Senha</Label>
+          <Label htmlFor="userPassword">Senha</Label>
           <Input
-            name="password1"
+            name="userPassword"
             type="password"
-            // defaultValue={currentUser.password}
             ref={register({ required: true })}
           />
 
-          <Label htmlFor="password2">Confirme a senha</Label>
+          <Label htmlFor="confirmPassword">Confirme a senha</Label>
           <Input
-            name="password2"
+            name="confirmPassword"
             type="password"
-            // defaultValue={currentUser.email}
-            ref={register({ required: true })}
+            ref={register({
+              required: true,
+              validate: {
+                matchesPassword: (value) => value === watch("userPassword"),
+              },
+            })}
           />
+          {/*
+          <Label htmlFor="userActive">Ativo</Label>
+           <input
+            name="userActive"
+            type="checkbox"
+            defaultChecked={currentUser.isActive == 1 ? true : false}
+            ref={register}
+          /> */}
 
           <button type="submit">Salvar</button>
         </Form>

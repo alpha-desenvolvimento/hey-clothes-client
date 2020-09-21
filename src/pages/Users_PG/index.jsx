@@ -30,13 +30,13 @@ const Users_PG = () => {
   const fetchPageData = (query) => {
     setIsBadRequest(false);
     setIsLoaded(false);
-    let url = `${process.env.REACT_APP_API_URL}/api/users/${currentUser.id}`;
+    let url = `${process.env.REACT_APP_API_URL}/api/users/list`;
     axios
       .get(url)
       .then((resp) => {
         console.log("resp", resp);
         // resp.header. TODO coloda o erro que vem no header
-        setUsers([resp.data]);
+        setUsers(resp.data);
       })
       .catch((err) => {
         console.log(err);
@@ -79,6 +79,12 @@ const Users_PG = () => {
     hideDrawer();
   };
 
+  const handleUser = (openUserId) => {
+    setUserID(openUserId);
+    history.push(`/u/${openUserId}`);
+    openDrawer();
+  };
+
   return (
     <>
       <NavBar />
@@ -95,7 +101,13 @@ const Users_PG = () => {
               {users && (
                 <>
                   {users.map((user, index) => (
-                    <Card active={user.isActive} key={"Card-" + user.id}>
+                    <Card
+                      onClick={() => {
+                        handleUser(user.id);
+                      }}
+                      active={user.isActive}
+                      key={"Card-" + user.id}
+                    >
                       <CardDetails>
                         <CardText>Id: {user.id}</CardText>
                         <CardText active={user.isActive} svg="right">
@@ -124,7 +136,11 @@ const Users_PG = () => {
       </Main>
 
       <Drawer isOpen={isOpen} hide={hideAndClearCurrentUser} closeUrl="/u">
-        <UserForm userID={userID} isCreate={isCreate} />
+        <UserForm
+          refreshData={fetchAndSetPageData}
+          userID={userID}
+          isCreate={isCreate}
+        />
       </Drawer>
     </>
   );
