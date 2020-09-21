@@ -114,7 +114,7 @@ const ResetPassword = () => {
   }
 
   function selectContent() {
-    return finish();
+    // return finish();
     if (!token) return urlDontHasToken();
     if (tokenUsed) return finish();
     if (token && !tokenUsed && resetInfo) return form();
