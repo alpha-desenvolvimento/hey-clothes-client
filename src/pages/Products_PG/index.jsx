@@ -134,7 +134,11 @@ const Products_PG = () => {
           <h1>To carregando</h1>
         ) : (
           <>
-            <CreateButton dest="/p?action=create" />
+            <CreateButton
+              setIsCreate={setIsCreate}
+              openDrawer={openDrawer}
+              dest="/p?action=create"
+            />
             <h1>EU SOU A PAGINA {page + 1} </h1>
             {products ? (
               <>
