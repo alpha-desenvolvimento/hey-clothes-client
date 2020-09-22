@@ -44,7 +44,7 @@ const CategoryForm = ({ categoryId, isCreate, refreshData }) => {
 
     const id = !isCreate && currentCategory.id;
     const name = formData.categoryName;
-    const isActive = formData.categoryActive ? "1" : "0";
+    const isActive = formData.categoryActive ? 1 : 0;
 
     isCreate // isActive não pode ser 0 no create se não o js acha que é "false" na query
       ? axios.post(url, { name, isActive }).then((resp) => {
