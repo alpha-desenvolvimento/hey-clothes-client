@@ -46,6 +46,7 @@ export const SearchInput = styled.input`
 export const FilterContainer = styled.div``;
 
 export const SubmitButton = styled.button`
+  right: 2rem;
   background: unset;
   border: 0;
 `;

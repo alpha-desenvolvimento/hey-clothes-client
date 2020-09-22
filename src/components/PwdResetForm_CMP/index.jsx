@@ -77,7 +77,7 @@ const PwdResetForm = () => {
           <br />
           <FormWrapper>
             <p>
-              Você solicitou a recuperaçã de sua senhal,{" "}
+              Você solicitou a recuperação de sua senhal,{" "}
               <a target="_blank" href={`/resetPassword/${mockLink}`}>
                 clica aqui
               </a>{" "}
