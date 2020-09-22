@@ -17,9 +17,19 @@ const ProductSearchBar = ({ page, handleFetchData, setPage }) => {
   const { register, handleSubmit } = useForm();
 
   async function doSearch(formValues) {
-    page !== null
-      ? setPage(0, handleFetchData("0", formValues.searchValue))
-      : handleFetchData(formValues.searchValue);
+    // page !== null
+    //   ? setPage(0, handleFetchData("0", formValues.searchValue))
+    //   : handleFetchData(formValues.searchValue);
+    const urlParams = new URLSearchParams("");
+    const { searchValue } = formValues;
+
+    urlParams.set("page", 1);
+
+    if (searchValue && searchValue != "") urlParams.set("name", searchValue);
+
+    window.history.pushState(null, null, `?${urlParams.toString()}`);
+    handleFetchData();
+    //
   }
 
   return (

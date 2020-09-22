@@ -10,6 +10,7 @@ import Drawer, { useDrawerUtils } from "../../components/Drawer_CMP";
 import ProductForm from "../../components/ProductForm_CMP";
 import CreateButton from "../../components/CreateButton_CMP";
 import ProductSearchBar from "../../components/SearchBar_CMP";
+import Paginator from "../../components/Paginator_CMP";
 
 import { BreadcrumbNav, BreadCrumbItem, BreadCrumbItemText } from "./styles";
 import HerokuServer from "../../API/HerokuServer";
@@ -24,11 +25,15 @@ const Products_PG = () => {
   const [actionExecuted, setActionExecuted] = useState(false);
   const [isCreate, setIsCreate] = useState(false);
 
-  const [page, setPage] = useState(0);
-  const [nextPageExists, setNextPageExists] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(null);
   const [isBadRequest, setIsBadRequest] = useState(false);
+
+  const [page, setPage] = useState(0);
+  const [hasNextPage, setHasNextPage] = useState(false);
+  const [hasPreviousPage, sethasPreviousPage] = useState(false);
+  const [pageCount, setPageCout] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
 
   const fetchAndSetPageData = useCallback((page) => {
     page === 0 ? fetchPageData("0") : fetchPageData(page);
@@ -40,6 +45,8 @@ const Products_PG = () => {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const action = urlParams.get("action");
+
+    setPage(parseInt(urlParams.get("page") || 1));
 
     if (prodID) {
       openDrawer();
@@ -66,23 +73,34 @@ const Products_PG = () => {
           });
           break;
         default:
-          fetchAndSetPageData(page);
+          fetchPageData();
       }
     }
   }, [actionExecuted, fetchAndSetPageData, openDrawer, page, prodID]);
 
-  const fetchPageData = (page, query) => {
+  const fetchPageData = (pageia, queryia) => {
     setIsBadRequest(false);
     setIsLoaded(false);
+
+    const urlParams = new URLSearchParams(window.location.search);
+
+    var page = parseInt(urlParams.get("page") || 1) - 1;
+
     let url = `${process.env.REACT_APP_API_URL}/api/products/page/${page}`;
-    if (query) url += `?prodName=${query}`;
+
+    var name = urlParams.get("name");
+    if (name && name != " ") url += `?prodName=${name}`;
+
+    console.log(urlParams.toString());
+
     axios
       .get(url)
       .then((resp) => {
-        console.log("fetchPageData", resp);
-        // resp.header. TODO coloda o erro que vem no header
         setProducts(resp.data.products);
-        setNextPageExists(resp.data.next);
+        setHasNextPage(resp.data.next);
+        sethasPreviousPage(resp.data.previous);
+        setPageCout(resp.data.pageCount + 1);
+        setCurrentPage(resp.data.page + 1);
       })
       .catch((err) => {
         console.log(err);
@@ -106,19 +124,6 @@ const Products_PG = () => {
     openDrawer();
   }
 
-  //TODO refatorar handleNext e handlePrevious em uma só função
-  function handleNextPage() {
-    setPage(parseInt(page) + 1, fetchAndSetPageData(page + 1));
-    //Segundo argumento do metodo set é um callback
-    console.log(page);
-  }
-
-  async function handlePreviousPage() {
-    setPage(page - 1, fetchAndSetPageData(page - 1));
-    //Segundo argumento do metodo set é um callback
-    console.log(page);
-  }
-
   return (
     <>
       <NavBar />
@@ -140,12 +145,7 @@ const Products_PG = () => {
               openDrawer={openDrawer}
               dest="/p?action=create"
             />
-            <BreadCrumbs
-              handleNextPage={handleNextPage}
-              handlePreviousPage={handlePreviousPage}
-              nextPageExists={nextPageExists}
-              page={page}
-            />
+
             <CardContainer>
               {products.map((product, index) => (
                 <Card
@@ -155,11 +155,12 @@ const Products_PG = () => {
                 />
               ))}
             </CardContainer>
-            <BreadCrumbs
-              handleNextPage={handleNextPage}
-              handlePreviousPage={handlePreviousPage}
-              nextPageExists={nextPageExists}
-              page={page}
+            <Paginator
+              fetchPageData={fetchPageData}
+              hasPreviousPage={hasPreviousPage}
+              hasNextPage={hasNextPage}
+              currentPage={currentPage}
+              pageCount={pageCount}
             />
           </>
         )}
@@ -179,28 +180,3 @@ const Products_PG = () => {
 };
 
 export default Products_PG;
-
-const BreadCrumbs = ({
-  page,
-  handlePreviousPage,
-  nextPageExists,
-  handleNextPage,
-}) => {
-  return (
-    <BreadcrumbNav>
-      {page > 0 && (
-        <BreadCrumbItem onClick={handlePreviousPage}>
-          <FiChevronLeft />
-          <BreadCrumbItemText>página Anterior</BreadCrumbItemText>
-        </BreadCrumbItem>
-      )}
-      <BreadCrumbItem>pg. {page + 1} </BreadCrumbItem>
-      {nextPageExists && (
-        <BreadCrumbItem onClick={handleNextPage}>
-          <BreadCrumbItemText>Proxima página</BreadCrumbItemText>
-          <FiChevronRight />
-        </BreadCrumbItem>
-      )}
-    </BreadcrumbNav>
-  );
-};
