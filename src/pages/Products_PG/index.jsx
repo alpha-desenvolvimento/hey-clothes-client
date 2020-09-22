@@ -31,7 +31,7 @@ const Products_PG = () => {
   const [isBadRequest, setIsBadRequest] = useState(false);
 
   const fetchAndSetPageData = useCallback((page) => {
-    fetchPageData(page);
+    page === 0 ? fetchPageData("0") : fetchPageData(page);
   }, []);
 
   useEffect(() => {
@@ -79,11 +79,9 @@ const Products_PG = () => {
     axios
       .get(url)
       .then((resp) => {
-        console.log("resp", resp);
+        console.log("fetchPageData", resp);
         // resp.header. TODO coloda o erro que vem no header
-        !resp.data.products.lenght
-          ? setProducts(resp.data.products)
-          : setError("Não foram encontrados itens");
+        setProducts(resp.data.products);
         setNextPageExists(resp.data.next);
       })
       .catch((err) => {
@@ -169,7 +167,9 @@ const Products_PG = () => {
 
       <Drawer isOpen={isOpen} hide={hideAndClearCurrentProduct} closeUrl="/p">
         <ProductForm
-          refreshData={fetchAndSetPageData}
+          refreshData={() => {
+            fetchAndSetPageData(page);
+          }}
           prodId={prodID}
           isCreate={isCreate}
         />
