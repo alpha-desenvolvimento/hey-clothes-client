@@ -7,7 +7,7 @@ import { AuthContext } from "../../AuthContext";
 import Button from "../Button_CMP";
 import { FormWrapper, Input, Label, Wrapper, ForgotPwdText } from "./styles";
 
-const Login = ({ history, className }) => {
+const Login = ({ history, className, displayPwdReset }) => {
   const { register, handleSubmit, errors } = useForm({
     mode: "onChange",
   });
@@ -26,7 +26,9 @@ const Login = ({ history, className }) => {
         if (resp.data.auth) {
           setCurrentUser({ ...resp.data });
           window.localStorage.setItem("section", JSON.stringify(resp.data));
-        } 
+        }else{
+          //TODO criar controle de erro
+        }
       })
       .catch((resp) => {
         console.log(resp);
@@ -34,6 +36,10 @@ const Login = ({ history, className }) => {
   };
 
   if (currentUser) return <Redirect to="/p" />;
+
+  function pwdResetHandler() {
+    displayPwdReset(true);
+  }
 
   return (
     <Wrapper>
@@ -50,9 +56,7 @@ const Login = ({ history, className }) => {
             name="user"
             type="email"
             error={errors.user}
-            //value={userValues.user}
             placeholder="meu@email.com"
-            //onInput={handleInputChange}
           />
 
           <Label htmlFor="pwd"> Password </Label>
@@ -62,9 +66,7 @@ const Login = ({ history, className }) => {
             name="pwd"
             type="password"
             error={errors.pwd}
-            //value={userValues.pwd}
             placeholder="Password"
-            //onInput={handleInputChange}
           />
 
           <Button
@@ -75,8 +77,8 @@ const Login = ({ history, className }) => {
             Login
           </Button>
         </form>
-        <ForgotPwdText href="#a">
-          <span>Forgot your password?</span>
+        <ForgotPwdText href="#" onClick={pwdResetHandler}>
+          <span>Esqueci minha senha</span>
         </ForgotPwdText>
       </FormWrapper>
     </Wrapper>

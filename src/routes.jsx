@@ -9,6 +9,7 @@ import Users from "./pages/Users_PG";
 import Config from "./pages/Configurations_PG";
 import Categories from "./pages/Categories_PG";
 import Providers from "./pages/Providers_PG";
+import ResetPassword from "./pages/ResetPassword_PG";
 // import Mock from "./pages/Mock_PG";
 
 function Routes() {
@@ -28,6 +29,8 @@ function Routes() {
         <PrivateRoute exact path="/c/provider/:id" component={Providers} />
 
         {/* <PrivateRoute exact path="/Mock" component={Mock}/> */}
+        <Route exact path="/resetPassword/:token" component={ResetPassword} />
+        <Route exact path="/resetPassword/" component={ResetPassword} />
         <Route exact path="/" component={Home} />
       </Switch>
     </Router>
