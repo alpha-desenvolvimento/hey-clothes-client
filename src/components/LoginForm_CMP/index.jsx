@@ -2,13 +2,14 @@ import React, { useContext } from "react";
 import { withRouter, Redirect } from "react-router";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import swal from "sweetalert";
 
 import { AuthContext } from "../../AuthContext";
 import Button from "../Button_CMP";
 import { FormWrapper, Input, Label, Wrapper, ForgotPwdText } from "./styles";
 
 const Login = ({ history, className, displayPwdReset }) => {
-  const { register, handleSubmit, errors } = useForm({
+  const { register, handleSubmit, errors, setValue: SetFormValue } = useForm({
     mode: "onChange",
   });
 
@@ -17,6 +18,7 @@ const Login = ({ history, className, displayPwdReset }) => {
   const handleLogin = async (formValues) => {
     window.localStorage.setItem("section", null);
     const { user, pwd } = formValues;
+    SetFormValue("pwd", "");
     setCurrentUser(null);
 
     const url = `${process.env.REACT_APP_API_URL}/api/auth/user`;
@@ -26,8 +28,11 @@ const Login = ({ history, className, displayPwdReset }) => {
         if (resp.data.auth) {
           setCurrentUser({ ...resp.data });
           window.localStorage.setItem("section", JSON.stringify(resp.data));
-        }else{
-          //TODO criar controle de erro
+        } else {
+          swal(
+            "Oops",
+            "Não foi possível realizar o login, verifique seu email e sua senha e tente novamente."
+          );
         }
       })
       .catch((resp) => {

@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 
 import LargeLogo from "../../assets/img/logos/large_heyclothes.png";
 import axios from "axios";
+import swal from "sweetalert";
 import Button from "../../components/Button_CMP";
 
 import {
@@ -38,10 +39,10 @@ const ResetPassword = () => {
 
   const handleSave = async (formValues) => {
     const { pwd, pwdConfirm } = formValues;
-    setFormError("");
+    // setFormError("");
 
     if (pwd != pwdConfirm) {
-      setFormError("Confirmação de senha diferente da senha informada!");
+      swal( "Confirmação de senha diferente da senha informada!");
       return;
     }
 
@@ -51,6 +52,11 @@ const ResetPassword = () => {
       .then((resp) => {
         if (resp.data) {
           setTokenUsed(true);
+        } else {
+          swal(
+            "Oops",
+            "Erro ao salvar senha, verifique os valores informados e tenta novamente!"
+          );
         }
       })
       .catch((resp) => {
