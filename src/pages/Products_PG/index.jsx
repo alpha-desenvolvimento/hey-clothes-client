@@ -76,7 +76,7 @@ const Products_PG = () => {
     setIsLoaded(false);
     let url = `${process.env.REACT_APP_API_URL}/api/products/page/${page}`;
     if (query) url += `?prodName=${query}`;
-    axios //TODO colocar url em uma variavel de .env ou algo assim pra produção
+    axios
       .get(url)
       .then((resp) => {
         console.log("resp", resp);
@@ -125,7 +125,11 @@ const Products_PG = () => {
     <>
       <NavBar />
       <Main>
-        <ProductSearchBar page={page} handleFetchData={fetchPageData} />
+        <ProductSearchBar
+          page={page}
+          setPage={setPage}
+          handleFetchData={fetchPageData}
+        />
         <div style={{ paddingTop: "10rem" }}></div>
         {isBadRequest ? (
           <h1>{error}</h1>
