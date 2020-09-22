@@ -42,8 +42,7 @@ const ResetPassword = () => {
     // setFormError("");
 
     if (pwd != pwdConfirm) {
-      swal( "Confirmação de senha diferente da senha informada!");
-      return;
+      return swal("Confirmação de senha diferente da senha informada!");
     }
 
     const url = `${process.env.REACT_APP_API_URL}/api/users/updatePasswordWithToken/`;
