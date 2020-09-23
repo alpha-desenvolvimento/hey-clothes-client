@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { getUrlParams } from "../../controller/url";
+import { useParams, useHistory } from "react-router-dom";
+import { FiTag } from "react-icons/fi";
 
 import NavBar, { Main } from "../../components/NavBar_CMP";
 import Drawer, { useDrawerUtils } from "../../components/Drawer_CMP";
-import { useParams, useHistory } from "react-router-dom";
-import { FiTag } from "react-icons/fi";
+import Spinner from "../../components/LoadingSpinner_CMP";
 
 import CategoryForm from "../../components/CategoryForm_CMP";
 import CreateButton from "../../components/CreateButton_CMP";
@@ -98,7 +99,7 @@ const Categories_PG = () => {
         {isBadRequest ? (
           <h1>{error}</h1>
         ) : !isLoaded ? (
-          <h1>Buscando</h1>
+          <Spinner />
         ) : (
           <>
             <CardContainer>

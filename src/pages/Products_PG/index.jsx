@@ -16,6 +16,7 @@ import Paginator from "../../components/Paginator_CMP";
 
 import { BreadcrumbNav, BreadCrumbItem, BreadCrumbItemText } from "./styles";
 import HerokuServer from "../../API/HerokuServer";
+import Spinner from "../../components/LoadingSpinner_CMP";
 
 const Products_PG = () => {
   const [isOpen, hideDrawer, openDrawer] = useDrawerUtils();
@@ -131,7 +132,7 @@ const Products_PG = () => {
         {isBadRequest ? (
           <h1>{error}</h1>
         ) : !isLoaded ? (
-          <h1>Loading...</h1>
+          <Spinner />
         ) : (
           <>
             <CreateButton

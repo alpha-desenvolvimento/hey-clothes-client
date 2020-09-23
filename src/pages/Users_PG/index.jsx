@@ -10,6 +10,7 @@ import { AuthContext } from "../../AuthContext";
 import UserForm from "../../components/UserForm_CMP";
 import CreateButton from "../../components/CreateButton_CMP";
 import SearchBar from "../../components/SearchBar_CMP";
+import Spinner from "../../components/LoadingSpinner_CMP";
 
 import { CardContainer, Card, CardDetails, CardText } from "./styles";
 
@@ -95,7 +96,7 @@ const Users_PG = () => {
         {isBadRequest ? (
           <h1>{error}</h1>
         ) : !isLoaded ? (
-          <h1>Buscando</h1>
+          <Spinner />
         ) : (
           <>
             <CardContainer>

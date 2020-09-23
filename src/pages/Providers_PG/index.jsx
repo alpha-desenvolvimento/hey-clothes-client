@@ -12,6 +12,7 @@ import CreateButton from "../../components/CreateButton_CMP";
 import SearchBar from "../../components/SearchBar_CMP";
 
 import { CardContainer, Card, CardDetails, CardText } from "./styles";
+import Spinner from "../../components/LoadingSpinner_CMP";
 
 const Providers_PG = () => {
   const history = useHistory();
@@ -105,7 +106,7 @@ const Providers_PG = () => {
         {isBadRequest ? (
           <h1>{error}</h1>
         ) : !isLoaded ? (
-          <h1>Buscando</h1>
+          <Spinner />
         ) : (
           <>
             <CardContainer>
