@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { mediaQuery } from "../../styles/global";
 
 export const Hr = styled.hr`
   border-width: 1px;
@@ -16,8 +17,12 @@ export const MainContainer = styled.form`
   /* width: calc(100vw - 8rem); */
   right: 0;
   background-color: rgb(255 255 255 / 0.7);
-  padding: 3vh 8rem 3vh 16rem;
+  padding: 3vh 1rem 3vh 2rem;
   height: 10rem;
+
+  ${mediaQuery[0]} {
+    padding: 3vh 8rem 3vh 16rem;
+  }
 `;
 
 export const SearchInputContainer = styled.div`

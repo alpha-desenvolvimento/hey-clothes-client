@@ -1,13 +1,16 @@
 import styled from "styled-components";
 import { fontSize } from "../../styles/typography";
-import { colors } from "../../styles/colors";
-
-const secondary = colors.tertiary.rgb;
+import { mediaQuery } from "../../styles/global";
 
 export const Main = styled.main`
-  width: 100%;
+  width: 80%;
+  /*Não pode ser 100% se não fica por baixo do botão de create no mobile */
   display: flex;
   justify-content: center;
+
+  ${mediaQuery[0]} {
+    width: 100%;
+  }
 `;
 
 export const Arrow = styled.div`
@@ -20,18 +23,18 @@ export const Arrow = styled.div`
 `;
 
 export const PageNumber = styled.div`
-  display: flex;
+  cursor: pointer;
+  display: inline-flex;
+
   align-items: center;
   justify-content: center;
-  font-size: ${fontSize.h6}rem;
-  background-color: rgba(${secondary.r}, ${secondary.g}, ${secondary.b}, 0.7);
+
   margin: 0 1rem;
   width: 3rem;
   height: 3rem;
-  border-radius: 100%;
-  cursor: pointer;
+  padding: 0.4rem;
+  border-radius: 50%;
 
-  &.current-page {
-    background-color: rgba(${secondary.r}, ${secondary.g}, ${secondary.b}, 1);
-  }
+  font-size: ${fontSize.h6}rem;
+  color: ${({ currentPage }) => (currentPage ? "#74A3F2" : "131313cc")};
 `;

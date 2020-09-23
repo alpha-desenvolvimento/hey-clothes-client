@@ -8,7 +8,7 @@ import { AuthContext } from "../../AuthContext";
 import Button from "../Button_CMP";
 import { FormWrapper, Input, Label, Wrapper, ForgotPwdText } from "./styles";
 
-const Login = ({ history, className, displayPwdReset }) => {
+const Login = ({ displayPwdReset }) => {
   const { register, handleSubmit, errors, setValue: SetFormValue } = useForm({
     mode: "onChange",
   });
@@ -48,7 +48,7 @@ const Login = ({ history, className, displayPwdReset }) => {
 
   return (
     <Wrapper>
-      <FormWrapper className={className}>
+      <FormWrapper>
         <h3>Log in</h3>
         <form onSubmit={handleSubmit(handleLogin)}>
           <Label htmlFor="user"> Email </Label>
@@ -79,7 +79,7 @@ const Login = ({ history, className, displayPwdReset }) => {
             type="submit"
             style={{ margin: "5rem auto 2rem", display: "block" }}
           >
-            Login
+            Entrar
           </Button>
         </form>
         <ForgotPwdText href="#" onClick={pwdResetHandler}>

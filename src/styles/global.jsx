@@ -20,6 +20,7 @@ export default createGlobalStyle`
     body {
         min-height:100vh;
         -webkit-font-smoothing: antialiased !important;
+        background-color: #f9f9f9;
     }
     body html #root {
         height: 100%;

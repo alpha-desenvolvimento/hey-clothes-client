@@ -9,6 +9,8 @@ export const CardWrapper = styled.div`
   margin: 1rem auto;
   border: 0;
   border-radius: 1rem;
+
+  background-color: #f2f2f2;
   box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
 
   transition: all 200ms ease-in-out;
@@ -34,19 +36,20 @@ export const CardImage = styled.div`
 export const CardDescription = styled.div`
   height: 8rem; /*Altura do pai - altura do CardImage*/
   padding: 1rem 2rem;
-  background-color: #625656;
   border-radius: 0 0 1rem 1rem;
   overflow-y: auto;
 `;
 
 export const NameText = styled.h1`
   font-size: 2.4rem;
-  font-weight: 700;
-  color: #f2f2f2d0;
+  font-weight: 400;
+  color: #131313;
+  opacity: 0.9;
 `;
 
 export const PriceText = styled.h3`
   font-size: 2.4rem;
-  font-weight: 500;
-  color: #f2f2f290;
+  font-weight: 700;
+  color: #131313;
+  opacity: 0.7;
 `;
