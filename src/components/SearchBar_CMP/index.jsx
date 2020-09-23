@@ -13,23 +13,20 @@ import {
 // import { useForm } from "react-hook-form";
 // import HerokuServer from "../../API/HerokuServer";
 
-const ProductSearchBar = ({ page, handleFetchData, setPage }) => {
+const ProductSearchBar = ({ handleFetchData, ignorePagination }) => {
   const { register, handleSubmit } = useForm();
 
   async function doSearch(formValues) {
-    // page !== null
-    //   ? setPage(0, handleFetchData("0", formValues.searchValue))
-    //   : handleFetchData(formValues.searchValue);
     const urlParams = new URLSearchParams("");
     const { searchValue } = formValues;
 
-    urlParams.set("page", 1);
+    if (!ignorePagination) urlParams.set("page", 1);
 
     if (searchValue && searchValue != "") urlParams.set("name", searchValue);
 
     window.history.pushState(null, null, `?${urlParams.toString()}`);
+
     handleFetchData();
-    //
   }
 
   return (

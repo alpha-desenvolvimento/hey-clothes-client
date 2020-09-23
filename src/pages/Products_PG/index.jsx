@@ -3,6 +3,8 @@ import { useParams, useHistory } from "react-router-dom";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import axios from "axios";
 
+import { getUrlParams, getPage } from "../../controller/url";
+
 import NavBar, { Main } from "../../components/NavBar_CMP";
 import CardContainer from "../../components/CardContainer_CMP";
 import Card from "../../components/ProductCard_CMP";
@@ -34,10 +36,6 @@ const Products_PG = () => {
   const [hasPreviousPage, sethasPreviousPage] = useState(false);
   const [pageCount, setPageCout] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
-
-  const fetchAndSetPageData = useCallback((page) => {
-    page === 0 ? fetchPageData("0") : fetchPageData(page);
-  }, []);
 
   useEffect(() => {
     // window.location.reload(false);
@@ -76,26 +74,22 @@ const Products_PG = () => {
           fetchPageData();
       }
     }
-  }, [actionExecuted, fetchAndSetPageData, openDrawer, page, prodID]);
+  }, [actionExecuted, openDrawer, page, prodID]);
 
-  const fetchPageData = (pageia, queryia) => {
+  const fetchPageData = () => {
     setIsBadRequest(false);
     setIsLoaded(false);
 
-    const urlParams = new URLSearchParams(window.location.search);
+    const urlParams = { paramList: [["name", "prodName"]] };
 
-    var page = parseInt(urlParams.get("page") || 1) - 1;
-
-    let url = `${process.env.REACT_APP_API_URL}/api/products/page/${page}`;
-
-    var name = urlParams.get("name");
-    if (name && name != " ") url += `?prodName=${name}`;
-
-    console.log(urlParams.toString());
+    let url = `${
+      process.env.REACT_APP_API_URL
+    }/api/products/page/${getPage()}${getUrlParams(urlParams)}`;
 
     axios
       .get(url)
       .then((resp) => {
+        console.log(resp.data);
         setProducts(resp.data.products);
         setHasNextPage(resp.data.next);
         sethasPreviousPage(resp.data.previous);
@@ -169,7 +163,7 @@ const Products_PG = () => {
       <Drawer isOpen={isOpen} hide={hideAndClearCurrentProduct} closeUrl="/p">
         <ProductForm
           refreshData={() => {
-            fetchAndSetPageData(page);
+            fetchPageData();
           }}
           prodId={prodID}
           isCreate={isCreate}

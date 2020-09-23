@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
+import { getUrlParams } from "../../controller/url";
 
 import NavBar, { Main } from "../../components/NavBar_CMP";
 import Drawer, { useDrawerUtils } from "../../components/Drawer_CMP";
@@ -24,11 +25,15 @@ const Providers_PG = () => {
   const [error, setError] = useState(null);
   const [isBadRequest, setIsBadRequest] = useState(false);
 
-  const fetchPageData = (query) => {
+  const fetchPageData = () => {
     setIsBadRequest(false);
     setIsLoaded(false);
+
+    const urlParams = { paramList: [["name", "provName"]] };
+
     let url = `${process.env.REACT_APP_API_URL}/api/provider/list`;
-    query && (url += `?provName=${query}`);
+    url += getUrlParams(urlParams);
+
     axios
       .get(url)
       .then((resp) => {
@@ -46,12 +51,8 @@ const Providers_PG = () => {
       });
   };
 
-  const fetchAndSetPageData = useCallback((query) => {
-    fetchPageData(query);
-  }, []);
-
   useEffect(() => {
-    fetchAndSetPageData("");
+    fetchPageData();
     if (providerId) {
       openDrawer();
     } else {
@@ -99,11 +100,12 @@ const Providers_PG = () => {
           openDrawer={openDrawer}
           dest="/c/provider?action=create"
         />
-        <SearchBar handleFetchData={fetchPageData} />
+        <SearchBar handleFetchData={fetchPageData} ignorePagination={true} />
+
         {isBadRequest ? (
           <h1>{error}</h1>
         ) : !isLoaded ? (
-          <h1>To carregando</h1>
+          <h1>Buscando</h1>
         ) : (
           <>
             <CardContainer>
@@ -139,7 +141,7 @@ const Providers_PG = () => {
         closeUrl="/c/provider"
       >
         <ProviderForm
-          refreshData={fetchAndSetPageData}
+          refreshData={fetchPageData}
           providerId={providerId}
           isCreate={isCreate}
         />

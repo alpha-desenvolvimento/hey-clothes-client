@@ -16,7 +16,7 @@ export const MainContainer = styled.form`
   /* width: calc(100vw - 8rem); */
   right: 0;
   background-color: rgb(255 255 255 / 0.7);
-  padding: 3vh 10vw;
+  padding: 3vh 8rem 3vh 16rem;
   height: 10rem;
 `;
 

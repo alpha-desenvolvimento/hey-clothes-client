@@ -27,15 +27,21 @@ const Users_PG = () => {
 
   const history = useHistory();
 
-  const fetchPageData = (query) => {
+  const fetchPageData = () => {
     setIsBadRequest(false);
     setIsLoaded(false);
+
+    const urlParams = new URLSearchParams(window.location.search);
+
     let url = `${process.env.REACT_APP_API_URL}/api/users/list`;
+
+    var name = urlParams.get("name");
+    if (name && name != " ") url += `?userName=${name}`;
+
     axios
       .get(url)
       .then((resp) => {
-        console.log("resp", resp);
-        // resp.header. TODO coloda o erro que vem no header
+        // console.log("resp", resp);
         setUsers(resp.data);
       })
       .catch((err) => {
@@ -48,12 +54,8 @@ const Users_PG = () => {
       });
   };
 
-  const fetchAndSetPageData = useCallback((query) => {
-    fetchPageData(query);
-  }, []);
-
   useEffect(() => {
-    fetchAndSetPageData(currentUser.id);
+    fetchPageData();
     if (userID) {
       openDrawer();
     } else {
@@ -61,7 +63,6 @@ const Users_PG = () => {
       const urlParams = new URLSearchParams(queryString);
       const action = urlParams.get("action");
 
-      // if (!actionExecuted)
       switch (action) {
         case "create":
           console.log("is create");
@@ -90,11 +91,11 @@ const Users_PG = () => {
       <NavBar />
       <Main>
         <CreateButton dest="/u?action=create" />
-        <SearchBar />
+        <SearchBar handleFetchData={fetchPageData} ignorePagination={true} />
         {isBadRequest ? (
           <h1>{error}</h1>
         ) : !isLoaded ? (
-          <h1>To carregando</h1>
+          <h1>Buscando</h1>
         ) : (
           <>
             <CardContainer>
@@ -137,7 +138,7 @@ const Users_PG = () => {
 
       <Drawer isOpen={isOpen} hide={hideAndClearCurrentUser} closeUrl="/u">
         <UserForm
-          refreshData={fetchAndSetPageData}
+          refreshData={fetchPageData}
           userID={userID}
           isCreate={isCreate}
         />
@@ -147,8 +148,3 @@ const Users_PG = () => {
 };
 
 export default Users_PG;
-
-// table, th, td {
-//   border: 1px solid black;
-//   border-collapse: collapse;
-// }
