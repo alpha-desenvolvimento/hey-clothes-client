@@ -1,4 +1,4 @@
-import { styled } from "styled-components";
+import styled from "styled-components";
 
 export const Wrapper = styled.div`
   width: 100%;
@@ -20,7 +20,7 @@ export const Spinner = styled.svg`
   height: 50px;
 
   & > circle {
-    stroke: hsl(210, 70, 75);
+    stroke: #848484;
     stroke-linecap: round;
     animation: dash 1.5s ease-in-out infinite;
   }
