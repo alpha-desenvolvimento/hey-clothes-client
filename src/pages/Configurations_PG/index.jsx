@@ -11,13 +11,16 @@ const Config_PG = () => {
       <Main>
         <CardsWrapper>
           <NavCard to="/c/provider">
-            <h3>Providers</h3>
-            <h5>Descrição do card seila</h5>
+            <h3>Fornecedores</h3>
+            <h5>Consulte e gerencie as informações sobre seus fornecedores.</h5>
           </NavCard>
 
           <NavCard to="/c/category">
-            <h3>Categories</h3>
-            <h5>Descrição do card seila</h5>
+            <h3>Categorias</h3>
+            <h5>
+              Consulte e gerencie as diferentes categorias que seus produtos
+              podem receber.
+            </h5>
           </NavCard>
         </CardsWrapper>
       </Main>
