@@ -1,4 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useParams, useHistory } from "react-router-dom";
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import axios from "axios";
+
+import { getUrlParams, getPage } from "../../controller/url";
 
 import NavBar, { Main } from "../../components/NavBar_CMP";
 import CardContainer from "../../components/CardContainer_CMP";
@@ -7,14 +12,11 @@ import Drawer, { useDrawerUtils } from "../../components/Drawer_CMP";
 import ProductForm from "../../components/ProductForm_CMP";
 import CreateButton from "../../components/CreateButton_CMP";
 import ProductSearchBar from "../../components/SearchBar_CMP";
+import Paginator from "../../components/Paginator_CMP";
 
-// import { Produtos as data } from "./mockData";
-
-import { useParams, useHistory } from "react-router-dom";
-import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
-
+import { BreadcrumbNav, BreadCrumbItem, BreadCrumbItemText } from "./styles";
 import HerokuServer from "../../API/HerokuServer";
-import axios from "axios";
+import Spinner from "../../components/LoadingSpinner_CMP";
 
 const Products_PG = () => {
   const [isOpen, hideDrawer, openDrawer] = useDrawerUtils();
@@ -26,15 +28,15 @@ const Products_PG = () => {
   const [actionExecuted, setActionExecuted] = useState(false);
   const [isCreate, setIsCreate] = useState(false);
 
-  const [page, setPage] = useState(0);
-  const [nextPageExists, setNextPageExists] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(null);
   const [isBadRequest, setIsBadRequest] = useState(false);
 
-  const fetchAndSetPageData = useCallback((page) => {
-    fetchPageData(page);
-  }, []);
+  const [page, setPage] = useState(0);
+  const [hasNextPage, setHasNextPage] = useState(false);
+  const [hasPreviousPage, sethasPreviousPage] = useState(false);
+  const [pageCount, setPageCout] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
 
   useEffect(() => {
     // window.location.reload(false);
@@ -42,6 +44,8 @@ const Products_PG = () => {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const action = urlParams.get("action");
+
+    setPage(parseInt(urlParams.get("page") || 1));
 
     if (prodID) {
       openDrawer();
@@ -68,25 +72,30 @@ const Products_PG = () => {
           });
           break;
         default:
-          fetchAndSetPageData(page);
+          fetchPageData();
       }
     }
-  }, [actionExecuted, fetchAndSetPageData, openDrawer, page, prodID]);
+  }, [actionExecuted, openDrawer, page, prodID]);
 
-  const fetchPageData = (page, query) => {
+  const fetchPageData = () => {
     setIsBadRequest(false);
     setIsLoaded(false);
-    let url = `${process.env.REACT_APP_API_URL}/api/products/page/${page}`;
-    if (query) url += `?prodName=${query}`;
-    axios //TODO colocar url em uma variavel de .env ou algo assim pra produção
+
+    const urlParams = { paramList: [["name", "prodName"]] };
+
+    let url = `${
+      process.env.REACT_APP_API_URL
+    }/api/products/page/${getPage()}${getUrlParams(urlParams)}`;
+
+    axios
       .get(url)
       .then((resp) => {
-        console.log("resp", resp);
-        // resp.header. TODO coloda o erro que vem no header
-        !resp.data.products.lenght
-          ? setProducts(resp.data.products)
-          : setError("Não foram encontrados itens");
-        setNextPageExists(resp.data.next);
+        console.log(resp.data);
+        setProducts(resp.data.products);
+        setHasNextPage(resp.data.next);
+        sethasPreviousPage(resp.data.previous);
+        setPageCout(resp.data.pageCount + 1);
+        setCurrentPage(resp.data.page + 1);
       })
       .catch((err) => {
         console.log(err);
@@ -99,6 +108,7 @@ const Products_PG = () => {
   };
 
   const hideAndClearCurrentProduct = () => {
+    setIsCreate(false);
     setProdID(null);
     hideDrawer();
   };
@@ -109,80 +119,56 @@ const Products_PG = () => {
     openDrawer();
   }
 
-  //TODO refatorar handleNext e handlePrevious em uma só função
-  function handleNextPage() {
-    setPage(parseInt(page) + 1, fetchAndSetPageData(page + 1));
-    //Segundo argumento do metodo set é um callback
-    console.log(page);
-  }
-
-  async function handlePreviousPage() {
-    setPage(page - 1, fetchAndSetPageData(page - 1));
-    //Segundo argumento do metodo set é um callback
-    console.log(page);
-  }
-
   return (
     <>
       <NavBar />
       <Main>
-        <ProductSearchBar page={page} handleFetchData={fetchPageData} />
+        <ProductSearchBar
+          page={page}
+          setPage={setPage}
+          handleFetchData={fetchPageData}
+        />
         <div style={{ paddingTop: "10rem" }}></div>
         {isBadRequest ? (
           <h1>{error}</h1>
         ) : !isLoaded ? (
-          <h1>To carregando</h1>
+          <Spinner />
         ) : (
           <>
-            <CreateButton dest="/p?action=create" />
-            <h1>EU SOU A PAGINA {page + 1} </h1>
-            {products ? (
-              <>
-                {/*TODO add styling to arrows */}
-                {page > 0 && (
-                  <h1 onClick={handlePreviousPage}>
-                    Anterior
-                    <FiChevronLeft />
-                  </h1>
-                )}
-                {nextPageExists && (
-                  <h1 onClick={handleNextPage}>
-                    Proxima
-                    <FiChevronRight />
-                  </h1>
-                )}
-                <CardContainer>
-                  {products.map((product, index) => (
-                    <Card
-                      key={product.id + "-" + index}
-                      product={product}
-                      onClick={() => handleProduct(product.id)}
-                    />
-                  ))}
-                </CardContainer>
-                {/*TODO add styling to arrows */}
-                {page > 0 && (
-                  <h1 onClick={handlePreviousPage}>
-                    Anterior
-                    <FiChevronLeft />
-                  </h1>
-                )}
-                {nextPageExists && (
-                  <h1 onClick={handleNextPage}>
-                    Proxima
-                    <FiChevronRight />
-                  </h1>
-                )}
-              </>
-            ) : (
-              <h1>Loading</h1>
-            )}
+            <CreateButton
+              setIsCreate={setIsCreate}
+              openDrawer={openDrawer}
+              dest="/p?action=create"
+            />
+
+            <CardContainer>
+              {products.map((product, index) => (
+                <Card
+                  key={product.id + "-" + index}
+                  product={product}
+                  onClick={() => handleProduct(product.id)}
+                />
+              ))}
+            </CardContainer>
+            <Paginator
+              fetchPageData={fetchPageData}
+              hasPreviousPage={hasPreviousPage}
+              hasNextPage={hasNextPage}
+              currentPage={currentPage}
+              pageCount={pageCount}
+            />
           </>
         )}
       </Main>
 
       <Drawer isOpen={isOpen} hide={hideAndClearCurrentProduct} closeUrl="/p">
-        <ProductForm prodId={prodID} isCreate={isCreate} />
+        <ProductForm
+          refreshData={() => {
+            fetchPageData();
+          }}
+          prodId={prodID}
+          isCreate={isCreate}
+        />
       </Drawer>
     </>
   );

@@ -6,13 +6,13 @@ import { FiPlus } from "react-icons/fi";
 
 import { Button } from "./styles";
 
-const CreateButton = ({ dest }) => {
+const CreateButton = ({ dest, openDrawer, setIsCreate }) => {
   const history = useHistory();
 
   function handleClick() {
     console.log(dest);
     history.push(dest);
-    window.location.reload(false);
+    setIsCreate(true, openDrawer());
   }
 
   return (

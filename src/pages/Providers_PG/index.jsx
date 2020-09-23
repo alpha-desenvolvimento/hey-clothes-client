@@ -1,18 +1,22 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
+import { getUrlParams } from "../../controller/url";
 
 import NavBar, { Main } from "../../components/NavBar_CMP";
 import Drawer, { useDrawerUtils } from "../../components/Drawer_CMP";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { FiPhone } from "react-icons/fi";
 
-import CategoryForm from "../../components/CategoryForm_CMP";
+import ProviderForm from "../../components/ProviderForm_CMP";
 import CreateButton from "../../components/CreateButton_CMP";
 import SearchBar from "../../components/SearchBar_CMP";
 
 import { CardContainer, Card, CardDetails, CardText } from "./styles";
+import Spinner from "../../components/LoadingSpinner_CMP";
 
 const Providers_PG = () => {
+  const history = useHistory();
+
   const [isOpen, hideDrawer, openDrawer] = useDrawerUtils();
   const [providers, setProviders] = useState([]);
   const [providerId, setProviderId] = useState(useParams().id);
@@ -22,11 +26,15 @@ const Providers_PG = () => {
   const [error, setError] = useState(null);
   const [isBadRequest, setIsBadRequest] = useState(false);
 
-  const fetchPageData = (query) => {
+  const fetchPageData = () => {
     setIsBadRequest(false);
     setIsLoaded(false);
+
+    const urlParams = { paramList: [["name", "provName"]] };
+
     let url = `${process.env.REACT_APP_API_URL}/api/provider/list`;
-    query && (url += `?provName=${query}`);
+    url += getUrlParams(urlParams);
+
     axios
       .get(url)
       .then((resp) => {
@@ -44,12 +52,8 @@ const Providers_PG = () => {
       });
   };
 
-  const fetchAndSetPageData = useCallback((query) => {
-    fetchPageData(query);
-  }, []);
-
   useEffect(() => {
-    fetchAndSetPageData("");
+    fetchPageData();
     if (providerId) {
       openDrawer();
     } else {
@@ -72,7 +76,18 @@ const Providers_PG = () => {
     }
   }, []);
 
-  const hideAndClearCurrentCategory = () => {
+  useEffect(() => {
+    providerId && openDrawer();
+  });
+
+  const handleProvider = (openProvId) => {
+    setProviderId(openProvId);
+    history.push(`/c/provider/${openProvId}`);
+    openDrawer();
+  };
+
+  const hideAndClearCurrentProvider = () => {
+    setIsCreate(false);
     setProviderId(null);
     hideDrawer();
   };
@@ -81,19 +96,29 @@ const Providers_PG = () => {
     <>
       <NavBar />
       <Main>
-        <CreateButton dest="/c/provider?action=create" />
-        <SearchBar handleFetchData={fetchPageData} />
+        <CreateButton
+          setIsCreate={setIsCreate}
+          openDrawer={openDrawer}
+          dest="/c/provider?action=create"
+        />
+        <SearchBar handleFetchData={fetchPageData} ignorePagination={true} />
+
         {isBadRequest ? (
           <h1>{error}</h1>
         ) : !isLoaded ? (
-          <h1>To carregando</h1>
+          <Spinner />
         ) : (
           <>
             <CardContainer>
               {providers && (
                 <>
                   {providers.map((provider, index) => (
-                    <Card key={"Card-" + provider.id}>
+                    <Card
+                      key={"Card-" + provider.id}
+                      onClick={() => {
+                        handleProvider(provider.id);
+                      }}
+                    >
                       <CardText>Id: {provider.id}</CardText>
                       <CardText primary>{provider.name}</CardText>
                       <CardDetails>
@@ -113,10 +138,14 @@ const Providers_PG = () => {
 
       <Drawer
         isOpen={isOpen}
-        hide={hideAndClearCurrentCategory}
+        hide={hideAndClearCurrentProvider}
         closeUrl="/c/provider"
       >
-        <CategoryForm categoryId={providerId} isCreate={isCreate} />
+        <ProviderForm
+          refreshData={fetchPageData}
+          providerId={providerId}
+          isCreate={isCreate}
+        />
       </Drawer>
     </>
   );

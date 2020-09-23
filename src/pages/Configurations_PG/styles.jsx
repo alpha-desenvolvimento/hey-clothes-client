@@ -43,6 +43,11 @@ export const NavCard = styled(NavLink)`
     box-shadow: 0 4px 10px 0 hsla(0, 0%, 0%, 0.4);
   }
 
+  & > h5 {
+    font-weight: 400;
+    opacity: 0.7;
+  }
+
   ${mediaQuery[0]} {
     width: 45%;
 

@@ -8,6 +8,9 @@ const textSize = {
   small: fontSize.p,
 };
 
+const mockImage =
+  "https://www.creativefabrica.com/wp-content/uploads/2018/11/Clean-clothes-icon-by-rudezstudio-580x386.jpg";
+
 export const Form = styled.form`
   display: flex;
   flex-direction: column;
@@ -37,10 +40,32 @@ export const ErrorText = styled.span`
 export const PhotoContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: flex-start;
+
+  width: 100%;
 `;
 
-export const ProductPhoto = styled.img`
-  width: 20rem;
+export const ProductPhotoWrapper = styled.figure`
+  height: 20rem;
+  width: 48%;
   font-size: ${textSize.small}em;
+  margin: 0.4rem;
+
+  & > input {
+    width: 100%;
+  }
+`;
+
+export const ProductPhoto = styled.div`
+  background-image: ${({ imageUrl }) =>
+    imageUrl ? `url("${imageUrl}")` : `url("${mockImage}")`};
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  border-radius: 1rem;
+  margin: 0.4rem;
+
+  height: 16rem;
+  width: auto;
 `;

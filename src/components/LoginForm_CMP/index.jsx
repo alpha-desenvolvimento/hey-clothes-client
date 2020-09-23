@@ -2,13 +2,14 @@ import React, { useContext } from "react";
 import { withRouter, Redirect } from "react-router";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import swal from "sweetalert";
 
 import { AuthContext } from "../../AuthContext";
 import Button from "../Button_CMP";
 import { FormWrapper, Input, Label, Wrapper, ForgotPwdText } from "./styles";
 
-const Login = ({ history, className }) => {
-  const { register, handleSubmit, errors } = useForm({
+const Login = ({ displayPwdReset }) => {
+  const { register, handleSubmit, errors, setValue: SetFormValue } = useForm({
     mode: "onChange",
   });
 
@@ -17,6 +18,7 @@ const Login = ({ history, className }) => {
   const handleLogin = async (formValues) => {
     window.localStorage.setItem("section", null);
     const { user, pwd } = formValues;
+    SetFormValue("pwd", "");
     setCurrentUser(null);
 
     const url = `${process.env.REACT_APP_API_URL}/api/auth/user`;
@@ -26,7 +28,12 @@ const Login = ({ history, className }) => {
         if (resp.data.auth) {
           setCurrentUser({ ...resp.data });
           window.localStorage.setItem("section", JSON.stringify(resp.data));
-        } 
+        } else {
+          swal(
+            "Oops",
+            "Não foi possível realizar o login, verifique seu email e sua senha e tente novamente."
+          );
+        }
       })
       .catch((resp) => {
         console.log(resp);
@@ -35,9 +42,13 @@ const Login = ({ history, className }) => {
 
   if (currentUser) return <Redirect to="/p" />;
 
+  function pwdResetHandler() {
+    displayPwdReset(true);
+  }
+
   return (
     <Wrapper>
-      <FormWrapper className={className}>
+      <FormWrapper>
         <h3>Log in</h3>
         <form onSubmit={handleSubmit(handleLogin)}>
           <Label htmlFor="user"> Email </Label>
@@ -50,9 +61,7 @@ const Login = ({ history, className }) => {
             name="user"
             type="email"
             error={errors.user}
-            //value={userValues.user}
             placeholder="meu@email.com"
-            //onInput={handleInputChange}
           />
 
           <Label htmlFor="pwd"> Password </Label>
@@ -62,9 +71,7 @@ const Login = ({ history, className }) => {
             name="pwd"
             type="password"
             error={errors.pwd}
-            //value={userValues.pwd}
             placeholder="Password"
-            //onInput={handleInputChange}
           />
 
           <Button
@@ -72,11 +79,11 @@ const Login = ({ history, className }) => {
             type="submit"
             style={{ margin: "5rem auto 2rem", display: "block" }}
           >
-            Login
+            Entrar
           </Button>
         </form>
-        <ForgotPwdText href="#a">
-          <span>Forgot your password?</span>
+        <ForgotPwdText href="#" onClick={pwdResetHandler}>
+          <span>Esqueci minha senha</span>
         </ForgotPwdText>
       </FormWrapper>
     </Wrapper>

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { FiLogOut, FiShoppingCart, FiUser, FiSettings } from "react-icons/fi";
+import { FiLogOut, FiShoppingCart, FiUser, FiBook } from "react-icons/fi";
 
 import {
   NavBar as Nav,
@@ -20,28 +20,28 @@ const NavBar = () => {
         <NavItem>
           <NavLink to="/p">
             <FiShoppingCart />
-            <LinkText>Products</LinkText>
+            <LinkText>Produtos</LinkText>
           </NavLink>
         </NavItem>
 
         <NavItem>
           <NavLink to="/u">
             <FiUser />
-            <LinkText>Users</LinkText>
+            <LinkText>Usuarios</LinkText>
           </NavLink>
         </NavItem>
 
         <NavItem>
           <NavLink to="/c">
-            <FiSettings />
-            <LinkText>Configurations</LinkText>
+            <FiBook />
+            <LinkText>Gerenciar</LinkText>
           </NavLink>
         </NavItem>
 
         <NavItem>
           <NavLink onClick={HerokuServer.Auth.logoff} to="/">
             <FiLogOut />
-            <LinkText>Logoff</LinkText>
+            <LinkText>Sair</LinkText>
           </NavLink>
         </NavItem>
       </NavItemsWrapper>

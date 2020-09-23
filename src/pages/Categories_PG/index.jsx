@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { getUrlParams } from "../../controller/url";
+import { useParams, useHistory } from "react-router-dom";
+import { FiTag } from "react-icons/fi";
 
 import NavBar, { Main } from "../../components/NavBar_CMP";
 import Drawer, { useDrawerUtils } from "../../components/Drawer_CMP";
-import { useParams } from "react-router-dom";
-import { FiTag } from "react-icons/fi";
+import Spinner from "../../components/LoadingSpinner_CMP";
 
 import CategoryForm from "../../components/CategoryForm_CMP";
 import CreateButton from "../../components/CreateButton_CMP";
@@ -13,6 +15,8 @@ import SearchBar from "../../components/SearchBar_CMP";
 import { CardContainer, Card, CardDetails, CardText } from "./styles";
 
 const Categories_PG = () => {
+  const history = useHistory();
+
   const [isOpen, hideDrawer, openDrawer] = useDrawerUtils();
   const [categories, setCategories] = useState([]);
   const [categoryId, setCategoryId] = useState(useParams().id);
@@ -22,11 +26,14 @@ const Categories_PG = () => {
   const [error, setError] = useState(null);
   const [isBadRequest, setIsBadRequest] = useState(false);
 
-  const fetchPageData = (query) => {
+  const fetchPageData = () => {
     setIsBadRequest(false);
-    setIsLoaded(false);
+
+    const urlParams = { paramList: [["name", "catName"]] };
+
     let url = `${process.env.REACT_APP_API_URL}/api/category/list`;
-    query && (url += `?catName=${query}`);
+    url += getUrlParams(urlParams);
+
     axios
       .get(url)
       .then((resp) => {
@@ -44,12 +51,8 @@ const Categories_PG = () => {
       });
   };
 
-  const fetchAndSetPageData = useCallback((query) => {
-    fetchPageData(query);
-  }, []);
-
   useEffect(() => {
-    fetchAndSetPageData("");
+    fetchPageData();
     if (categoryId) {
       openDrawer();
     } else {
@@ -59,7 +62,6 @@ const Categories_PG = () => {
 
       console.log(action);
 
-      // if (!actionExecuted)
       switch (action) {
         case "create":
           console.log("is create");
@@ -72,7 +74,14 @@ const Categories_PG = () => {
     }
   }, []);
 
+  const handleCategory = (openCatId) => {
+    setCategoryId(openCatId);
+    history.push(`/c/category/${openCatId}`);
+    openDrawer();
+  };
+
   const hideAndClearCurrentCategory = () => {
+    setIsCreate(false);
     setCategoryId(null);
     hideDrawer();
   };
@@ -81,12 +90,16 @@ const Categories_PG = () => {
     <>
       <NavBar />
       <Main>
-        <CreateButton dest="/c/category?action=create" />
-        <SearchBar handleFetchData={fetchPageData} />
+        <CreateButton
+          setIsCreate={setIsCreate}
+          openDrawer={openDrawer}
+          dest="/c/category?action=create"
+        />
+        <SearchBar handleFetchData={fetchPageData} ignorePagination={true} />
         {isBadRequest ? (
           <h1>{error}</h1>
         ) : !isLoaded ? (
-          <h1>To carregando</h1>
+          <Spinner />
         ) : (
           <>
             <CardContainer>
@@ -94,6 +107,9 @@ const Categories_PG = () => {
                 <>
                   {categories.map((category, index) => (
                     <Card
+                      onClick={() => {
+                        handleCategory(category.id);
+                      }}
                       active={category.isActive}
                       key={"Card-" + category.id}
                     >
@@ -123,7 +139,11 @@ const Categories_PG = () => {
         hide={hideAndClearCurrentCategory}
         closeUrl="/c/category"
       >
-        <CategoryForm categoryId={categoryId} isCreate={isCreate} />
+        <CategoryForm
+          refreshData={fetchPageData}
+          categoryId={categoryId}
+          isCreate={isCreate}
+        />
       </Drawer>
     </>
   );

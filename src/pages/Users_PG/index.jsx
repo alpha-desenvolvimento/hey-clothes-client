@@ -1,28 +1,62 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
+import axios from "axios";
+
 import NavBar, { Main } from "../../components/NavBar_CMP";
 import Drawer, { useDrawerUtils } from "../../components/Drawer_CMP";
 import { useParams, useHistory } from "react-router-dom";
-import { FiEdit } from "react-icons/fi";
-
-import HerokuServer from "../../API/HerokuServer";
+import { FiMail, FiUser } from "react-icons/fi";
+import { AuthContext } from "../../AuthContext";
 
 import UserForm from "../../components/UserForm_CMP";
 import CreateButton from "../../components/CreateButton_CMP";
-import UserSearchBar from "../../components/UserSearchBar_CMP";
+import SearchBar from "../../components/SearchBar_CMP";
+import Spinner from "../../components/LoadingSpinner_CMP";
 
-import { Table } from "./styles";
+import { CardContainer, Card, CardDetails, CardText } from "./styles";
 
 const Users_PG = () => {
   const [isOpen, hideDrawer, openDrawer] = useDrawerUtils();
   const [users, setUsers] = useState([]);
   const [userID, setUserID] = useState(useParams().id);
-  const [actionExecuted, setActionExecuted] = useState(false);
+  const { currentUser } = useContext(AuthContext);
 
   const [isCreate, setIsCreate] = useState(false);
 
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [error, setError] = useState(null);
+  const [isBadRequest, setIsBadRequest] = useState(false);
+
   const history = useHistory();
 
+  const fetchPageData = () => {
+    setIsBadRequest(false);
+    setIsLoaded(false);
+
+    const urlParams = new URLSearchParams(window.location.search);
+
+    let url = `${process.env.REACT_APP_API_URL}/api/users/list`;
+
+    var name = urlParams.get("name");
+    if (name && name != " ") url += `?userName=${name}`;
+
+    axios
+      .get(url)
+      .then((resp) => {
+        // console.log("resp", resp);
+        setUsers(resp.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsBadRequest(true);
+      })
+      .finally(() => {
+        setIsLoaded(true);
+        setIsBadRequest(false);
+      });
+  };
+
   useEffect(() => {
+    fetchPageData();
     if (userID) {
       openDrawer();
     } else {
@@ -30,39 +64,27 @@ const Users_PG = () => {
       const urlParams = new URLSearchParams(queryString);
       const action = urlParams.get("action");
 
-      console.log(action);
-
-      // if (!actionExecuted)
       switch (action) {
         case "create":
           console.log("is create");
-          setIsCreate(true);
-          openDrawer();
+          setIsCreate(true, openDrawer());
           break;
-        case "search":
-          const name = urlParams.get("name");
-          //       const params = {
-          //         name: name || "",
-          break;
-        // };
-        //       HerokuServer.Product.list({ ...params }).then((resp) => {
-        //         console.log("resp", resp);
-        //         setProducts(resp);
-        //       });
-        //       break;
+
         default:
-          HerokuServer.User.list().then((resp) => {
-            console.log("resp", resp);
-            setUsers(resp);
-          });
+          break;
       }
     }
+  }, []);
 
-  });
-  
-  const hideAndClearCurrentProduct = () => {
+  const hideAndClearCurrentUser = () => {
     setUserID(null);
     hideDrawer();
+  };
+
+  const handleUser = (openUserId) => {
+    setUserID(openUserId);
+    history.push(`/u/${openUserId}`);
+    openDrawer();
   };
 
   return (
@@ -70,45 +92,60 @@ const Users_PG = () => {
       <NavBar />
       <Main>
         <CreateButton dest="/u?action=create" />
-        <UserSearchBar />
-        <Table>
-          <tr>
-            <th className="h3-font-size">Nome</th>
-            <th className="h3-font-size">E-mail</th>
-          </tr>
-          {users && (
-            <>
-              {users.map((user, index) => (
-                <tr className="h5-font-size" key={user.id}>
-                  <td>
-                    <span className="h6-font-size">{`${index}. `}</span>
-                    {user.name}
-                    <FiEdit
-                      className="icon p-font-size"
+        <SearchBar handleFetchData={fetchPageData} ignorePagination={true} />
+        {isBadRequest ? (
+          <h1>{error}</h1>
+        ) : !isLoaded ? (
+          <Spinner />
+        ) : (
+          <>
+            <CardContainer>
+              {users && (
+                <>
+                  {users.map((user, index) => (
+                    <Card
                       onClick={() => {
-                        history.push(`/u/${user.id}`);
-                        window.location.reload(false);
+                        handleUser(user.id);
                       }}
-                    />
-                  </td>
-                  <td>{user.email}</td>
-                </tr>
-              ))}
-            </>
-          )}
-        </Table>
+                      active={user.isActive}
+                      key={"Card-" + user.id}
+                    >
+                      <CardDetails>
+                        <CardText>Id: {user.id}</CardText>
+                        <CardText active={user.isActive} svg="right">
+                          {user.isActive == 0 ? (
+                            <span>inativo</span>
+                          ) : (
+                            <span>ativo</span>
+                          )}
+                          <FiUser />
+                        </CardText>
+                      </CardDetails>
+                      <CardText primary>{user.name}</CardText>
+                      <CardDetails>
+                        <CardText greyscale active={user.isActive} svg="left">
+                          <FiMail />
+                          {user.email}
+                        </CardText>
+                      </CardDetails>
+                    </Card>
+                  ))}
+                </>
+              )}
+            </CardContainer>
+          </>
+        )}
       </Main>
 
-      <Drawer isOpen={isOpen} hide={hideAndClearCurrentProduct} closeUrl="/u">
-        <UserForm userID={userID} isCreate={isCreate} />
+      <Drawer isOpen={isOpen} hide={hideAndClearCurrentUser} closeUrl="/u">
+        <UserForm
+          refreshData={fetchPageData}
+          userID={userID}
+          isCreate={isCreate}
+        />
       </Drawer>
     </>
   );
 };
 
 export default Users_PG;
-
-// table, th, td {
-//   border: 1px solid black;
-//   border-collapse: collapse;
-// }
