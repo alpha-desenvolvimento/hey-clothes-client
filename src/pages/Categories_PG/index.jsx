@@ -115,7 +115,7 @@ const Categories_PG = () => {
                     >
                       <CardText primary>{category.name}</CardText>
                       <CardDetails>
-                        <CardText>Id: {category.id}</CardText>
+                        {/* <CardText>Id: {category.id}</CardText> */}
                         <CardText>
                           {category.isActive == 0 ? (
                             <span>inativo</span>

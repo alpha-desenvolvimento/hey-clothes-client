@@ -119,7 +119,7 @@ const Providers_PG = () => {
                         handleProvider(provider.id);
                       }}
                     >
-                      <CardText>Id: {provider.id}</CardText>
+                      {/* <CardText>Id: {provider.id}</CardText> */}
                       <CardText primary>{provider.name}</CardText>
                       <CardDetails>
                         <CardText>
