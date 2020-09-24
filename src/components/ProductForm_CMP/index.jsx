@@ -3,6 +3,17 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { AuthContext } from "../../AuthContext";
 
+import TextField from "@material-ui/core/TextField";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import MenuItem from "@material-ui/core/MenuItem";
+import Button from "@material-ui/core/Button";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
+import ptBrLocale from "date-fns/locale/pt-BR";
+
 import {
   Form,
   Input,
@@ -20,6 +31,14 @@ const ProductForm = ({ prodId, isCreate, refreshData }) => {
   const [currentProduct, setCurrentProduct] = useState(null);
   const [categories, setCategories] = useState([]);
   const [providers, setProviders] = useState([]);
+
+  const [selectedDate, setSelectedDate] = React.useState(
+    new Date("2020-08-18")
+  );
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
 
   const fetchAndSetData = () => {
     let url = `${process.env.REACT_APP_API_URL}/api/products/${prodId}`;
@@ -118,45 +137,49 @@ const ProductForm = ({ prodId, isCreate, refreshData }) => {
       console.log(currentProduct), //TODO atualizar os campos do form
       (
         <>
-          <Form onSubmit={handleSubmit(onSubmit)}>
+          <Form
+            styles={{ fontSize: "1.6rem" }}
+            autoComplete="off"
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <h4>{isCreate ? "Novo Produto" : currentProduct.name}</h4>
-            {currentProduct.id && <IdText>ID: {currentProduct.id}</IdText>}
 
-            <Label htmlFor="prodName">Nome do Produto</Label>
-            <Input
+            <TextField
+              label="Nome do Produto"
               name="prodName"
               defaultValue={currentProduct.name}
               ref={register({ required: true })}
             />
 
-            <Label htmlFor="prodDescription">Descrição do Produto</Label>
-            {/*TODO estilizar textArea */}
-            <textarea
+            <TextField
+              multiline
+              label="Descrição do Produto"
               name="prodDescription"
               defaultValue={currentProduct.description}
               ref={register({ required: true })}
             />
 
-            <label htmlFor="">
-              Product Quantity: {currentProduct.quantity}
-            </label>
-
-            <Label htmlFor="prodPrice">Preço do Produto</Label>
-            <Input
+            {/*Eu fiquei das 2:09 am até as 3:27 tentando fazer isso ficar com mask e tal, tentei usando react-input-mask, react-intl-currency-mask e uma caralhada de coisa, to cansado e não consegui */}
+            <TextField
+              startAdornment={
+                <InputAdornment position="start">R$</InputAdornment>
+              }
+              label="Preço do Produto"
               name="prodPrice"
               defaultValue={currentProduct.price}
               ref={register({ required: true, min: 0.01 })}
             />
 
-            <Label htmlFor="prodBrand">Marca</Label>
-            <Input
+            <TextField
+              label="Marca"
               name="prodBrand"
               defaultValue={currentProduct.brand}
               ref={register({ required: true })}
             />
 
-            <Label htmlFor="prodCategory">Categoria</Label>
-            <select
+            <TextField
+              select
+              label="Categoria"
               name="prodCategory"
               defaultValue={currentProduct.category}
               ref={register({ required: true })}
@@ -164,18 +187,18 @@ const ProductForm = ({ prodId, isCreate, refreshData }) => {
               {categories.map(
                 (category, index) =>
                   category.isActive == 1 && (
-                    <option key={"cat-" + index} value={category.id}>
+                    <MenuItem key={"cat-" + index} value={category.id}>
                       {category.name}
-                    </option>
+                    </MenuItem>
                   )
               )}
-            </select>
+            </TextField>
 
             <Label htmlFor="productPhoto">Fotos do Produto</Label>
             <PhotoContainer>
               <ProductPhotoWrapper>
                 <ProductPhoto imageUrl={currentProduct.imgA} />
-                <Input
+                <TextField
                   name="prodImgA"
                   defaultValue={currentProduct.imgA}
                   ref={register}
@@ -184,7 +207,7 @@ const ProductForm = ({ prodId, isCreate, refreshData }) => {
 
               <ProductPhotoWrapper>
                 <ProductPhoto imageUrl={currentProduct.imgB} />
-                <Input
+                <TextField
                   name="prodImgB"
                   defaultValue={currentProduct.imgB}
                   ref={register}
@@ -193,7 +216,7 @@ const ProductForm = ({ prodId, isCreate, refreshData }) => {
 
               <ProductPhotoWrapper>
                 <ProductPhoto imageUrl={currentProduct.imgC} />
-                <Input
+                <TextField
                   name="prodImgC"
                   defaultValue={currentProduct.imgC}
                   ref={register}
@@ -202,30 +225,61 @@ const ProductForm = ({ prodId, isCreate, refreshData }) => {
 
               <ProductPhotoWrapper>
                 <ProductPhoto imageUrl={currentProduct.imgD} />
-                <Input
+                <TextField
                   name="prodImgD"
                   defaultValue={currentProduct.imgD}
                   ref={register}
                 />
               </ProductPhotoWrapper>
             </PhotoContainer>
-            <Label htmlFor="prodProvider">Fornecedor</Label>
-            <select
+            <TextField
+              select
+              label="Fornecedor"
               name="prodProvider"
               defaultValue={currentProduct.provider}
               ref={register({ required: true })}
             >
               {providers.map((provider, index) => (
-                <option key={"prov-" + index} value={provider.id}>
+                <MenuItem key={"prov-" + index} value={provider.id}>
                   {provider.name}
-                </option>
+                </MenuItem>
               ))}
-            </select>
-            <br />
-            <br />
-            <br />
-            <br />
-            <button type="submit">Salvar</button>
+            </TextField>
+
+            <MuiPickersUtilsProvider locale={ptBrLocale} utils={DateFnsUtils}>
+              {/*TODO, ainda não testei esses inputs de data */}
+              <KeyboardDatePicker
+                name="prodDataDeEntrada"
+                disableToolbar
+                variant="inline"
+                format="dd/MM/yyyy"
+                label="Data de entrada"
+                value={selectedDate}
+                onChange={handleDateChange}
+                KeyboardButtonProps={{
+                  "aria-label": "change date",
+                }}
+                ref={register}
+              />
+
+              <KeyboardDatePicker
+                name="prodDataDeSaida"
+                disableToolbar
+                variant="inline"
+                format="dd/MM/yyyy"
+                label="Data de saída"
+                value={selectedDate}
+                onChange={handleDateChange}
+                KeyboardButtonProps={{
+                  "aria-label": "change date",
+                }}
+                ref={register}
+              />
+            </MuiPickersUtilsProvider>
+
+            <Button color="primary" variant="contained" type="submit">
+              Salvar
+            </Button>
           </Form>
         </>
       )
