@@ -3,8 +3,11 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { AuthContext } from "../../AuthContext";
 
+import Box from "@material-ui/core/Box";
+import Grid from "@material-ui/core/Grid";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import TextField from "@material-ui/core/TextField";
-import InputAdornment from "@material-ui/core/InputAdornment";
+import CurrencyTextField from "@unicef/material-ui-currency-textfield";
 import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
 import {
@@ -14,16 +17,18 @@ import {
 import DateFnsUtils from "@date-io/date-fns";
 import ptBrLocale from "date-fns/locale/pt-BR";
 
-import {
-  Form,
-  Input,
-  Label,
-  ErrorText,
-  PhotoContainer,
-  ProductPhotoWrapper,
-  ProductPhoto,
-  IdText,
-} from "./styles";
+import { makeStyles } from "@material-ui/core/styles";
+
+import { ProductPhoto } from "./styles";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    "& .MuiTextField-root": {
+      margin: "1rem",
+      width: "100%",
+    },
+  },
+}));
 
 const ProductForm = ({ prodId, isCreate, refreshData }) => {
   const { currentUser } = useContext(AuthContext);
@@ -31,13 +36,17 @@ const ProductForm = ({ prodId, isCreate, refreshData }) => {
   const [currentProduct, setCurrentProduct] = useState(null);
   const [categories, setCategories] = useState([]);
   const [providers, setProviders] = useState([]);
+  const [selectedDateEnter, setSelectedDateEnter] = React.useState(null);
+  const [selectedDateLeave, setSelectedDateLeave] = React.useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  const [selectedDate, setSelectedDate] = React.useState(
-    new Date("2020-08-18")
-  );
+  const classes = useStyles();
 
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
+  const handleDateChangeEnter = (date) => {
+    setSelectedDateEnter(date);
+  };
+  const handleDateChangeLeave = (date) => {
+    setSelectedDateLeave(date);
   };
 
   const fetchAndSetData = () => {
@@ -48,9 +57,14 @@ const ProductForm = ({ prodId, isCreate, refreshData }) => {
         console.log("resp", resp);
         // resp.header. TODO coloda o erro que vem no header
         setCurrentProduct(resp.data[0]);
+        setSelectedDateEnter(resp.data[0].revievedAt);
+        resp.data[0].soldAt && setSelectedDateLeave(resp.data[0].soldAt);
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setIsLoaded(true);
       });
   };
 
@@ -136,8 +150,9 @@ const ProductForm = ({ prodId, isCreate, refreshData }) => {
     return (
       console.log(currentProduct), //TODO atualizar os campos do form
       (
-        <>
-          <Form
+        <Box padding="2rem" fontSize="2.4rem">
+          <form
+            className={classes.root}
             styles={{ fontSize: "1.6rem" }}
             autoComplete="off"
             onSubmit={handleSubmit(onSubmit)}
@@ -145,6 +160,7 @@ const ProductForm = ({ prodId, isCreate, refreshData }) => {
             <h4>{isCreate ? "Novo Produto" : currentProduct.name}</h4>
 
             <TextField
+              variant="outlined"
               label="Nome do Produto"
               name="prodName"
               defaultValue={currentProduct.name}
@@ -152,6 +168,7 @@ const ProductForm = ({ prodId, isCreate, refreshData }) => {
             />
 
             <TextField
+              variant="outlined"
               multiline
               label="Descrição do Produto"
               name="prodDescription"
@@ -159,18 +176,21 @@ const ProductForm = ({ prodId, isCreate, refreshData }) => {
               ref={register({ required: true })}
             />
 
-            {/*Eu fiquei das 2:09 am até as 3:27 tentando fazer isso ficar com mask e tal, tentei usando react-input-mask, react-intl-currency-mask e uma caralhada de coisa, to cansado e não consegui */}
-            <TextField
-              startAdornment={
-                <InputAdornment position="start">R$</InputAdornment>
-              }
+            <CurrencyTextField
               label="Preço do Produto"
-              name="prodPrice"
+              variant="outlined"
+              currencySymbol="R$"
+              minimumValue="0"
+              outputFormat="string"
+              decimalCharacter=","
+              digitGroupSeparator="."
               defaultValue={currentProduct.price}
+              textAlign="left"
               ref={register({ required: true, min: 0.01 })}
             />
 
             <TextField
+              variant="outlined"
               label="Marca"
               name="prodBrand"
               defaultValue={currentProduct.brand}
@@ -179,6 +199,7 @@ const ProductForm = ({ prodId, isCreate, refreshData }) => {
 
             <TextField
               select
+              variant="outlined"
               label="Categoria"
               name="prodCategory"
               defaultValue={currentProduct.category}
@@ -194,46 +215,62 @@ const ProductForm = ({ prodId, isCreate, refreshData }) => {
               )}
             </TextField>
 
-            <Label htmlFor="productPhoto">Fotos do Produto</Label>
-            <PhotoContainer>
-              <ProductPhotoWrapper>
+            <h4>Fotos do Produto</h4>
+            <Grid
+              justify="center"
+              cols={2}
+              container
+              wrap="wrap"
+              direction="row"
+              spacing={3}
+            >
+              <Grid item sm>
                 <ProductPhoto imageUrl={currentProduct.imgA} />
                 <TextField
+                  label="foto 1"
+                  variant="outlined"
                   name="prodImgA"
                   defaultValue={currentProduct.imgA}
                   ref={register}
                 />
-              </ProductPhotoWrapper>
+              </Grid>
 
-              <ProductPhotoWrapper>
+              <Grid item sm>
                 <ProductPhoto imageUrl={currentProduct.imgB} />
                 <TextField
+                  label="foto 2"
+                  variant="outlined"
                   name="prodImgB"
                   defaultValue={currentProduct.imgB}
                   ref={register}
                 />
-              </ProductPhotoWrapper>
+              </Grid>
 
-              <ProductPhotoWrapper>
+              <Grid item sm>
                 <ProductPhoto imageUrl={currentProduct.imgC} />
                 <TextField
+                  label="foto 3"
+                  variant="outlined"
                   name="prodImgC"
                   defaultValue={currentProduct.imgC}
                   ref={register}
                 />
-              </ProductPhotoWrapper>
+              </Grid>
 
-              <ProductPhotoWrapper>
+              <Grid item sm>
                 <ProductPhoto imageUrl={currentProduct.imgD} />
                 <TextField
+                  label="foto 4"
+                  variant="outlined"
                   name="prodImgD"
                   defaultValue={currentProduct.imgD}
                   ref={register}
                 />
-              </ProductPhotoWrapper>
-            </PhotoContainer>
+              </Grid>
+            </Grid>
             <TextField
               select
+              variant="outlined"
               label="Fornecedor"
               name="prodProvider"
               defaultValue={currentProduct.provider}
@@ -254,12 +291,12 @@ const ProductForm = ({ prodId, isCreate, refreshData }) => {
                 variant="inline"
                 format="dd/MM/yyyy"
                 label="Data de entrada"
-                value={selectedDate}
-                onChange={handleDateChange}
+                value={selectedDateEnter}
+                initialFocusedDate={new Date(currentProduct.recievedAt)}
+                onChange={handleDateChangeEnter}
                 KeyboardButtonProps={{
-                  "aria-label": "change date",
+                  "aria-label": "Mudar data de entrada",
                 }}
-                ref={register}
               />
 
               <KeyboardDatePicker
@@ -268,20 +305,20 @@ const ProductForm = ({ prodId, isCreate, refreshData }) => {
                 variant="inline"
                 format="dd/MM/yyyy"
                 label="Data de saída"
-                value={selectedDate}
-                onChange={handleDateChange}
+                value={selectedDateLeave}
+                initialFocusedDate={new Date(currentProduct.soldAt)}
+                onChange={handleDateChangeLeave}
                 KeyboardButtonProps={{
-                  "aria-label": "change date",
+                  "aria-label": "Mudar data de saída",
                 }}
-                ref={register}
               />
             </MuiPickersUtilsProvider>
 
             <Button color="primary" variant="contained" type="submit">
               Salvar
             </Button>
-          </Form>
-        </>
+          </form>
+        </Box>
       )
     );
   }
@@ -290,7 +327,29 @@ const ProductForm = ({ prodId, isCreate, refreshData }) => {
     return <h4>Erro produto não localizado</h4>;
   }
 
-  return <>{currentProduct ? sucessLoad() : errorLoad()}</>;
+  function loading() {
+    return (
+      <Box
+        width="100%"
+        height="100%"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  return (
+    <>
+      {!isLoaded && !isCreate
+        ? loading()
+        : currentProduct
+        ? sucessLoad()
+        : errorLoad()}
+    </>
+  );
 };
 
 export default ProductForm;
