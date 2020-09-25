@@ -66,7 +66,6 @@ const Users_PG = () => {
 
       switch (action) {
         case "create":
-          console.log("is create");
           setIsCreate(true, openDrawer());
           break;
 
@@ -91,7 +90,11 @@ const Users_PG = () => {
     <>
       <NavBar />
       <Main>
-        <CreateButton dest="/u?action=create" />
+        <CreateButton
+          setIsCreate={setIsCreate}
+          openDrawer={openDrawer}
+          dest="/u?action=create"
+        />
         <SearchBar handleFetchData={fetchPageData} ignorePagination={true} />
         {isBadRequest ? (
           <h1>{error}</h1>
@@ -139,6 +142,7 @@ const Users_PG = () => {
 
       <Drawer isOpen={isOpen} hide={hideAndClearCurrentUser} closeUrl="/u">
         <UserForm
+          hideDrawer={hideDrawer}
           refreshData={fetchPageData}
           userID={userID}
           isCreate={isCreate}
