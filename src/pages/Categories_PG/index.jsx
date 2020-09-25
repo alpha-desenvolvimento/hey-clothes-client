@@ -140,6 +140,7 @@ const Categories_PG = () => {
         closeUrl="/c/category"
       >
         <CategoryForm
+          hideDrawer={hideDrawer}
           refreshData={fetchPageData}
           categoryId={categoryId}
           isCreate={isCreate}
