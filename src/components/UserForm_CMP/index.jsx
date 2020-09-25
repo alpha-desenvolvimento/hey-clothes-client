@@ -2,14 +2,28 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 
+import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import { makeStyles } from "@material-ui/core/styles";
 
-import { Form, Input, Label } from "../ProductForm_CMP/styles";
+import Loading from "../MaterialLoading_CMP";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    "& .MuiTextField-root": {
+      margin: "1rem",
+      width: "100%",
+    },
+  },
+}));
 
 const UserForm = ({ userID, isCreate, refreshData, hideDrawer }) => {
   const { register, handleSubmit, watch } = useForm();
   const [currentUser, setCurrentUser] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  const classes = useStyles();
 
   const fetchAndSetData = () => {
     let url = `${process.env.REACT_APP_API_URL}/api/users/${userID}`;
@@ -22,6 +36,9 @@ const UserForm = ({ userID, isCreate, refreshData, hideDrawer }) => {
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setIsLoaded(true);
       });
   };
 
@@ -70,17 +87,23 @@ const UserForm = ({ userID, isCreate, refreshData, hideDrawer }) => {
 
   function sucessLoad() {
     return (
-      <>
-        <Form onSubmit={handleSubmit(onSubmit)}>
+      <Box padding="2rem" fontSize="2.4rem">
+        <form
+          className={classes.root}
+          autoComplete="off"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <h4>{isCreate ? "Novo usuario" : currentUser.name}</h4>
 
           <TextField
+            variant="outlined"
             label="Nome de usuário"
             name="userName"
             defaultValue={isCreate ? "" : currentUser.name}
             ref={register({ required: true })}
           />
           <TextField
+            variant="outlined"
             label="Email"
             name="userEmail"
             defaultValue={currentUser.email}
@@ -88,6 +111,7 @@ const UserForm = ({ userID, isCreate, refreshData, hideDrawer }) => {
           />
 
           <TextField
+            variant="outlined"
             label="Senha"
             name="userPassword"
             type="password"
@@ -95,6 +119,7 @@ const UserForm = ({ userID, isCreate, refreshData, hideDrawer }) => {
           />
 
           <TextField
+            variant="outlined"
             label="Confirme a senha"
             name="confirmPassword"
             type="password"
@@ -119,8 +144,8 @@ const UserForm = ({ userID, isCreate, refreshData, hideDrawer }) => {
           <Button color="primary" variant="contained" type="submit">
             Salvar
           </Button>
-        </Form>
-      </>
+        </form>
+      </Box>
     );
   }
 
@@ -128,7 +153,17 @@ const UserForm = ({ userID, isCreate, refreshData, hideDrawer }) => {
     return <h4>Erro: usuário não localizado</h4>;
   }
 
-  return <>{currentUser ? sucessLoad() : errorLoad()}</>;
+  return (
+    <>
+      {!isLoaded && !isCreate ? (
+        <Loading />
+      ) : currentUser ? (
+        sucessLoad()
+      ) : (
+        errorLoad()
+      )}
+    </>
+  );
 };
 
 export default UserForm;
