@@ -1,5 +1,31 @@
-import styled from "styled-components";
 import { fontSize } from "../../styles/typography";
+import styled from "styled-components";
+import { NavLink } from "react-router-dom";
+
+const mockImage =
+  "https://www.creativefabrica.com/wp-content/uploads/2018/11/Clean-clothes-icon-by-rudezstudio-580x386.jpg";
+
+export const Link = styled(NavLink)`
+  cursor: pointer;
+
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+`;
+
+export const ProductPhoto = styled.div`
+  background-image: ${({ imageUrl }) =>
+    imageUrl ? `url("${imageUrl}")` : `url("${mockImage}")`};
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  border-radius: 1rem;
+  margin: 0.4rem;
+
+  height: 16rem;
+  width: auto;
+`;
 
 const textSize = {
   big: fontSize.h4,
@@ -7,9 +33,6 @@ const textSize = {
   regular: fontSize.h6,
   small: fontSize.p,
 };
-
-const mockImage =
-  "https://www.creativefabrica.com/wp-content/uploads/2018/11/Clean-clothes-icon-by-rudezstudio-580x386.jpg";
 
 export const Form = styled.form`
   display: flex;
@@ -54,18 +77,4 @@ export const ProductPhotoWrapper = styled.figure`
   & > input {
     width: 100%;
   }
-`;
-
-export const ProductPhoto = styled.div`
-  background-image: ${({ imageUrl }) =>
-    imageUrl ? `url("${imageUrl}")` : `url("${mockImage}")`};
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: cover;
-
-  border-radius: 1rem;
-  margin: 0.4rem;
-
-  height: 16rem;
-  width: auto;
 `;

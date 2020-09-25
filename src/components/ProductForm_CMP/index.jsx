@@ -2,10 +2,10 @@ import React, { useEffect, useState, useContext } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { AuthContext } from "../../AuthContext";
+import { FiExternalLink } from "react-icons/fi";
 
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import TextField from "@material-ui/core/TextField";
 import CurrencyTextField from "@unicef/material-ui-currency-textfield";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -19,7 +19,8 @@ import ptBrLocale from "date-fns/locale/pt-BR";
 
 import { makeStyles } from "@material-ui/core/styles";
 
-import { ProductPhoto } from "./styles";
+import { Link, ProductPhoto } from "./styles";
+import Loading from "../MaterialLoading_CMP";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -153,7 +154,6 @@ const ProductForm = ({ prodId, isCreate, refreshData }) => {
         <Box padding="2rem" fontSize="2.4rem">
           <form
             className={classes.root}
-            styles={{ fontSize: "1.6rem" }}
             autoComplete="off"
             onSubmit={handleSubmit(onSubmit)}
           >
@@ -268,6 +268,7 @@ const ProductForm = ({ prodId, isCreate, refreshData }) => {
                 />
               </Grid>
             </Grid>
+
             <TextField
               select
               variant="outlined"
@@ -282,6 +283,13 @@ const ProductForm = ({ prodId, isCreate, refreshData }) => {
                 </MenuItem>
               ))}
             </TextField>
+
+            <Link to={`/c/provider/${currentProduct.provider}`}>
+              <h4>
+                {/*TODO, estilizar */}
+                Ir ao fornecedor <FiExternalLink />
+              </h4>
+            </Link>
 
             <MuiPickersUtilsProvider locale={ptBrLocale} utils={DateFnsUtils}>
               {/*TODO, ainda não testei esses inputs de data */}
@@ -327,27 +335,15 @@ const ProductForm = ({ prodId, isCreate, refreshData }) => {
     return <h4>Erro produto não localizado</h4>;
   }
 
-  function loading() {
-    return (
-      <Box
-        width="100%"
-        height="100%"
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-      >
-        <CircularProgress />
-      </Box>
-    );
-  }
-
   return (
     <>
-      {!isLoaded && !isCreate
-        ? loading()
-        : currentProduct
-        ? sucessLoad()
-        : errorLoad()}
+      {!isLoaded && !isCreate ? (
+        <Loading />
+      ) : currentProduct ? (
+        sucessLoad()
+      ) : (
+        errorLoad()
+      )}
     </>
   );
 };
