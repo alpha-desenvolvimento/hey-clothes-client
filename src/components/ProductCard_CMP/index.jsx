@@ -1,13 +1,5 @@
 import React from "react";
 
-// import {
-//   CardWrapper,
-//   CardImage,
-//   CardDescription,
-//   NameText,
-//   PriceText,
-// } from "./styles";
-
 import {
   Card,
   CardActionArea,
@@ -15,6 +7,8 @@ import {
   CardContent,
   Typography,
 } from "@material-ui/core";
+
+import { makeStyles } from "@material-ui/core/styles";
 
 const stockImage =
   "https://www.creativefabrica.com/wp-content/uploads/2018/11/Clean-clothes-icon-by-rudezstudio-580x386.jpg";
@@ -32,8 +26,21 @@ const ProductCard = ({ product, openDrawer, onClick, ...rest }) => {
     return aux;
   }
 
+  const useStyles = makeStyles({
+    root: {
+      boxShadow: "0 2px 6px 0 hsla(0, 0%, 0%, 0.2)",
+      transition: "all 200ms ease-in-out",
+      "&:hover": {
+        cursor: "pointer",
+        boxShadow: "0 4px 10px 0 hsla(0, 0%, 0%, 0.4)",
+      },
+    },
+  });
+
+  const classes = useStyles();
+
   return (
-    <Card onClick={onClick}>
+    <Card onClick={onClick} className={classes.root}>
       <CardActionArea>
         <CardMedia
           component="img"
@@ -47,7 +54,7 @@ const ProductCard = ({ product, openDrawer, onClick, ...rest }) => {
             {product.name}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            <span>{product.price == 0 ? "Doação" : `R$ ${product.price}`}</span>
+            <span>{product.price <= 0 ? "Doação" : `R$ ${product.price}`}</span>
             <span>{(product.isActive == 0) & `Indisponível`}</span>
           </Typography>
         </CardContent>

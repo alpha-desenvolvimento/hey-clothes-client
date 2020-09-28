@@ -1,12 +1,8 @@
-import React, { useState, useEffect, useCallback, Component } from "react";
-import { useParams, useHistory, Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
-import {
-  getUrlParams,
-  getPage,
-  getUrlParamsValues,
-} from "../../controller/url";
+import { getUrlParams, getPage } from "../../controller/url";
 
 import NavBar, { Main } from "../../components/NavBar_CMP";
 import {
@@ -15,13 +11,12 @@ import {
   Paginator,
   SearchBar,
   Spinner,
-  CreateButton,
-  ProductForm,
-  DrawerClass,
 } from "../../components";
 
+import Fab from "@material-ui/core/Fab";
+import { FiPlus } from "react-icons/fi";
+
 const Products_PG = () => {
-  const history = useHistory();
   const [products, setProducts] = useState([]);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -32,7 +27,10 @@ const Products_PG = () => {
   const [currentPage, setCurrentPage] = useState(0);
 
   useEffect(() => {
-    getProductList();
+    async function firstFetch() {
+      await getProductList();
+    }
+    firstFetch();
   }, []);
 
   async function getProductList() {
@@ -65,8 +63,8 @@ const Products_PG = () => {
 
     for (const [index, product] of products.entries()) {
       productCards.push(
-        <Link to={`/p/detail/${product.id}`}>
-          <Card key={product.id} product={product} />
+        <Link to={`/p/detail/${product.id}`} key={product.id}>
+          <Card product={product} />
         </Link>
       );
     }
@@ -118,7 +116,10 @@ const Products_PG = () => {
       <NavBar />
 
       <Main>
-        <CreateButton />
+        <Fab href="/p/create" variant="extended">
+          <FiPlus /> Criar novo produto
+        </Fab>
+
         <Render />
       </Main>
     </>

@@ -23,6 +23,7 @@ const Paginator = ({
     if (i >= currentPage - offset && i <= currentPage + offset) {
       let indexItem = (
         <PageNumber
+          key={i}
           currentPage={i == currentPage && currentPage}
           onClick={() => {
             setPage(i);

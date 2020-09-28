@@ -17,10 +17,13 @@ function Routes() {
   return (
     <Router>
       <Switch>
-        <PrivateRoute exact path="/p/detail/:id" component={ProductDetail} />
         <PrivateRoute exact path="/p" component={Products} />
+        <PrivateRoute exact path="/p/create" component={ProductDetail} />
+        <PrivateRoute exact path="/p/detail/:id" component={ProductDetail} />
+
         <PrivateRoute exact path="/u/:id" component={Users} />
         <PrivateRoute exact path="/u" component={Users} />
+        
         <PrivateRoute exact path="/c" component={Config} />
 
         <PrivateRoute exact path="/c/category" component={Categories} />

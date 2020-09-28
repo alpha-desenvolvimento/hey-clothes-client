@@ -65,12 +65,30 @@ const ProductDetail_PG = () => {
 
   const classes = useStyles();
 
-  useEffect(async () => {
-    // setIsCreate(prodId == "create");
-    loadProduct();
-    loadCategories();
-    loadProviders();
-
+  useEffect(() => {
+    async function firstFetch() {
+      if (window.location.pathname == "/p/create") {
+        setIsCreate(true);
+        setCurrentProduct({
+          name: "",
+          description: "",
+          price: "",
+          Brand: "",
+          category: 1,
+          imgA: "",
+          imgB: "",
+          imgC: "",
+          imgD: "",
+          provider: 1,
+        });
+        setIsLoadingProduct(false);
+      } else {
+        await loadProduct();
+      }
+      await loadCategories();
+      await loadProviders();
+    }
+    firstFetch();
   }, []);
 
   const loadProduct = async () => {
@@ -228,7 +246,7 @@ const ProductDetail_PG = () => {
     return true;
   };
 
-  const onSubmit = async (formData) => {
+  const onSubmitForm = async (formData) => {
     console.log("formData", formData);
     return;
 
@@ -329,7 +347,7 @@ const ProductDetail_PG = () => {
         <form
           className={classes.root}
           autoComplete="off"
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={handleSubmit(onSubmitForm)}
         >
           <h4>{isCreate ? "Novo Produto" : currentProduct.name}</h4>
           {currentProduct.isActive == 0 && <SoldProd />}
@@ -558,7 +576,6 @@ const ProductDetail_PG = () => {
   };
 
   const Render = () => {
-     
     if (isLoadingProduct || isLoadinProviders || isLoadinCategories) {
       return <Loading />;
     } else if (categories.length <= 0) {

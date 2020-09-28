@@ -1,4 +1,5 @@
 import React from "react";
+import { useParams, useHistory, Link } from "react-router-dom";
 
 import { FiLogOut, FiShoppingCart, FiUser, FiBook } from "react-icons/fi";
 

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
 // import { Link } from "react-router-dom";
 
@@ -8,7 +8,12 @@ export default class Drawer_CLS extends React.Component {
   constructor(props) {
     super(props);
 
-    this.isOpen = false
+    this.isOpen = false;
+  }
+
+  open() {
+    this.isOpen = true;
+    this.forceUpdate();
   }
 
   render = () => {
@@ -23,6 +28,7 @@ export default class Drawer_CLS extends React.Component {
       : null;
   };
 }
+
 
 // const Drawer = ({ isOpen, hide, children, closeUrl }) => {
 //   return isOpen

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
+import swal from "sweetalert";
 
 import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
@@ -18,10 +20,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProviderForm = ({ providerId, isCreate, refreshData }) => {
-  const { register, handleSubmit, errors } = useForm();
+const ProviderForm = ({ providerId, isCreate, refreshData, hideDrawer }) => {
+  const { register, handleSubmit, errors, control } = useForm();
   const [currentProvider, setCurrentProvider] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const history = useHistory();
 
   const classes = useStyles();
 
@@ -68,9 +71,13 @@ const ProviderForm = ({ providerId, isCreate, refreshData }) => {
     const endereco = formData.providerAdress;
 
     axios.post(url, { id, name, phone, email, endereco }).then((resp) => {
-      console.log("updatedProvider resp", resp);
+      hideDrawer();
       refreshData();
-      fetchAndSetData();
+      swal({
+        text: "Operação executada com sucesso!",
+        icon: "success",
+      });
+      history.push("/c/provider");
     });
   };
 
@@ -84,7 +91,9 @@ const ProviderForm = ({ providerId, isCreate, refreshData }) => {
         >
           <h4>{isCreate ? "Novo fornecedor" : currentProvider.name}</h4>
 
-          <TextField
+          <Controller
+            as={TextField}
+            control={control}
             variant="outlined"
             label="Nome"
             type="text"
@@ -93,7 +102,9 @@ const ProviderForm = ({ providerId, isCreate, refreshData }) => {
             ref={register({ required: true, maxLength: 80 })}
           />
 
-          <TextField
+          <Controller
+            as={TextField}
+            control={control}
             variant="outlined"
             label="Telefone"
             type="text"
@@ -102,7 +113,9 @@ const ProviderForm = ({ providerId, isCreate, refreshData }) => {
             ref={register({ required: true, maxLength: 15 })}
           />
 
-          <TextField
+          <Controller
+            as={TextField}
+            control={control}
             variant="outlined"
             label="Email"
             type="email"
@@ -111,7 +124,9 @@ const ProviderForm = ({ providerId, isCreate, refreshData }) => {
             ref={register()}
           />
 
-          <TextField
+          <Controller
+            as={TextField}
+            control={control}
             variant="outlined"
             multiline
             label="Endereço"
