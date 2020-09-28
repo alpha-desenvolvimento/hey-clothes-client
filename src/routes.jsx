@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import PrivateRoute from "./components/PrivateRoute_CMP";
 
 import Products from "./pages/Products_PG";
+import ProductDetail from "./pages/ProductDetail_PG";
 import Home from "./pages/Home_PG";
 import Users from "./pages/Users_PG";
 import Config from "./pages/Configurations_PG";
@@ -16,7 +17,7 @@ function Routes() {
   return (
     <Router>
       <Switch>
-        <PrivateRoute exact path="/p/:id" component={Products} />
+        <PrivateRoute exact path="/p/detail/:id" component={ProductDetail} />
         <PrivateRoute exact path="/p" component={Products} />
         <PrivateRoute exact path="/u/:id" component={Users} />
         <PrivateRoute exact path="/u" component={Users} />

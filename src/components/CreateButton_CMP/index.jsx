@@ -6,18 +6,21 @@ import { FiPlus } from "react-icons/fi";
 
 import { Button } from "./styles";
 
-const CreateButton = ({ dest, openDrawer, setIsCreate }) => {
+const CreateButton = ({ dest, onClick, ...rest }) => {
   const history = useHistory();
 
   function handleClick() {
-    console.log(dest);
-    history.push(dest);
-    setIsCreate(true, openDrawer());
+    if (dest) history.push(dest);
   }
 
   return (
     <>
-      <Button onClick={handleClick} className="h5-font-size">
+      <Button
+        onClick={onClick}
+        className="h5-font-size"
+        aria-label="Criar novo"
+        title="Criar novo"
+      >
         <FiPlus />
       </Button>
     </>

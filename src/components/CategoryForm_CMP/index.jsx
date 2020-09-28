@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import swal from "sweetalert";
 
-import Box from "@material-ui/core/Box";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
-import Checkbox from "@material-ui/core/Checkbox";
+import {
+  Checkbox,
+  Button,
+  TextField,
+  Box,
+  FormControlLabel,
+  FormGroup,
+  Switch,
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 import Loading from "../MaterialLoading_CMP";
@@ -21,15 +27,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CategoryForm = ({ categoryId, isCreate, refreshData, hideDrawer }) => {
-  const { register, handleSubmit, errors } = useForm();
+  const { register, handleSubmit, control } = useForm();
   const [currentCategory, setCurrentCategory] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoadingCategory, setIsLoadingCategory] = useState(true);
+  const [checked, setChecked] = useState(true);
 
   const classes = useStyles();
 
   const history = useHistory();
 
   const fetchAndSetData = () => {
+    setIsLoadingCategory(true);
     let url = `${process.env.REACT_APP_API_URL}/api/category/${categoryId}`;
     axios
       .get(url)
@@ -37,52 +45,61 @@ const CategoryForm = ({ categoryId, isCreate, refreshData, hideDrawer }) => {
         console.log("resp", resp);
         // resp.header. TODO coloda o erro que vem no header
         setCurrentCategory(resp.data);
+        setChecked(resp.data.isActive == 1);
       })
       .catch((err) => {
         console.log(err);
       })
       .finally(() => {
-        setIsLoaded(true);
+        setIsLoadingCategory(false);
       });
   };
 
   useEffect(() => {
-    console.log("categoryId", categoryId);
-
     if (isCreate) {
       setCurrentCategory({
         name: "",
-        isActive: 0,
+        isActive: 1,
       });
+      setChecked(currentCategory.isActive == 1);
     } else {
       fetchAndSetData();
     }
-
-    console.log(currentCategory);
   }, []);
 
   const onSubmit = (formData) => {
-    //TODO, formData está voltando vazio
-    console.log(formData);
+    if (!formData.name || formData.name == "") {
+      swal({
+        text: "Informe um nome para a categoria",
+        icon: "warning",
+      });
+      return;
+    }
+    formData.isActive = checked;
+
     const action = isCreate ? "create" : "update";
     const url = `${process.env.REACT_APP_API_URL}/api/category/${action}`;
 
-    const id = !isCreate && currentCategory.id;
-    const name = formData.categoryName;
-    const isActive = formData.categoryActive ? 1 : 0;
+    const categoryTO = { ...formData };
 
-    isCreate // isActive não pode ser 0 no create se não o js acha que é "false" na query
-      ? axios.post(url, { name, isActive }).then((resp) => {
-          console.log("updatedCategory resp", resp);
-          hideDrawer();
-          refreshData();
-          fetchAndSetData();
-        })
-      : axios.post(url, { id, name, isActive }).then((resp) => {
-          console.log("updatedCategory resp", resp);
-          refreshData();
-          fetchAndSetData();
+    if (currentCategory) categoryTO.id = currentCategory.id;
+
+    console.log(categoryTO);
+
+    axios.post(url, categoryTO).then((resp) => {
+      console.log(" resp", resp);
+
+      if (resp.data.id) {
+        hideDrawer();
+        refreshData();
+        fetchAndSetData();
+        swal({
+          text: "Operação executada com sucesso!",
+          icon: "success",
         });
+        history.push("/c/category/");
+      }
+    });
   };
 
   function sucessLoad() {
@@ -94,21 +111,24 @@ const CategoryForm = ({ categoryId, isCreate, refreshData, hideDrawer }) => {
           onSubmit={handleSubmit(onSubmit)}
         >
           <h4>{isCreate ? "Nova Categoria" : currentCategory.name}</h4>
-
-          <TextField
-            name="categoryName"
-            defaultValue={isCreate ? "" : currentCategory.name}
+          <Controller
+            as={TextField}
+            control={control}
+            name="name"
+            defaultValue={() => {
+              if (currentCategory) return currentCategory.name;
+              return "";
+            }}
             ref={register({ required: true })}
           />
-
           <h6>Ativo?</h6>
-          <Checkbox
-            name="categoryActive"
-            defaultChecked={currentCategory.isActive == 1 ? true : false}
-            ref={register}
+          <Switch
+            name="isActive"
+            defaultChecked={checked}
+            onChange={() => setChecked(!checked)}
           />
-          <br />
 
+          <br />
           <Button color="primary" variant="contained" type="submit">
             Salvar
           </Button>
@@ -123,7 +143,7 @@ const CategoryForm = ({ categoryId, isCreate, refreshData, hideDrawer }) => {
 
   return (
     <>
-      {!isLoaded && !isCreate ? (
+      {isLoadingCategory && !isCreate ? (
         <Loading />
       ) : currentCategory ? (
         sucessLoad()

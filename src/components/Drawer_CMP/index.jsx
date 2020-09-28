@@ -8,9 +8,13 @@ const Drawer = ({ isOpen, hide, children, closeUrl }) => {
   return isOpen
     ? ReactDOM.createPortal(
         <>
-          <Link to={closeUrl}>
-            <Overlay onClick={hide} />
-          </Link>
+          {closeUrl ? (
+            <Link to={closeUrl} onClick={hide}>
+              <Overlay />
+            </Link>
+          ) : (
+            <Overlay onClick={hide}/>
+          )}
           <DrawerBody>{children}</DrawerBody>
         </>,
         document.body
