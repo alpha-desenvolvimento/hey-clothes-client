@@ -30,21 +30,24 @@ const ProductSearchBar = ({ handleFetchData, ignorePagination }) => {
   }
 
   return (
-    <MainContainer onSubmit={handleSubmit(doSearch)}>
-      <SearchInputContainer>
-        <SearchInput
-          className="h4-font-size"
-          name="searchValue"
-          placeholder="Pesquisar"
-          ref={register()}
-        />
-        <SubmitButton className="h5-font-size icon" style={{ right: "2rem" }}>
-          <FiSearch />
-        </SubmitButton>
-        <Hr />
-      </SearchInputContainer>
-      <FilterContainer></FilterContainer>
-    </MainContainer>
+    <>
+      <MainContainer onSubmit={handleSubmit(doSearch)}>
+        <SearchInputContainer>
+          <SearchInput
+            className="h4-font-size"
+            name="searchValue"
+            placeholder="Pesquisar"
+            ref={register()}
+          />
+          <SubmitButton className="h5-font-size icon" style={{ right: "2rem" }}>
+            <FiSearch />
+          </SubmitButton>
+          <Hr />
+        </SearchInputContainer>
+        <FilterContainer></FilterContainer>
+      </MainContainer>
+      <div style={{ paddingTop: "10rem" }}></div>
+    </>
   );
 };
 

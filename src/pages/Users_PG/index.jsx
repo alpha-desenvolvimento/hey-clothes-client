@@ -90,18 +90,15 @@ const Users_PG = () => {
     <>
       <NavBar />
       <Main>
-        <CreateButton
-          setIsCreate={setIsCreate}
-          openDrawer={openDrawer}
-          dest="/u?action=create"
-        />
         <SearchBar handleFetchData={fetchPageData} ignorePagination={true} />
+
         {isBadRequest ? (
           <h1>{error}</h1>
         ) : !isLoaded ? (
           <Spinner />
         ) : (
           <>
+            <CreateButton href="/u?action=create" text="Criar novo usuário" />
             <CardContainer>
               {users && (
                 <>

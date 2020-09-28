@@ -90,10 +90,9 @@ const Categories_PG = () => {
     <>
       <NavBar />
       <Main>
-        <CreateButton
-          setIsCreate={setIsCreate}
-          openDrawer={openDrawer}
-          dest="/c/category?action=create"
+      <CreateButton
+          text="Criar nova categoria"
+          href="/c/category?action=create"
         />
         <SearchBar handleFetchData={fetchPageData} ignorePagination={true} />
         {isBadRequest ? (

@@ -61,7 +61,7 @@ const CategoryForm = ({ categoryId, isCreate, refreshData, hideDrawer }) => {
         name: "",
         isActive: 1,
       });
-      setChecked(currentCategory.isActive == 1);
+      setChecked(true);
     } else {
       fetchAndSetData();
     }

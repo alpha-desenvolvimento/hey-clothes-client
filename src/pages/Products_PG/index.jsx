@@ -11,10 +11,8 @@ import {
   Paginator,
   SearchBar,
   Spinner,
+  CreateButton,
 } from "../../components";
-
-import Fab from "@material-ui/core/Fab";
-import { FiPlus } from "react-icons/fi";
 
 const Products_PG = () => {
   const [products, setProducts] = useState([]);
@@ -112,14 +110,14 @@ const Products_PG = () => {
   return (
     <>
       <SearchBar page={page} setPage={setPage} handleFetchData={forceUpdate} />
-      <div style={{ paddingTop: "10rem" }}></div>
       <NavBar />
 
       <Main>
-        <Fab href="/p/create" variant="extended">
-          <FiPlus /> Criar novo produto
-        </Fab>
-
+        <CreateButton
+          href="/p/create"
+          variant="extended"
+          text="Criar novo produto"
+        />
         <Render />
       </Main>
     </>
