@@ -27,6 +27,7 @@ const Paginator = ({
           currentPage={i == currentPage && currentPage}
           onClick={() => {
             setPage(i);
+            window.scrollTo(0,0)
           }}
         >
           {i}

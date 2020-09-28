@@ -60,11 +60,7 @@ const Products_PG = () => {
     const productCards = [];
 
     for (const [index, product] of products.entries()) {
-      productCards.push(
-        <Link to={`/p/detail/${product.id}`} key={product.id}>
-          <Card product={product} />
-        </Link>
-      );
+      productCards.push(<Card product={product} key={index} />);
     }
 
     return <CardContainer>{productCards}</CardContainer>;

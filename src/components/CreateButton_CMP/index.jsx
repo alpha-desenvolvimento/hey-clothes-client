@@ -7,7 +7,6 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { mediaQuery } from "../../styles/global";
 
 const CreateButton = ({ href, variant, text }) => {
-  console.log("mediaQuery", mediaQuery);
   const useStyles = makeStyles((theme) => ({
     root: {
       boxShadow: "0 2px 6px 0 hsla(0, 0%, 0%, 0.2)",
@@ -29,13 +28,20 @@ const CreateButton = ({ href, variant, text }) => {
         right: "1rem",
       },
     },
+    displayText: {
+      display: "none",
+      [mediaQuery[0]]: {
+        display: "unset",
+      },
+    },
   }));
 
   const classes = useStyles();
 
   return (
     <Fab href={href} variant={variant || "extended"} className={classes.root}>
-      <FiPlus /> {text || ""}
+      <FiPlus />
+      <span className={classes.displayText}>{text || ""}</span>
     </Fab>
   );
 };

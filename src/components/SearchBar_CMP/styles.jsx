@@ -45,8 +45,9 @@ export const SearchInput = styled.input`
   width: 100%;
   padding: 1rem 5rem;
   border: 0;
-  background-color: rgb(255 255 255 / 0.7);
   border-radius: 100px;
+  background-color: rgb(255 255 255 / 0.8);
+  backdrop-filter: blur(5px);
 `;
 
 export const FilterContainer = styled.div``;

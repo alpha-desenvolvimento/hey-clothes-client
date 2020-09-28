@@ -6,26 +6,17 @@ import {
   CardMedia,
   CardContent,
   Typography,
+  CardActions,
+  Button,
 } from "@material-ui/core";
+import { Redirect, Link } from "react-router-dom";
 
 import { makeStyles } from "@material-ui/core/styles";
 
 const stockImage =
   "https://www.creativefabrica.com/wp-content/uploads/2018/11/Clean-clothes-icon-by-rudezstudio-580x386.jpg";
 
-const ProductCard = ({ product, openDrawer, onClick, ...rest }) => {
-  function sanitizeString() {
-    const limit = 17;
-    if (product.name.length <= limit) return product.name;
-
-    var aux = "";
-
-    for (let i = 0; i <= limit - 3; i++) aux += product.name[i];
-    aux += "...";
-
-    return aux;
-  }
-
+const ProductCard = ({ product }) => {
   const useStyles = makeStyles({
     root: {
       boxShadow: "0 2px 6px 0 hsla(0, 0%, 0%, 0.2)",
@@ -39,8 +30,40 @@ const ProductCard = ({ product, openDrawer, onClick, ...rest }) => {
 
   const classes = useStyles();
 
+  // console.log();
+  try {
+    product.condition = product.productCondition.name || "";
+  } catch (error) {
+    product.condition = "";
+  }
+
+  const Price = () => {
+    if (!product.price || product.price <= 0) {
+      return (
+        <>
+          <p>Doação</p>
+        </>
+      );
+    }
+
+    if (product.price != "Doação") {
+      var price = product.price.split(".");
+
+      if (!price[1]) price.push("00");
+      else if (price[1] < 10) price[1] += "0";
+
+      price = price.join(",");
+
+      return <p>R$ {price}</p>;
+    }
+    return <></>;
+    //  {
+    //   product.price = "";
+    // } else
+  };
+
   return (
-    <Card onClick={onClick} className={classes.root}>
+    <Card className={classes.root}>
       <CardActionArea>
         <CardMedia
           component="img"
@@ -54,19 +77,18 @@ const ProductCard = ({ product, openDrawer, onClick, ...rest }) => {
             {product.name}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            <span>{product.price <= 0 ? "Doação" : `R$ ${product.price}`}</span>
-            <span>{(product.isActive == 0) & `Indisponível`}</span>
+            <Price />
+            <p>{product.condition}</p>
+            {product.isActive == 0 && <p>Indisponível</p>}
           </Typography>
         </CardContent>
       </CardActionArea>
+      <CardActions>
+        <Link to={`/p/detail/${product.id}`}>
+          <Button size="small">Detalhes</Button>
+        </Link>
+      </CardActions>
     </Card>
-    // <CardWrapper {...rest}>
-    //   <CardImage img/>
-    //   <CardDescription>
-    //     <NameText>{sanitizeString()}</NameText>
-    //     <PriceText>R$ {product.price}</PriceText>
-    //   </CardDescription>
-    // </CardWrapper>
   );
 };
 

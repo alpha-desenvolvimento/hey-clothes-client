@@ -21,6 +21,7 @@ export default createGlobalStyle`
         min-height:100vh;
         -webkit-font-smoothing: antialiased !important;
         background-color: #f9f9f9;
+        scroll-behavior: smooth;
     }
     body html #root {
         height: 100%;

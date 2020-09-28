@@ -10,6 +10,7 @@ import {
   Hr,
   SubmitButton,
 } from "./styles";
+
 // import { useForm } from "react-hook-form";
 // import HerokuServer from "../../API/HerokuServer";
 
@@ -27,6 +28,7 @@ const ProductSearchBar = ({ handleFetchData, ignorePagination }) => {
     window.history.pushState(null, null, `?${urlParams.toString()}`);
 
     handleFetchData();
+    window.scrollTo(0, 0);
   }
 
   return (
