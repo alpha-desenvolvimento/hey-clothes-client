@@ -1,14 +1,10 @@
 import { Link, ProductPhoto, SoldNote } from "./styles";
 import axios from "axios";
 import swal from "sweetalert";
-import React, { useEffect, useState, useContext } from "react";
+import React, { useContext } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { AuthContext } from "../../AuthContext";
 import { FiExternalLink } from "react-icons/fi";
-import Loading from "../MaterialLoading_CMP";
-import { useParams, useHistory } from "react-router-dom";
-
-import UrlUtils from "../../controller/url";
 
 import CurrencyTextField from "@unicef/material-ui-currency-textfield";
 import {
@@ -37,123 +33,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProductForm = ({ isCreate, refreshData }) => {
-  const history = useHistory();
+const SoldProd = ({ currentProduct }) => {
+  var soldDate = new Date(currentProduct.soldAt);
+  soldDate = `${soldDate.getDay()}/${
+    soldDate.getMonth() + 1
+  }/${soldDate.getFullYear()}`;
 
-  const [prodId, setProdID] = useState(useParams().id);
+  return (
+    <>
+      <SoldNote>
+        Produto indisponível
+        <br />
+        Vendido/entregue em {soldDate}
+      </SoldNote>
+    </>
+  );
+};
+const ProductForm = ({ isCreate, currentProduct, categories, providers }) => {
   const { currentUser } = useContext(AuthContext);
-  const {
-    register,
-    handleSubmit,
-    errors,
-    control,
-    clearErrors,
-    setError,
-    getValues,
-    reset: resetForm,
-  } = useForm();
-  const [currentProduct, setCurrentProduct] = useState(null);
-  const [categories, setCategories] = useState([]);
-  const [providers, setProviders] = useState([]);
-
-  const [isLoadingProduct, setIsLoadingProduct] = useState(true);
-  const [isLoadinCategories, setIsLoadingCategories] = useState(true);
-  const [isLoadinProviders, setIsLoadingProviders] = useState(true);
+  const { handleSubmit, control } = useForm();
 
   const classes = useStyles();
-
-  useEffect(async () => {
-    await loadProduct();
-    await loadCategories();
-    await loadProviders();
-  }, []);
-
-  const loadProduct = async () => {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const action = urlParams.get("action");
-    setIsLoadingProduct(true);
-    // const { action } = UrlUtils.getUrlParamsValues();
-
-    if (action == "create") {
-      setCurrentProduct({
-        name: "",
-        description: "",
-        price: "",
-        Brand: "",
-        category: 1,
-        imgA: "",
-        imgB: "",
-        imgC: "",
-        imgD: "",
-        provider: 1,
-      });
-      setIsLoadingProduct(false);
-    } else if (prodId) {
-      let url = `${process.env.REACT_APP_API_URL}/api/products/${prodId}`;
-
-      axios.get(url).then((resp) => {
-        console.log("resp", resp);
-        setCurrentProduct(resp.data[0]);
-        setIsLoadingProduct(false);
-      });
-    } else {
-      setIsLoadingProduct(false);
-    }
-  };
-
-  const loadCategories = async () => {
-    setIsLoadingCategories(true);
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/api/category/list`)
-      .then((resp) => {
-        if (resp.data.length <= 0) return;
-
-        const recievedCategories = [];
-
-        for (const category of resp.data) {
-          if (category.isActive == 0) continue;
-
-          recievedCategories.push(category);
-        }
-
-        recievedCategories[0].selected = true;
-
-        setCategories(recievedCategories);
-        setIsLoadingCategories(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const loadProviders = async () => {
-    setIsLoadingProviders(true);
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/api/provider/list`)
-      .then((resp) => {
-        if (resp.data.length <= 0) return;
-
-        const recievedProviders = [];
-
-        for (const provider of resp.data) {
-          if (provider.isActive == 0) continue;
-
-          if (currentProduct) {
-            if (currentProduct.provider == provider.id) provider.select = true;
-          }
-          recievedProviders.push(provider);
-        }
-
-        recievedProviders[0].selected = true;
-
-        setProviders(recievedProviders);
-        setIsLoadingProviders(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
 
   const isValidProduct = async (formData) => {
     const { name, price, brand, recievedAt } = formData;
@@ -223,19 +123,8 @@ const ProductForm = ({ isCreate, refreshData }) => {
     return true;
   };
 
-  const onSubmit = async (formData) => {
-    console.log("formData.price", formData.price);
-    if (formData.price) {
-      try {
-        formData.price = parseFloat(
-          formData.price.split(".").join("").replace(",", ".")
-        );
-      } catch (error) {}
-    } else {
-      formData.price = 0;
-    }
-    if (!(await isValidProduct(formData))) return;
-
+  const onSubmit = (formData) => {
+    if (!isValidProduct(formData)) return;
     const action = isCreate ? "create" : "update";
     const restEndpoint = `${process.env.REACT_APP_API_URL}/api/products/${action}`;
 
@@ -251,8 +140,6 @@ const ProductForm = ({ isCreate, refreshData }) => {
 
     delete productTO.isActive;
 
-    setIsLoadingProduct(true);
-    setCurrentProduct(null);
     axios
       .post(restEndpoint, productTO)
       .then((resp) => {
@@ -260,9 +147,9 @@ const ProductForm = ({ isCreate, refreshData }) => {
         const returnedProduct = resp.data;
         if (returnedProduct.id) {
           if (isCreate) {
-            successCreate(returnedProduct.id);
+            //successCreate(returnedProduct.id);
           } else {
-            setCurrentProduct(returnedProduct);
+            //setCurrentProduct(returnedProduct);
           }
         } else {
           swal({
@@ -278,46 +165,11 @@ const ProductForm = ({ isCreate, refreshData }) => {
           icon: "error",
           dangerMode: true,
         });
-      })
-      .finally(() => {
-        resetForm();
-        setIsLoadingProduct(false);
       });
-
-    async function successCreate(newProdId) {
-      resetForm();
-      await swal({
-        text:
-          "Novo produto cadastrado com sucesso!\nCadastrar um novo produto?",
-        icon: "success",
-        buttons: true,
-      }).then((createNewProduct) => {
-        if (!createNewProduct) {
-          history.push(`/p/${newProdId}`);
-        }
-      });
-    }
   };
 
-  function sucessLoad() {
-    const SoldProd = () => {
-      var soldDate = new Date(currentProduct.soldAt);
-      soldDate = `${soldDate.getDay()}/${
-        soldDate.getMonth() + 1
-      }/${soldDate.getFullYear()}`;
-
-      return (
-        <>
-          <SoldNote>
-            Produto indisponível
-            <br />
-            Vendido/entregue em {soldDate}
-          </SoldNote>
-        </>
-      );
-    };
-
-    return (
+  return (
+    currentProduct && (
       <Box padding="2rem" fontSize="2.4rem">
         <form
           className={classes.root}
@@ -325,7 +177,9 @@ const ProductForm = ({ isCreate, refreshData }) => {
           onSubmit={handleSubmit(onSubmit)}
         >
           <h4>{isCreate ? "Novo Produto" : currentProduct.name}</h4>
-          {currentProduct.isActive == 0 && <SoldProd />}
+          {currentProduct.isActive == 0 && (
+            <SoldProd currentProduct={currentProduct} />
+          )}
           <Controller
             as={TextField}
             control={control}
@@ -333,7 +187,6 @@ const ProductForm = ({ isCreate, refreshData }) => {
             label="Nome do Produto"
             name="name"
             defaultValue={currentProduct.name || ""}
-            ref={register({ required: true })}
           />
           <Controller
             as={TextField}
@@ -343,7 +196,6 @@ const ProductForm = ({ isCreate, refreshData }) => {
             label="Descrição do Produto"
             name="description"
             defaultValue={currentProduct.description || ""}
-            ref={register({ required: true })}
           />
           <Controller
             as={CurrencyTextField}
@@ -365,7 +217,6 @@ const ProductForm = ({ isCreate, refreshData }) => {
             label="Marca"
             name="brand"
             defaultValue={currentProduct.brand || ""}
-            ref={register({ required: true })}
           />
 
           <Controller
@@ -380,7 +231,6 @@ const ProductForm = ({ isCreate, refreshData }) => {
                 return currentProduct.category || categories[0].id;
               return categories[0].id;
             }}
-            ref={register({ required: true })}
           >
             {categories.map((category, index) => (
               <MenuItem key={"category-" + index} value={category.id}>
@@ -401,7 +251,6 @@ const ProductForm = ({ isCreate, refreshData }) => {
                   return currentProduct.provider || providers[0].id;
                 return providers[0].id;
               }}
-              ref={register({ required: true })}
             >
               {providers.map((provider, index) => (
                 <MenuItem key={"provider-" + index} value={provider.id}>
@@ -440,7 +289,6 @@ const ProductForm = ({ isCreate, refreshData }) => {
                 variant="outlined"
                 name="imgA"
                 defaultValue={currentProduct.imgA || ""}
-                ref={register}
               />
             </Grid>
 
@@ -453,7 +301,6 @@ const ProductForm = ({ isCreate, refreshData }) => {
                 variant="outlined"
                 name="imgB"
                 defaultValue={currentProduct.imgB || ""}
-                ref={register}
               />
             </Grid>
 
@@ -466,7 +313,6 @@ const ProductForm = ({ isCreate, refreshData }) => {
                 variant="outlined"
                 name="imgC"
                 defaultValue={currentProduct.imgC || ""}
-                ref={register}
               />
             </Grid>
 
@@ -479,17 +325,11 @@ const ProductForm = ({ isCreate, refreshData }) => {
                 variant="outlined"
                 name="imgD"
                 defaultValue={currentProduct.imgD || ""}
-                ref={register}
               />
             </Grid>
           </Grid>
 
-          <MuiPickersUtilsProvider
-            locale={ptBrLocale}
-            utils={DateFnsUtils}
-            okLabel
-            todayLabel
-          >
+          <MuiPickersUtilsProvider locale={ptBrLocale} utils={DateFnsUtils}>
             <Controller
               as={KeyboardDatePicker}
               control={control}
@@ -497,9 +337,7 @@ const ProductForm = ({ isCreate, refreshData }) => {
               variant="inline"
               format="dd/MM/yyyy"
               autoOk
-              todayLabel
               invalidDateMessage="Informe uma data válida"
-              showTodayButton={true}
               disableFuture
               animateYearScrolling
               label="Data de entrada"
@@ -519,9 +357,7 @@ const ProductForm = ({ isCreate, refreshData }) => {
               variant="inline"
               format="dd/MM/yyyy"
               autoOk
-              todayLabel
               invalidDateMessage="[asd"
-              showTodayButton={true}
               disableFuture
               animateYearScrolling
               label="Data de saída"
@@ -538,67 +374,8 @@ const ProductForm = ({ isCreate, refreshData }) => {
           </Button>
         </form>
       </Box>
-    );
-  }
-
-  function render() {
-    if (isLoadingProduct || isLoadinProviders || isLoadinCategories) {
-      return <Loading />;
-    } else if (categories.length <= 0) {
-      return (
-        <>
-          <br />
-          <br />
-          <h5>Erro ao carregar a página.</h5>
-          <p>
-            Isso pode ter ocorrido por instabilidade do servidor ou por não
-            existirem categorias cadastradas, verifique e tente novamente.
-          </p>
-          <br />
-          <br />
-
-          <p>
-            <Link to="/c/category">
-              Acessar página de categorias <FiExternalLink />{" "}
-            </Link>
-          </p>
-        </>
-      );
-    } else if (providers.length <= 0) {
-      return (
-        <>
-          <br />
-          <br />
-          <h5>Erro ao carregar a página.</h5>
-          <p>
-            Isso pode ter ocorrido por instabilidade do servidor ou por não
-            existirem fornecedores cadastrados, verifique e tente novamente.
-          </p>
-          <br />
-          <br />
-
-          <p>
-            <Link to="/c/provider">
-              Acessar página de fornecedores <FiExternalLink />{" "}
-            </Link>
-          </p>
-        </>
-      );
-    } else if (currentProduct) {
-      return sucessLoad();
-    } else {
-      return (
-        <>
-          <h5>
-            Erro ao carregar a página, isso pode ocorrer devido a uma
-            instabilidade do servidor, tente novamente mais tarde
-          </h5>
-        </>
-      );
-    }
-  }
-
-  return <>{render()}</>;
+    )
+  );
 };
 
 export default ProductForm;
