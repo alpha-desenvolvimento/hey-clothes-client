@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
+import Box from "@material-ui/core/Box";
 
 import { getUrlParams, getPage } from "../../controller/url";
 
@@ -10,7 +10,7 @@ import {
   CardContainer,
   Paginator,
   SearchBar,
-  Spinner,
+  Loading as Spinner,
   CreateButton,
 } from "../../components";
 
@@ -92,7 +92,11 @@ const Products_PG = () => {
     };
 
     if (isLoading) {
-      return <Spinner />;
+      return (
+        <Box height="80vh">
+          <Spinner />
+        </Box>
+      );
     } else if (products.length <= 0) return <NoResults />;
     else {
       return <Products />;
