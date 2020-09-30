@@ -6,20 +6,24 @@ import { FiExternalLink } from "react-icons/fi";
 
 import { NavBar, Main, ProductForm, Loading } from "../../components";
 
-const CantFind = ({ thing, link }) => {
+const CantFind = ({ text, thing, link }) => {
   return (
     <Box>
       <h5>Erro ao carregar a página.</h5>
       <p>
-        Isso pode ter ocorrido por instabilidade do servidor ou por não
-        existirem {thing} no sistema, verifique e tente novamente.
+        {text
+          ? text
+          : `Isso pode ter ocorrido por instabilidade do servidor ou por não
+        existirem ${thing} no sistema, verifique e tente novamente.`}
       </p>
 
-      <p>
-        <NavLink to={link}>
-          Acessar página de {thing} <FiExternalLink />{" "}
-        </NavLink>
-      </p>
+      {link && (
+        <p>
+          <NavLink to={link}>
+            Acessar página de {thing} <FiExternalLink />{" "}
+          </NavLink>
+        </p>
+      )}
     </Box>
   );
 };
@@ -35,6 +39,7 @@ const ProductDetail_PG = () => {
   const [conditions, setConditions] = useState([]);
 
   const [isLoading, setIsLoading] = useState(true);
+  const [isMissingProduct, setIsMissingProduct] = useState(false);
 
   const fetchAndSetData = async () => {
     axios
@@ -150,18 +155,16 @@ const ProductDetail_PG = () => {
       } else {
         let url = `${process.env.REACT_APP_API_URL}/api/products/${prodId}`;
 
-        axios
-          .get(url)
-          .then((resp) => {
-            console.log("resp", resp);
-            setCurrentProduct(resp.data[0]);
-          })
-          .then(() => {
-            // fetchAndSetData();
-          })
-          .then(() => {
-            setIsLoading(false);
-          });
+        axios.get(url).then((resp) => {
+          
+          if (resp.data) {
+            setCurrentProduct(resp.data);
+          } else {
+            setIsMissingProduct(true);
+          }
+
+          setIsLoading(false);
+        });
       }
     }
   }, [prodId]);
@@ -180,6 +183,8 @@ const ProductDetail_PG = () => {
           <CantFind thing="fornecedores" link="/c/provider" />
         ) : conditions.lenght < 0 ? (
           <CantFind thing="Condições" link="/c/condition" />
+        ) : isMissingProduct ? (
+          <CantFind text="Produto não localizado" />
         ) : (
           <ProductForm
             isCreate={isCreate}

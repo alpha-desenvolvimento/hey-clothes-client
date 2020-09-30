@@ -76,6 +76,9 @@ const ProductForm = ({
       soldAt,
     } = formData;
 
+    console.log("recievedAt", recievedAt);
+    console.log("soldAt", soldAt);
+
     if (!name || name == "") {
       swal({
         text: "Informe um nome para o produto",
@@ -112,17 +115,17 @@ const ProductForm = ({
       });
 
       return false;
-    } else if (soldAt && recievedAt > soldAt ) {
+    } else if (soldAt) {
+      if (recievedAt > soldAt) {
+        swal({
+          text: "Data de saída não pode ser menor que a data de entrada!",
+          icon: "error",
+        });
 
-      console.log('recievedAt',recievedAt );
-      console.log('soldAt',soldAt );
-      swal({
-        text: "Data de saída não pode ser menor que a data de entrada!",
-        icon: "error",
-      });
-
-      return false;
+        return false;
+      }
     }
+
 
     return true;
   };
