@@ -175,9 +175,15 @@ const CategoryForm = ({ categoryId, isCreate, refreshData, hideDrawer }) => {
               onChange={() => setChecked(!checked)}
             />
           </div>
-          <Controller
+
+      
+            
+            
+            <Controller
             as={TextField}
             control={control}
+            variant="outlined"
+            label="Nome"
             name="name"
             defaultValue={() => {
               if (currentCategory) return currentCategory.name;

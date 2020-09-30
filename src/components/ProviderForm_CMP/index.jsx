@@ -65,19 +65,25 @@ const ProviderForm = ({ providerId, isCreate, refreshData, hideDrawer }) => {
     const url = `${process.env.REACT_APP_API_URL}/api/provider/${action}`;
 
     const id = !isCreate && currentProvider.id;
-    const name = formData.providerName;
-    const phone = formData.providerPhone;
-    const email = formData.providerEmail;
-    const endereco = formData.providerAdress;
 
-    axios.post(url, { id, name, phone, email, endereco }).then((resp) => {
-      hideDrawer();
-      refreshData();
-      swal({
-        text: "Operação executada com sucesso!",
-        icon: "success",
-      });
-      history.push("/c/provider");
+    if (!isCreate) formData.id = currentProvider.id;
+
+    axios.post(url, { ...formData }).then((resp) => {
+      console.log(resp);
+      if (resp.data && resp.data.id) {
+        hideDrawer();
+        refreshData();
+        swal({
+          text: "Operação executada com sucesso!",
+          icon: "success",
+        });
+        history.push("/c/provider");
+      } else {
+        swal({
+          text: "Erro ao executar operação",
+          icon: "error",
+        });
+      }
     });
   };
 
@@ -99,7 +105,7 @@ const ProviderForm = ({ providerId, isCreate, refreshData, hideDrawer }) => {
             label="Nome"
             type="text"
             defaultValue={currentProvider.name}
-            name="providerName"
+            name="name"
             ref={register({ required: true, maxLength: 80 })}
           />
 
@@ -110,7 +116,7 @@ const ProviderForm = ({ providerId, isCreate, refreshData, hideDrawer }) => {
             label="Telefone"
             type="text"
             defaultValue={currentProvider.phone}
-            name="providerPhone"
+            name="phone"
             ref={register({ required: true, maxLength: 15 })}
           />
 
@@ -121,7 +127,7 @@ const ProviderForm = ({ providerId, isCreate, refreshData, hideDrawer }) => {
             label="Email"
             type="email"
             defaultValue={currentProvider.email}
-            name="providerEmail"
+            name="email"
             ref={register()}
           />
 
@@ -133,7 +139,7 @@ const ProviderForm = ({ providerId, isCreate, refreshData, hideDrawer }) => {
             label="Endereço"
             type="text"
             defaultValue={currentProvider.endereco}
-            name="providerAdress"
+            name="endereco"
             ref={register()}
           />
 

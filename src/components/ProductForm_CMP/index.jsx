@@ -67,7 +67,14 @@ const ProductForm = ({
   const classes = useStyles();
 
   const isValidProduct = async (formData) => {
-    const { name, recievedAt, category, condition, provider } = formData;
+    const {
+      name,
+      recievedAt,
+      category,
+      condition,
+      provider,
+      soldAt,
+    } = formData;
 
     if (!name || name == "") {
       swal({
@@ -101,6 +108,16 @@ const ProductForm = ({
     } else if (!recievedAt || recievedAt == "") {
       swal({
         text: "Você não informou uma data de recebimento do produto!",
+        icon: "error",
+      });
+
+      return false;
+    } else if (soldAt && recievedAt > soldAt ) {
+
+      console.log('recievedAt',recievedAt );
+      console.log('soldAt',soldAt );
+      swal({
+        text: "Data de saída não pode ser menor que a data de entrada!",
         icon: "error",
       });
 
@@ -139,8 +156,6 @@ const ProductForm = ({
         setIsCreate(false);
         const returnedProduct = resp.data;
 
-        console.log(returnedProduct);
-
         if (returnedProduct && returnedProduct.id) {
           setCurrentProduct(returnedProduct);
           if (isCreate) {
@@ -148,14 +163,14 @@ const ProductForm = ({
             window.scrollTo(0, 0);
 
             swal({
-              text: `Produco criado com sucesso`,
+              text: `Produto criado com sucesso!`,
               icon: "success",
             });
           } else {
             window.scrollTo(0, 0);
 
             swal({
-              text: `Produco atualizado sucesso`,
+              text: `Produto atualizado sucesso!`,
               icon: "success",
             });
           }
@@ -198,6 +213,7 @@ const ProductForm = ({
             name="name"
             defaultValue={currentProduct.name || ""}
           />
+
           <Controller
             as={TextField}
             control={control}
@@ -207,6 +223,7 @@ const ProductForm = ({
             name="description"
             defaultValue={currentProduct.description || ""}
           />
+
           <Controller
             as={CurrencyTextField}
             control={control}
@@ -394,11 +411,10 @@ const ProductForm = ({
               as={KeyboardDatePicker}
               control={control}
               name="soldAt"
-              variant="inline"
               format="dd/MM/yyyy"
               autoOk
-              invalidDateMessage="[asd"
               disableFuture
+              invalidDateMessage="Informe uma data válida"
               animateYearScrolling
               label="Data de saída"
               defaultValue={

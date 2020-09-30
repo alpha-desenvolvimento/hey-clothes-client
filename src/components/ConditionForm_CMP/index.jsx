@@ -151,9 +151,12 @@ const ConditionForm = ({ conditionId, isCreate, refreshData, hideDrawer }) => {
           <h4>
             {isCreate ? "Nova Condiçao de produto" : currentCondition.name}
           </h4>
+
           <Controller
             as={TextField}
             control={control}
+            variant="outlined"
+            label="Nome"
             name="name"
             defaultValue={() => {
               if (currentCondition) return currentCondition.name;
