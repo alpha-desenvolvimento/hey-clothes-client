@@ -359,7 +359,7 @@ const ProductForm = ({
                     </MenuItem>
                   ))}
                 </Controller>
-                {currentProduct.provider && (
+                {/* {currentProduct.provider && (
                   <Link
                     to={`/c/provider/${currentProduct.provider}`}
                     className="link-provider"
@@ -369,7 +369,7 @@ const ProductForm = ({
                       Acessar fornecedor <FiExternalLink />
                     </span>
                   </Link>
-                )}
+                )} */}
               </Box>
 
               <Controller
