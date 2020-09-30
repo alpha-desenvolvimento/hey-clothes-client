@@ -253,6 +253,67 @@ const ProductForm = ({
                 name="brand"
                 defaultValue={currentProduct.brand || ""}
               />
+            </Box>
+
+            <Box width="48%">
+              <h4>Fotos do Produto</h4>
+              <Grid
+                justify="center"
+                cols={2}
+                container
+                wrap="wrap"
+                direction="row"
+                spacing={3}
+              >
+                <Grid item sm>
+                  <ProductPhoto imageUrl={currentProduct.imgA} />
+
+                  <Controller
+                    as={TextField}
+                    control={control}
+                    label="foto 1"
+                    variant="outlined"
+                    name="imgA"
+                    defaultValue={currentProduct.imgA || ""}
+                  />
+                </Grid>
+
+                <Grid item sm>
+                  <ProductPhoto imageUrl={currentProduct.imgB} />
+                  <Controller
+                    as={TextField}
+                    control={control}
+                    label="foto 2"
+                    variant="outlined"
+                    name="imgB"
+                    defaultValue={currentProduct.imgB || ""}
+                  />
+                </Grid>
+
+                <Grid item sm>
+                  <ProductPhoto imageUrl={currentProduct.imgC} />
+                  <Controller
+                    as={TextField}
+                    control={control}
+                    label="foto 3"
+                    variant="outlined"
+                    name="imgC"
+                    defaultValue={currentProduct.imgC || ""}
+                  />
+                </Grid>
+
+                <Grid item sm>
+                  <ProductPhoto imageUrl={currentProduct.imgD} />
+                  <Controller
+                    as={TextField}
+                    control={control}
+                    label="foto 4"
+                    variant="outlined"
+                    name="imgD"
+                    defaultValue={currentProduct.imgD || ""}
+                  />
+                </Grid>
+              </Grid>
 
               <Controller
                 as={TextField}
@@ -334,67 +395,6 @@ const ProductForm = ({
                   </MenuItem>
                 ))}
               </Controller>
-            </Box>
-
-            <Box width="48%">
-              <h4>Fotos do Produto</h4>
-              <Grid
-                justify="center"
-                cols={2}
-                container
-                wrap="wrap"
-                direction="row"
-                spacing={3}
-              >
-                <Grid item sm>
-                  <ProductPhoto imageUrl={currentProduct.imgA} />
-
-                  <Controller
-                    as={TextField}
-                    control={control}
-                    label="foto 1"
-                    variant="outlined"
-                    name="imgA"
-                    defaultValue={currentProduct.imgA || ""}
-                  />
-                </Grid>
-
-                <Grid item sm>
-                  <ProductPhoto imageUrl={currentProduct.imgB} />
-                  <Controller
-                    as={TextField}
-                    control={control}
-                    label="foto 2"
-                    variant="outlined"
-                    name="imgB"
-                    defaultValue={currentProduct.imgB || ""}
-                  />
-                </Grid>
-
-                <Grid item sm>
-                  <ProductPhoto imageUrl={currentProduct.imgC} />
-                  <Controller
-                    as={TextField}
-                    control={control}
-                    label="foto 3"
-                    variant="outlined"
-                    name="imgC"
-                    defaultValue={currentProduct.imgC || ""}
-                  />
-                </Grid>
-
-                <Grid item sm>
-                  <ProductPhoto imageUrl={currentProduct.imgD} />
-                  <Controller
-                    as={TextField}
-                    control={control}
-                    label="foto 4"
-                    variant="outlined"
-                    name="imgD"
-                    defaultValue={currentProduct.imgD || ""}
-                  />
-                </Grid>
-              </Grid>
 
               <MuiPickersUtilsProvider locale={ptBrLocale} utils={DateFnsUtils}>
                 <Controller
