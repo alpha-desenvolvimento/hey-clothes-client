@@ -26,42 +26,40 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CategoryForm = ({ categoryId, isCreate, refreshData, hideDrawer }) => {
+const ConditionForm = ({ conditionId, isCreate, refreshData, hideDrawer }) => {
   const { register, handleSubmit, control } = useForm();
-  const [currentCategory, setCurrentCategory] = useState(null);
-  const [isLoadingCategory, setIsLoadingCategory] = useState(true);
-  const [checked, setChecked] = useState(true);
+  const [currentCondition, setCurrentCondition] = useState(null);
+  const [isLoadingCondition, setIsLoadingCondition] = useState(true);
+  const [allowDelete, setAllowDelete] = useState(false);
 
   const classes = useStyles();
 
   const history = useHistory();
 
   const fetchAndSetData = () => {
-    setIsLoadingCategory(true);
-    let url = `${process.env.REACT_APP_API_URL}/api/category/${categoryId}`;
+    setIsLoadingCondition(true);
+    let url = `${process.env.REACT_APP_API_URL}/api/conditions/${conditionId}`;
     axios
       .get(url)
       .then((resp) => {
         console.log("resp", resp);
         // resp.header. TODO coloda o erro que vem no header
-        setCurrentCategory(resp.data);
-        setChecked(resp.data.isActive == 1);
+        setCurrentCondition(resp.data);
       })
       .catch((err) => {
         console.log(err);
       })
       .finally(() => {
-        setIsLoadingCategory(false);
+        setIsLoadingCondition(false);
       });
   };
 
   useEffect(() => {
     if (isCreate) {
-      setCurrentCategory({
+      setCurrentCondition({
         name: "",
         isActive: 1,
       });
-      setChecked(true);
     } else {
       fetchAndSetData();
     }
@@ -70,27 +68,21 @@ const CategoryForm = ({ categoryId, isCreate, refreshData, hideDrawer }) => {
   const onSubmit = (formData) => {
     if (!formData.name || formData.name == "") {
       swal({
-        text: "Informe um nome para a categoria",
+        text: "Informe um nome para a condição do produto",
         icon: "warning",
       });
       return;
     }
-    formData.isActive = checked;
-
     const action = isCreate ? "create" : "update";
-    const url = `${process.env.REACT_APP_API_URL}/api/category/${action}`;
+    const url = `${process.env.REACT_APP_API_URL}/api/conditions/${action}`;
 
-    const categoryTO = { ...formData };
+    const conditionTO = { ...formData };
 
-    categoryTO.isActive = categoryTO.isActive ? 1 : "0";
+    if (currentCondition) conditionTO.id = currentCondition.id;
 
-    if (currentCategory) categoryTO.id = currentCategory.id;
+    console.log(conditionTO);
 
-    if (isCreate) delete categoryTO.id;
-
-    console.log(categoryTO);
-
-    axios.post(url, categoryTO).then((resp) => {
+    axios.post(url, conditionTO).then((resp) => {
       console.log(" resp", resp);
 
       if (resp.data.id) {
@@ -101,9 +93,16 @@ const CategoryForm = ({ categoryId, isCreate, refreshData, hideDrawer }) => {
           text: "Operação executada com sucesso!",
           icon: "success",
         });
-        history.push("/c/category/");
+        history.push("/c/condition/");
       }
+      isCreate = false;
     });
+  };
+
+  const deleteCondition = (event) => {
+    event.preventDefault();
+
+    console.log("doasd");
   };
 
   function sucessLoad() {
@@ -114,42 +113,48 @@ const CategoryForm = ({ categoryId, isCreate, refreshData, hideDrawer }) => {
           autoComplete="off"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <h4>{isCreate ? "Nova Categoria" : currentCategory.name}</h4>
+          <h4>
+            {isCreate ? "Nova Condiçao de produto" : currentCondition.name}
+          </h4>
           <Controller
             as={TextField}
             control={control}
             name="name"
             defaultValue={() => {
-              if (currentCategory) return currentCategory.name;
+              if (currentCondition) return currentCondition.name;
               return "";
             }}
             ref={register({ required: true })}
           />
-          <h6>Ativo?</h6>
-          <Switch
-            name="isActive"
-            defaultChecked={checked}
-            onChange={() => setChecked(!checked)}
-          />
 
-          <br />
           <Button color="primary" variant="contained" type="submit">
             Salvar
           </Button>
+
+          {allowDelete && (
+            <Button
+              color="primary"
+              variant="contained"
+              type="submit"
+              onClick={deleteCondition}
+            >
+              Deletar
+            </Button>
+          )}
         </form>
       </Box>
     );
   }
 
   function errorLoad() {
-    return <h4>Erro: Categoria não localizada</h4>;
+    return <h4>Erro: COndição não localizada</h4>;
   }
 
   return (
     <>
-      {isLoadingCategory && !isCreate ? (
+      {isLoadingCondition && !isCreate ? (
         <Loading />
-      ) : currentCategory ? (
+      ) : currentCondition ? (
         sucessLoad()
       ) : (
         errorLoad()
@@ -158,4 +163,4 @@ const CategoryForm = ({ categoryId, isCreate, refreshData, hideDrawer }) => {
   );
 };
 
-export default CategoryForm;
+export default ConditionForm;

@@ -19,7 +19,7 @@ export const MainContainer = styled.form`
   background-color: rgb(255 255 255 / 0.1);
   padding: 3vh 1rem 3vh 2rem;
   height: 10rem;
-  backdrop-filter: blur(5px);
+  /* backdrop-filter: blur(5px); */
 
   ${mediaQuery[0]} {
     padding: 3vh 8rem 3vh 16rem;
@@ -47,7 +47,7 @@ export const SearchInput = styled.input`
   border: 0;
   border-radius: 100px;
   background-color: rgb(255 255 255 / 0.8);
-  backdrop-filter: blur(5px);
+  /* backdrop-filter: blur(5px); */
 `;
 
 export const FilterContainer = styled.div``;

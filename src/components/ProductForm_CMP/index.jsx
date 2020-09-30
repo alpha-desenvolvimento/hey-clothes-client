@@ -5,6 +5,7 @@ import React, { useContext } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { AuthContext } from "../../AuthContext";
 import { FiExternalLink } from "react-icons/fi";
+import { useHistory } from "react-router-dom";
 
 import CurrencyTextField from "@unicef/material-ui-currency-textfield";
 import {
@@ -57,6 +58,7 @@ const ProductForm = ({
   providers,
   conditions,
 }) => {
+  const history = useHistory();
   const { currentUser } = useContext(AuthContext);
   const { handleSubmit, control } = useForm();
 
@@ -147,13 +149,19 @@ const ProductForm = ({
 
     delete productTO.isActive;
 
+
+
     axios
       .post(restEndpoint, productTO)
       .then((resp) => {
-        console.log("product resp", resp.data);
+        // console.log("product resp", resp.data);
         const returnedProduct = resp.data;
-        if (returnedProduct.id) {
+
+        console.log(returnedProduct);
+
+        if (returnedProduct && returnedProduct.id) {
           if (isCreate) {
+            history.push(`/p/detail/${returnedProduct.id}`)
             //successCreate(returnedProduct.id);
           } else {
             //setCurrentProduct(returnedProduct);
@@ -234,9 +242,11 @@ const ProductForm = ({
             label="Categoria"
             name="category"
             defaultValue={() => {
-              if (currentProduct)
-                return currentProduct.category || categories[0].id;
-              return categories[0].id;
+              try {
+                return currentProduct.category;
+              } catch (error) {
+                return categories[0].id;
+              }
             }}
           >
             {categories.map((category, index) => (
@@ -255,9 +265,11 @@ const ProductForm = ({
               label="Fornecedor"
               name="provider"
               defaultValue={() => {
-                if (currentProduct)
-                  return currentProduct.provider || providers[0].id;
-                return providers[0].id;
+                try {
+                  return currentProduct.provider;
+                } catch (error) {
+                  return providers[0].id;
+                }
               }}
             >
               {providers.map((provider, index) => (
@@ -287,9 +299,11 @@ const ProductForm = ({
             label="Condição"
             name="condition"
             defaultValue={() => {
-              if (currentProduct)
-                return currentProduct.condition || conditions[0].id;
-              return conditions[0].id;
+              try {
+                return currentProduct.conditions;
+              } catch (error) {
+                return conditions[0].id;
+              }
             }}
           >
             {conditions.map((condition, index) => (
