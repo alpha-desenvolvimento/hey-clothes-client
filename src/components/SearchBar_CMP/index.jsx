@@ -10,6 +10,7 @@ import {
   Hr,
   SubmitButton,
 } from "./styles";
+
 // import { useForm } from "react-hook-form";
 // import HerokuServer from "../../API/HerokuServer";
 
@@ -27,24 +28,28 @@ const ProductSearchBar = ({ handleFetchData, ignorePagination }) => {
     window.history.pushState(null, null, `?${urlParams.toString()}`);
 
     handleFetchData();
+    window.scrollTo(0, 0);
   }
 
   return (
-    <MainContainer onSubmit={handleSubmit(doSearch)}>
-      <SearchInputContainer>
-        <SearchInput
-          className="h4-font-size"
-          name="searchValue"
-          placeholder="Pesquisar"
-          ref={register()}
-        />
-        <SubmitButton className="h5-font-size icon" style={{ right: "2rem" }}>
-          <FiSearch />
-        </SubmitButton>
-        <Hr />
-      </SearchInputContainer>
-      <FilterContainer></FilterContainer>
-    </MainContainer>
+    <>
+      <MainContainer onSubmit={handleSubmit(doSearch)}>
+        <SearchInputContainer>
+          <SearchInput
+            className="h4-font-size"
+            name="searchValue"
+            placeholder="Pesquisar"
+            ref={register()}
+          />
+          <SubmitButton className="h5-font-size icon" style={{ right: "2rem" }}>
+            <FiSearch />
+          </SubmitButton>
+          <Hr />
+        </SearchInputContainer>
+        <FilterContainer></FilterContainer>
+      </MainContainer>
+      <div style={{ paddingTop: "10rem" }}></div>
+    </>
   );
 };
 

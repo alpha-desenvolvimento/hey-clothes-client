@@ -66,7 +66,6 @@ const Users_PG = () => {
 
       switch (action) {
         case "create":
-          console.log("is create");
           setIsCreate(true, openDrawer());
           break;
 
@@ -91,14 +90,15 @@ const Users_PG = () => {
     <>
       <NavBar />
       <Main>
-        <CreateButton dest="/u?action=create" />
         <SearchBar handleFetchData={fetchPageData} ignorePagination={true} />
+
         {isBadRequest ? (
           <h1>{error}</h1>
         ) : !isLoaded ? (
           <Spinner />
         ) : (
           <>
+            <CreateButton href="/u?action=create" text="Criar novo usuário" />
             <CardContainer>
               {users && (
                 <>
@@ -111,7 +111,7 @@ const Users_PG = () => {
                       key={"Card-" + user.id}
                     >
                       <CardDetails>
-                        <CardText>Id: {user.id}</CardText>
+                        {/* <CardText>Id: {user.id}</CardText> */}
                         <CardText active={user.isActive} svg="right">
                           {user.isActive == 0 ? (
                             <span>inativo</span>
@@ -139,6 +139,7 @@ const Users_PG = () => {
 
       <Drawer isOpen={isOpen} hide={hideAndClearCurrentUser} closeUrl="/u">
         <UserForm
+          hideDrawer={hideDrawer}
           refreshData={fetchPageData}
           userID={userID}
           isCreate={isCreate}

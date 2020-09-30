@@ -32,11 +32,29 @@ export default class UrlController_CLS {
     return response == "?" ? "" : response;
   }
 
+  static getUrlParamsValues() {
+    const urlParamsResponse = {};
+    const urlParams = new URLSearchParams(window.location.search);
+
+    window.location.search
+      .substring(1)
+      .split("&")
+      .forEach((param) => (urlParamsResponse[param.split("=")[0]] = null));
+
+    for (const key in urlParamsResponse) {
+      if (key == "") continue;
+      // urlParamsResponse[key] = urlParams.get(key);
+    }
+
+    return urlParamsResponse;
+  }
+
   static getPage() {
     const urlParams = new URLSearchParams(window.location.search);
-    return parseInt(urlParams.get("page") || 1) - 1;
+    return `${parseInt(urlParams.get("page") || 1) - 1}`;
   }
 }
 
 export const getUrlParams = UrlController_CLS.getUrlParams;
 export const getPage = UrlController_CLS.getPage;
+export const getUrlParamsValues = UrlController_CLS.getUrlParamsValues;

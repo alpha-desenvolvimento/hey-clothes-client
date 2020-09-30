@@ -3,9 +3,7 @@ import { mediaQuery } from "../../styles/global";
 
 const btnSize = "5rem";
 export const Button = styled.button`
-  position: fixed;
-  bottom: 9rem;
-  right: 1rem;
+  
 
   display: flex;
   justify-content: center;

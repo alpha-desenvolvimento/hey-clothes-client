@@ -97,10 +97,10 @@ const Providers_PG = () => {
       <NavBar />
       <Main>
         <CreateButton
-          setIsCreate={setIsCreate}
-          openDrawer={openDrawer}
-          dest="/c/provider?action=create"
+          href="/c/provider?action=create"
+          text="Criar novo fornecedor"
         />
+
         <SearchBar handleFetchData={fetchPageData} ignorePagination={true} />
 
         {isBadRequest ? (
@@ -119,7 +119,7 @@ const Providers_PG = () => {
                         handleProvider(provider.id);
                       }}
                     >
-                      <CardText>Id: {provider.id}</CardText>
+                      {/* <CardText>Id: {provider.id}</CardText> */}
                       <CardText primary>{provider.name}</CardText>
                       <CardDetails>
                         <CardText>
@@ -142,6 +142,7 @@ const Providers_PG = () => {
         closeUrl="/c/provider"
       >
         <ProviderForm
+          hideDrawer={hideAndClearCurrentProvider}
           refreshData={fetchPageData}
           providerId={providerId}
           isCreate={isCreate}

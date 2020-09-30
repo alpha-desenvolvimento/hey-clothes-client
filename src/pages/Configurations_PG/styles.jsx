@@ -5,6 +5,7 @@ import { mediaQuery } from "../../styles/global";
 
 export const CardsWrapper = styled.section`
   display: flex;
+  justify-content: space-between;
   flex-direction: column;
   flex-wrap: wrap;
 
@@ -28,7 +29,7 @@ export const NavCard = styled(NavLink)`
   height: auto;
 
   padding: 2.4rem;
-  margin: 1rem auto;
+  margin: 1rem 0;
   border: 0;
   border-radius: 1rem;
   box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);

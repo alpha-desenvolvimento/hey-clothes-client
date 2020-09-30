@@ -8,9 +8,9 @@ export const Main = styled.main`
   display: flex;
   justify-content: center;
 
-  ${mediaQuery[0]} {
-    width: 100%;
-  }
+  width: 100%;
+  /* ${mediaQuery[0]} {
+  } */
 `;
 
 export const Arrow = styled.div`

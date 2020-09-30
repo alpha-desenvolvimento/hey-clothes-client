@@ -8,18 +8,18 @@ import NavBar, { Main } from "../../components/NavBar_CMP";
 import Drawer, { useDrawerUtils } from "../../components/Drawer_CMP";
 import Spinner from "../../components/LoadingSpinner_CMP";
 
-import CategoryForm from "../../components/CategoryForm_CMP";
+import ConditionForm from "../../components/ConditionForm_CMP";
 import CreateButton from "../../components/CreateButton_CMP";
 import SearchBar from "../../components/SearchBar_CMP";
 
 import { CardContainer, Card, CardDetails, CardText } from "./styles";
 
-const Categories_PG = () => {
+const Condition_PG = () => {
   const history = useHistory();
 
   const [isOpen, hideDrawer, openDrawer] = useDrawerUtils();
-  const [categories, setCategories] = useState([]);
-  const [categoryId, setCategoryId] = useState(useParams().id);
+  const [conditions, setCondition] = useState([]);
+  const [conditionId, setConditionId] = useState(useParams().id);
   const [isCreate, setIsCreate] = useState(false);
 
   const [isLoaded, setIsLoaded] = useState(false);
@@ -29,17 +29,16 @@ const Categories_PG = () => {
   const fetchPageData = () => {
     setIsBadRequest(false);
 
-    const urlParams = { paramList: [["name", "catName"]] };
+    const urlParams = { paramList: [["name", "name"]] };
 
-    let url = `${process.env.REACT_APP_API_URL}/api/category/list`;
+    let url = `${process.env.REACT_APP_API_URL}/api/conditions/list`;
     url += getUrlParams(urlParams);
 
     axios
       .get(url)
       .then((resp) => {
         console.log("resp", resp);
-        // resp.header. TODO coloda o erro que vem no header
-        setCategories(resp.data);
+        setCondition(resp.data);
       })
       .catch((err) => {
         console.log(err);
@@ -53,7 +52,7 @@ const Categories_PG = () => {
 
   useEffect(() => {
     fetchPageData();
-    if (categoryId) {
+    if (conditionId) {
       openDrawer();
     } else {
       const queryString = window.location.search;
@@ -74,15 +73,15 @@ const Categories_PG = () => {
     }
   }, []);
 
-  const handleCategory = (openCatId) => {
-    setCategoryId(openCatId);
-    history.push(`/c/category/${openCatId}`);
+  const handleCondition = (openCatId) => {
+    setConditionId(openCatId);
+    history.push(`/c/condition/${openCatId}`);
     openDrawer();
   };
 
-  const hideAndClearCurrentCategory = () => {
+  const hideAndClearCurrentCondition = () => {
     setIsCreate(false);
-    setCategoryId(null);
+    setConditionId(null);
     hideDrawer();
   };
 
@@ -91,8 +90,8 @@ const Categories_PG = () => {
       <NavBar />
       <Main>
         <CreateButton
-          text="Criar nova categoria"
-          href="/c/category?action=create"
+          text="Criar nova condição de produto"
+          href="/c/condition?action=create"
         />
         <SearchBar handleFetchData={fetchPageData} ignorePagination={true} />
         {isBadRequest ? (
@@ -102,28 +101,17 @@ const Categories_PG = () => {
         ) : (
           <>
             <CardContainer>
-              {categories && (
+              {conditions && (
                 <>
-                  {categories.map((category, index) => (
+                  {conditions.map((condition, index) => (
                     <Card
                       onClick={() => {
-                        handleCategory(category.id);
+                        handleCondition(condition.id);
                       }}
-                      active={category.isActive}
-                      key={"Card-" + category.id}
+                      active={condition.isActive}
+                      key={"Card-" + condition.id}
                     >
-                      <CardText primary>{category.name}</CardText>
-                      <CardDetails>
-                        {/* <CardText>Id: {category.id}</CardText> */}
-                        <CardText>
-                          {category.isActive == 0 ? (
-                            <span>inativo</span>
-                          ) : (
-                            <span>ativo</span>
-                          )}
-                          <FiTag />
-                        </CardText>
-                      </CardDetails>
+                      <CardText primary>{condition.name}</CardText>
                     </Card>
                   ))}
                 </>
@@ -135,13 +123,13 @@ const Categories_PG = () => {
 
       <Drawer
         isOpen={isOpen}
-        hide={hideAndClearCurrentCategory}
-        closeUrl="/c/category"
+        hide={hideAndClearCurrentCondition}
+        closeUrl="/c/condition"
       >
-        <CategoryForm
-          hideDrawer={hideAndClearCurrentCategory}
+        <ConditionForm
+          hideDrawer={hideAndClearCurrentCondition}
           refreshData={fetchPageData}
-          categoryId={categoryId}
+          conditionId={conditionId}
           isCreate={isCreate}
         />
       </Drawer>
@@ -149,4 +137,4 @@ const Categories_PG = () => {
   );
 };
 
-export default Categories_PG;
+export default Condition_PG;

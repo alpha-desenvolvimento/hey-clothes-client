@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { mediaQuery } from "../../styles/global";
 
 export const CardContainer = styled.section`
-  padding: 12rem 1.6rem 5rem;
+  padding: 0 1.6rem 5rem;
 
   display: flex;
   flex-flow: wrap column;
