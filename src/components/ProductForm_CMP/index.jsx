@@ -76,8 +76,8 @@ const ProductForm = ({
       soldAt,
     } = formData;
 
-    console.log("recievedAt", recievedAt);
     console.log("soldAt", soldAt);
+    console.log("recievedAt > soldAt", recievedAt > soldAt);
 
     if (!name || name == "") {
       swal({
@@ -125,7 +125,6 @@ const ProductForm = ({
         return false;
       }
     }
-
 
     return true;
   };
