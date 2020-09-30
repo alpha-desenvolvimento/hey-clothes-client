@@ -65,7 +65,7 @@ const ProductForm = ({
   const classes = useStyles();
 
   const isValidProduct = async (formData) => {
-    const { name, price, brand, recievedAt } = formData;
+    const { name, recievedAt, category, condition, provider } = formData;
 
     if (!name || name == "") {
       swal({
@@ -75,67 +75,51 @@ const ProductForm = ({
         dangerMode: true,
       });
       return false;
-    }
-
-    if (!price || price == 0) {
-      await swal({
-        text: "Você informou valor R$ 0.00 para o produto, deseja continuar?",
-        icon: "warning",
-        buttons: true,
+    } else if (category == undefined) {
+      swal({
+        text: "Informe uma categoria para o produto",
+        icon: "error",
         dangerMode: true,
-      }).then((willDelete) => {
-        if (!willDelete) {
-          swal("Operação cancelada, você pode corrigir o valor do produto.", {
-            icon: "info",
-          });
-          return false;
-        }
       });
-    }
-
-    if (!brand || brand == "") {
-      await swal({
-        text: "Você não informou uma marca para o produto, deseja continuar?",
-        icon: "warning",
-        buttons: true,
+      return false;
+    } else if (provider == undefined) {
+      swal({
+        text: "Informe um fornecedor para o produto",
+        icon: "error",
         dangerMode: true,
-      }).then((willDelete) => {
-        if (!willDelete) {
-          swal("Operação cancelada, você pode corrigir a marca do produto.", {
-            icon: "info",
-          });
-          return false;
-        }
       });
-    }
-
-    if (!recievedAt || recievedAt == "") {
-      await swal({
-        text:
-          "Você não informou uma data de recebimento do produto, deseja continuar?",
-        icon: "warning",
-        buttons: true,
+      return false;
+    } else if (condition == undefined) {
+      swal({
+        text: "Informe uma condição do produto",
+        icon: "error",
         dangerMode: true,
-      }).then((willDelete) => {
-        if (!willDelete) {
-          swal(
-            "Operação cancelada, você pode corrigir a data de recebimento do produto.",
-            {
-              icon: "info",
-            }
-          );
-          return false;
-        }
       });
+      return false;
+    } else if (!recievedAt || recievedAt == "") {
+      swal({
+        text: "Você não informou uma data de recebimento do produto!",
+        icon: "error",
+      });
+
+      return false;
     }
 
     return true;
   };
 
-  const onSubmit = (formData) => {
-    if (!isValidProduct(formData)) return;
+  const onSubmit = async (formData) => {
+    console.log(formData);
     const action = isCreate ? "create" : "update";
     const restEndpoint = `${process.env.REACT_APP_API_URL}/api/products/${action}`;
+
+    try {
+      formData.price = formData.price.split(".").join("").replace(",", ".");
+    } catch (error) {
+      formData.price = 0;
+    }
+
+    if ((await isValidProduct(formData)) == false) return;
 
     const productTO = { ...formData };
 
@@ -149,22 +133,32 @@ const ProductForm = ({
 
     delete productTO.isActive;
 
-
-
     axios
       .post(restEndpoint, productTO)
       .then((resp) => {
-        // console.log("product resp", resp.data);
         const returnedProduct = resp.data;
 
         console.log(returnedProduct);
 
         if (returnedProduct && returnedProduct.id) {
+          currentProduct = returnedProduct;
           if (isCreate) {
-            history.push(`/p/detail/${returnedProduct.id}`)
-            //successCreate(returnedProduct.id);
+            isCreate = false;
+
+            history.push(`/p/detail/${returnedProduct.id}`);
+            window.scrollTo(0, 0);
+
+            swal({
+              text: `Produco criado com sucesso`,
+              icon: "success",
+            });
           } else {
-            //setCurrentProduct(returnedProduct);
+            window.scrollTo(0, 0);
+
+            swal({
+              text: `Produco atualizado sucesso`,
+              icon: "success",
+            });
           }
         } else {
           swal({
@@ -300,8 +294,10 @@ const ProductForm = ({
             name="condition"
             defaultValue={() => {
               try {
-                return currentProduct.conditions;
+                console.log(currentProduct);
+                return currentProduct.condition;
               } catch (error) {
+                console.log('conditions',conditions);
                 return conditions[0].id;
               }
             }}

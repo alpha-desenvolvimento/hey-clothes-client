@@ -37,7 +37,6 @@ const Products_PG = () => {
     endpoint += `${getPage() || 0}`;
     endpoint += `${getUrlParams({ paramList: ["name"] })}`;
 
-    console.log(endpoint);
     axios
       .get(endpoint)
       .then((resp) => {

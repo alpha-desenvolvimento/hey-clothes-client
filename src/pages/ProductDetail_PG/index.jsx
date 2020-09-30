@@ -36,7 +36,7 @@ const ProductDetail_PG = () => {
 
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchAndSetData = () => {
+  const fetchAndSetData = async () => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/api/category/list`)
       .then((resp) => {
@@ -80,10 +80,13 @@ const ProductDetail_PG = () => {
       .catch((err) => {
         console.log(err);
       });
+
     axios
       .get(`${process.env.REACT_APP_API_URL}/api/conditions/list`)
       .then((resp) => {
         if (resp.data.length <= 0) return;
+
+        console.log(resp);
 
         const recievedConditions = [];
 
@@ -116,13 +119,11 @@ const ProductDetail_PG = () => {
         description: "",
         price: "",
         Brand: "",
-        // category: 1,
-        // condition: 1,
         imgA: "",
         imgB: "",
         imgC: "",
         imgD: "",
-        // provider: 1,
+        // condition: 1, category: 1, provider: 1,
       });
       setIsLoading(false);
     } else {
@@ -148,19 +149,19 @@ const ProductDetail_PG = () => {
         });
       } else {
         let url = `${process.env.REACT_APP_API_URL}/api/products/${prodId}`;
-        
+
         axios
-        .get(url)
-        .then((resp) => {
-          console.log("resp", resp);
-          setCurrentProduct(resp.data[0]);
-        })
-        .then(() => {
-          // fetchAndSetData();
-        })
-        .then(() => {
-          setIsLoading(false);
-        });
+          .get(url)
+          .then((resp) => {
+            console.log("resp", resp);
+            setCurrentProduct(resp.data[0]);
+          })
+          .then(() => {
+            // fetchAndSetData();
+          })
+          .then(() => {
+            setIsLoading(false);
+          });
       }
     }
   }, [prodId]);
