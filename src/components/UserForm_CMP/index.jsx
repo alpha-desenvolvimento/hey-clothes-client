@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
+import swal from "sweetalert";
 
 import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import Switch from "@material-ui/core/Switch";
 import { makeStyles } from "@material-ui/core/styles";
 
 import Loading from "../MaterialLoading_CMP";
@@ -19,11 +21,70 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const UserForm = ({ userID, isCreate, refreshData, hideDrawer }) => {
-  const { register, handleSubmit, watch } = useForm();
+  const { control, handleSubmit } = useForm();
   const [currentUser, setCurrentUser] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   const classes = useStyles();
+
+  const isValidUser = async (formData) => {
+    const { userName, userEmail, userPassword, confirmPassword } = formData;
+    console.log(userPassword.length);
+    if (!userName || userName == "") {
+      swal({
+        text: "Informe um nome para o usuário",
+        icon: "error",
+
+        dangerMode: true,
+      });
+      return false;
+    } else if (!userEmail || userEmail == "") {
+      swal({
+        text: "Informe um email para o usuário",
+        icon: "error",
+        dangerMode: true,
+      });
+      return false;
+    } else if (!/\S+@\S+\.\S+/.test(userEmail)) {
+      swal({
+        text: "Informe um email valido para o usuário",
+        icon: "error",
+        dangerMode: true,
+      });
+      return false;
+    } else if (userPassword !== confirmPassword) {
+      swal({
+        text:
+          "Verifique se os campos 'senha' e 'confirme sua senha' estão preenchidos corretamente",
+        icon: "error",
+        dangerMode: true,
+      });
+      return false;
+    } else if (
+      (isCreate && userPassword == undefined) ||
+      userPassword == "" ||
+      userPassword.length === 0
+    ) {
+      swal({
+        text: "O usuário precisa de uma senha",
+        icon: "error",
+        dangerMode: true,
+      });
+      return false;
+    } else if (
+      (userPassword.length !== 0 && userPassword.length < 6) ||
+      userPassword.length > 20
+    ) {
+      swal({
+        text: "Sua senha deve ter entre 6 e 20 caracteres.",
+        icon: "error",
+        dangerMode: true,
+      });
+      return false;
+    }
+
+    return true;
+  };
 
   const fetchAndSetData = () => {
     let url = `${process.env.REACT_APP_API_URL}/api/users/${userID}`;
@@ -31,7 +92,6 @@ const UserForm = ({ userID, isCreate, refreshData, hideDrawer }) => {
       .get(url)
       .then((resp) => {
         console.log("resp", resp);
-        // resp.header. TODO coloda o erro que vem no header
         setCurrentUser(resp.data);
       })
       .catch((err) => {
@@ -54,40 +114,82 @@ const UserForm = ({ userID, isCreate, refreshData, hideDrawer }) => {
     } else {
       fetchAndSetData();
     }
-
-    console.log(currentUser);
   }, []);
 
-  const onSubmit = (formData) => {
-    console.log(formData);
+  const onSubmit = async (formData) => {
     const action = isCreate ? "create" : "update";
     console.log("action", isCreate);
     const url = `${process.env.REACT_APP_API_URL}/api/users/${action}`;
 
+    if ((await isValidUser(formData)) == false) return;
+
     const id = !isCreate && currentUser.id;
     const name = formData.userName;
-    const isActive = 1; //TODO, adicionar ao for
     const email = formData.userEmail;
-    const password = formData.userPassword;
+    const password =
+      formData.userPassword === formData.confirmPassword &&
+      formData.userPassword;
+
+    const userToSend = {
+      id: !isCreate && currentUser.id,
+      name: formData.userName,
+      email: formData.userEmail,
+      password:
+        formData.userPassword === formData.confirmPassword &&
+        formData.userPassword,
+    };
+
     console.log("data onSubmit", { id, name, email, password });
 
     isCreate // isActive não pode ser 0 no create se não o js acha que é "false" na query
-      ? axios.post(url, { name, email, password, isActive }).then((resp) => {
-          console.log("updatedCategory resp", resp);
-          hideDrawer();
-          refreshData();
-          fetchAndSetData();
-        })
-      : axios.post(url, { id, name, email, password }).then((resp) => {
-          console.log("updatedUser resp", resp);
-          refreshData();
-          fetchAndSetData();
-        });
+      ? axios
+          .post(url, { name, email, password, isActive: 1 })
+          .then((resp) => {
+            console.log("updatedUser resp", resp);
+            hideDrawer();
+            refreshData();
+            fetchAndSetData();
+          })
+          .then(() => {
+            swal({
+              text: `Usuário criado sucesso`,
+              icon: "success",
+            });
+          })
+          .catch((error) => {
+            swal({
+              text: `Erro ao executar operação:\n${error}`,
+              icon: "error",
+              dangerMode: true,
+            });
+          })
+      : axios
+          .post(url, userToSend)
+          .then((resp) => {
+            console.log("updatedUser resp", resp);
+            hideDrawer();
+            refreshData();
+            fetchAndSetData();
+          })
+          .then(() => {
+            swal({
+              text: `Usuário Atualizado sucesso`,
+              icon: "success",
+            });
+          })
+          .catch((error) => {
+            swal({
+              text: `Erro ao executar operação:\n${error}`,
+              icon: "error",
+              dangerMode: true,
+            });
+          });
   };
 
   function sucessLoad() {
     return (
       <Box padding="2rem" fontSize="2.4rem">
+        <p>Usuário:</p>
         <form
           className={classes.root}
           autoComplete="off"
@@ -95,51 +197,57 @@ const UserForm = ({ userID, isCreate, refreshData, hideDrawer }) => {
         >
           <h4>{isCreate ? "Novo usuario" : currentUser.name}</h4>
 
-          <TextField
+          <Controller
+            as={TextField}
+            control={control}
             variant="outlined"
             label="Nome de usuário"
             name="userName"
             defaultValue={isCreate ? "" : currentUser.name}
-            ref={register({ required: true })}
           />
-          <TextField
+          <Controller
+            as={TextField}
+            control={control}
             variant="outlined"
             label="Email"
             name="userEmail"
             defaultValue={currentUser.email}
-            ref={register({ required: true })}
           />
 
-          <TextField
+          <Controller
+            as={TextField}
+            control={control}
             variant="outlined"
             label="Senha"
             name="userPassword"
             type="password"
-            ref={register({ required: true })}
+            defaultValue=""
           />
 
-          <TextField
+          <Controller
+            as={TextField}
+            control={control}
             variant="outlined"
             label="Confirme a senha"
             name="confirmPassword"
             type="password"
-            ref={register({
-              required: true,
-              validate: {
-                matchesPassword: (value) => value === watch("userPassword"),
-              },
-            })}
+            defaultValue=""
           />
 
-          {/*
-          <Label htmlFor="userActive">Ativo</Label>
-          <input
-            name="userActive"
-            type="checkbox"
-            defaultChecked={currentUser.isActive == 1 ? true : false}
-            ref={register}
+          {/* 
+          
+          TODO: descomenta isso e faz ir pra o back
+
+          <h6>Ativo?</h6>
+          <Controller
+            as={Switch}
+            control={control}
+            name="isActive"
+            defaultValue={checked}
+            defaultChecked={checked}
+            onChange={() => setChecked(!checked)}
           />
-           */}
+          <br /> */}
 
           <Button color="primary" variant="contained" type="submit">
             Salvar
