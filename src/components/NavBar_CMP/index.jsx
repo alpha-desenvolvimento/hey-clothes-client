@@ -1,7 +1,6 @@
 import React from "react";
-import { useParams, useHistory, Link } from "react-router-dom";
 
-import { FiLogOut, FiShoppingCart, FiUser, FiBook } from "react-icons/fi";
+import { FiLogOut, FiArchive, FiUsers, FiBook } from "react-icons/fi";
 
 import {
   NavBar as Nav,
@@ -20,14 +19,14 @@ const NavBar = () => {
       <NavItemsWrapper>
         <NavItem>
           <NavLink to="/p">
-            <FiShoppingCart />
+            <FiArchive />
             <LinkText>Produtos</LinkText>
           </NavLink>
         </NavItem>
 
         <NavItem>
           <NavLink to="/u">
-            <FiUser />
+            <FiUsers />
             <LinkText>Usuarios</LinkText>
           </NavLink>
         </NavItem>

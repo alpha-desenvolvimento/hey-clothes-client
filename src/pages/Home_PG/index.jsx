@@ -14,9 +14,8 @@ const Home_PG = () => {
   }
   return (
     <Main>
-      <h1 style={{ textAlign: "center" }}>
-        HeyClothes! - Controle de produtos
-      </h1>
+      <h1 style={{ textAlign: "center" }}>HeyClothes!</h1>
+      <h3 style={{ textAlign: "center" }}>Controle de produtos</h3>
       <div>
         <LoginForm
           className="form-wrapper"
