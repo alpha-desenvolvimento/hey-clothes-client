@@ -188,6 +188,7 @@ const ProductDetail_PG = () => {
             providers={providers}
             conditions={conditions}
             setIsCreate={setIsCreate}
+            setCurrentProduct={setCurrentProduct}
           />
         )}
       </Main>

@@ -58,6 +58,7 @@ const ProductForm = ({
   providers,
   conditions,
   setIsCreate,
+  setCurrentProduct,
 }) => {
   const history = useHistory();
   const { currentUser } = useContext(AuthContext);
@@ -141,7 +142,7 @@ const ProductForm = ({
         console.log(returnedProduct);
 
         if (returnedProduct && returnedProduct.id) {
-          currentProduct = returnedProduct;
+          setCurrentProduct(returnedProduct);
           if (isCreate) {
             history.push(`/p/detail/${returnedProduct.id}`);
             window.scrollTo(0, 0);
@@ -174,7 +175,7 @@ const ProductForm = ({
         });
       });
   };
-  
+
   return (
     currentProduct && (
       <Box padding="2rem" fontSize="2.4rem">
@@ -183,11 +184,11 @@ const ProductForm = ({
           autoComplete="off"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <ha4>{isCreate ? `Novo Produto`: currentProduct.name}</ha4>
+          <ha4>{isCreate ? `Novo Produto` : currentProduct.name}</ha4>
           {currentProduct.isActive == 0 && (
             <SoldProd currentProduct={currentProduct} />
           )}
-          
+
           <Controller
             as={TextField}
             control={control}
