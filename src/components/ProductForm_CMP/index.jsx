@@ -57,6 +57,7 @@ const ProductForm = ({
   categories,
   providers,
   conditions,
+  setIsCreate,
 }) => {
   const history = useHistory();
   const { currentUser } = useContext(AuthContext);
@@ -123,8 +124,6 @@ const ProductForm = ({
 
     const productTO = { ...formData };
 
-    console.log("product", productTO);
-
     if (isCreate) {
       productTO.createdBy = currentUser.id;
     } else {
@@ -136,6 +135,7 @@ const ProductForm = ({
     axios
       .post(restEndpoint, productTO)
       .then((resp) => {
+        setIsCreate(false);
         const returnedProduct = resp.data;
 
         console.log(returnedProduct);
@@ -143,8 +143,6 @@ const ProductForm = ({
         if (returnedProduct && returnedProduct.id) {
           currentProduct = returnedProduct;
           if (isCreate) {
-            isCreate = false;
-
             history.push(`/p/detail/${returnedProduct.id}`);
             window.scrollTo(0, 0);
 
@@ -176,7 +174,11 @@ const ProductForm = ({
         });
       });
   };
+  function Title() {
+    if (isCreate) return <h4>Novo Produto</h4>;
 
+    return <h4>{currentProduct.name}</h4>;
+  }
   return (
     currentProduct && (
       <Box padding="2rem" fontSize="2.4rem">
@@ -185,7 +187,7 @@ const ProductForm = ({
           autoComplete="off"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <h4>{isCreate ? "Novo Produto" : currentProduct.name}</h4>
+          <Title />
           {currentProduct.isActive == 0 && (
             <SoldProd currentProduct={currentProduct} />
           )}
@@ -297,7 +299,7 @@ const ProductForm = ({
                 console.log(currentProduct);
                 return currentProduct.condition;
               } catch (error) {
-                console.log('conditions',conditions);
+                console.log("conditions", conditions);
                 return conditions[0].id;
               }
             }}
