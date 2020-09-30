@@ -76,6 +76,7 @@ const Users_PG = () => {
   }, []);
 
   const hideAndClearCurrentUser = () => {
+    setIsCreate(false);
     setUserID(null);
     hideDrawer();
   };
@@ -139,7 +140,7 @@ const Users_PG = () => {
 
       <Drawer isOpen={isOpen} hide={hideAndClearCurrentUser} closeUrl="/u">
         <UserForm
-          hideDrawer={hideDrawer}
+          hideDrawer={hideAndClearCurrentUser}
           refreshData={fetchPageData}
           userID={userID}
           isCreate={isCreate}
