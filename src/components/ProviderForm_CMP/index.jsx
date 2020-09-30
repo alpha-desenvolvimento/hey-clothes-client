@@ -89,6 +89,7 @@ const ProviderForm = ({ providerId, isCreate, refreshData, hideDrawer }) => {
           autoComplete="off"
           onSubmit={handleSubmit(onSubmit)}
         >
+          <p>Fornecedor:</p>
           <h4>{isCreate ? "Novo fornecedor" : currentProvider.name}</h4>
 
           <Controller

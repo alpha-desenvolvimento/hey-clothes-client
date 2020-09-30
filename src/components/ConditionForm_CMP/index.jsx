@@ -3,7 +3,7 @@ import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import swal from "sweetalert";
-
+import { Form } from "./styles";
 import {
   Checkbox,
   Button,
@@ -22,6 +22,15 @@ const useStyles = makeStyles((theme) => ({
     "& .MuiTextField-root": {
       margin: "1rem",
       width: "100%",
+    },
+    "& .button-row": {
+      display: "flex",
+      flexWrap: "wrap",
+      justifyContent: "center",
+
+      "& button": {
+        margin: "1rem 3rem",
+      },
     },
   },
 }));
@@ -43,6 +52,7 @@ const ConditionForm = ({ conditionId, isCreate, refreshData, hideDrawer }) => {
       .get(url)
       .then((resp) => {
         console.log("resp", resp);
+        setAllowDelete(!resp.data.hasProduct);
         // resp.header. TODO coloda o erro que vem no header
         setCurrentCondition(resp.data);
       })
@@ -80,8 +90,6 @@ const ConditionForm = ({ conditionId, isCreate, refreshData, hideDrawer }) => {
 
     if (currentCondition) conditionTO.id = currentCondition.id;
 
-    console.log(conditionTO);
-
     axios.post(url, conditionTO).then((resp) => {
       console.log(" resp", resp);
 
@@ -102,7 +110,33 @@ const ConditionForm = ({ conditionId, isCreate, refreshData, hideDrawer }) => {
   const deleteCondition = (event) => {
     event.preventDefault();
 
-    console.log("doasd");
+    const url = `${process.env.REACT_APP_API_URL}/api/conditions/delete`;
+
+    swal({
+      text:
+        "Confirmar exclusão de condição de produto? Essa ação não pode ser cancelada",
+      icon: "warning",
+      buttons: true,
+    }).then((resp) => {
+      if (resp) {
+        axios.post(url, { id: currentCondition.id }).then((resp) => {
+          if (resp.data == true) {
+            swal({
+              text: "Condição de produto removida com sucesso!",
+              icon: "success",
+            });
+            hideDrawer();
+            refreshData();
+            fetchAndSetData();
+          } else {
+            swal({
+              text: "Erro ao remover condição de produto",
+              icon: "error",
+            });
+          }
+        });
+      }
+    });
   };
 
   function sucessLoad() {
@@ -113,6 +147,7 @@ const ConditionForm = ({ conditionId, isCreate, refreshData, hideDrawer }) => {
           autoComplete="off"
           onSubmit={handleSubmit(onSubmit)}
         >
+          <p>Condição de produto:</p>
           <h4>
             {isCreate ? "Nova Condiçao de produto" : currentCondition.name}
           </h4>
@@ -127,20 +162,22 @@ const ConditionForm = ({ conditionId, isCreate, refreshData, hideDrawer }) => {
             ref={register({ required: true })}
           />
 
-          <Button color="primary" variant="contained" type="submit">
-            Salvar
-          </Button>
-
-          {allowDelete && (
-            <Button
-              color="primary"
-              variant="contained"
-              type="submit"
-              onClick={deleteCondition}
-            >
-              Deletar
+          <div className="button-row">
+            <Button color="primary" variant="contained" type="submit">
+              Salvar
             </Button>
-          )}
+
+            {allowDelete && (
+              <Button
+                color="primary"
+                variant="contained"
+                type="submit"
+                onClick={deleteCondition}
+              >
+                Deletar
+              </Button>
+            )}
+          </div>
         </form>
       </Box>
     );

@@ -19,6 +19,24 @@ import Loading from "../MaterialLoading_CMP";
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    "& .title-container": {
+      display: "flex",
+      flexWrap: "wrap",
+      "& h4": {
+        width: "80%",
+        display: "inline-block",
+        marginRight: "auto",
+      },
+    },
+    "& .button-row": {
+      display: "flex",
+      flexWrap: "wrap",
+      justifyContent: "center",
+
+      "& button": {
+        margin: "1rem 3rem",
+      },
+    },
     "& .MuiTextField-root": {
       margin: "1rem",
       width: "100%",
@@ -31,6 +49,7 @@ const CategoryForm = ({ categoryId, isCreate, refreshData, hideDrawer }) => {
   const [currentCategory, setCurrentCategory] = useState(null);
   const [isLoadingCategory, setIsLoadingCategory] = useState(true);
   const [checked, setChecked] = useState(true);
+  const [allowDelete, setAllowDelete] = useState(false);
 
   const classes = useStyles();
 
@@ -46,6 +65,7 @@ const CategoryForm = ({ categoryId, isCreate, refreshData, hideDrawer }) => {
         // resp.header. TODO coloda o erro que vem no header
         setCurrentCategory(resp.data);
         setChecked(resp.data.isActive == 1);
+        setAllowDelete(!resp.data.hasProduct);
       })
       .catch((err) => {
         console.log(err);
@@ -88,7 +108,7 @@ const CategoryForm = ({ categoryId, isCreate, refreshData, hideDrawer }) => {
 
     if (isCreate) delete categoryTO.id;
 
-    console.log(categoryTO);
+    console.log("categoryTO", categoryTO);
 
     axios.post(url, categoryTO).then((resp) => {
       console.log(" resp", resp);
@@ -105,7 +125,39 @@ const CategoryForm = ({ categoryId, isCreate, refreshData, hideDrawer }) => {
       }
     });
   };
+  const deleteCategory = (event) => {
+    event.preventDefault();
 
+    const url = `${process.env.REACT_APP_API_URL}/api/category/delete`;
+
+    swal({
+      text:
+        "Confirmar exclusão de categoria de produto? Essa ação não pode ser cancelada",
+      icon: "warning",
+      buttons: true,
+    }).then((resp) => {
+      if (resp) {
+        axios.post(url, { id: currentCategory.id }).then((resp) => {
+
+          console.log('resp',resp);
+          if (resp.data == true) {
+            swal({
+              text: "Categoria de produto removida com sucesso!",
+              icon: "success",
+            });
+            hideDrawer();
+            refreshData();
+            fetchAndSetData();
+          } else {
+            swal({
+              text: "Erro ao remover Categoria de produto",
+              icon: "error",
+            });
+          }
+        });
+      }
+    });
+  };
   function sucessLoad() {
     return (
       <Box padding="2rem" fontSize="2.4rem">
@@ -114,7 +166,15 @@ const CategoryForm = ({ categoryId, isCreate, refreshData, hideDrawer }) => {
           autoComplete="off"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <h4>{isCreate ? "Nova Categoria" : currentCategory.name}</h4>
+          <p>Categoria:</p>
+          <div className="title-container">
+            <h4>{isCreate ? "Nova Categoria" : currentCategory.name}</h4>
+            <Switch
+              name="isActive"
+              defaultChecked={checked}
+              onChange={() => setChecked(!checked)}
+            />
+          </div>
           <Controller
             as={TextField}
             control={control}
@@ -125,17 +185,24 @@ const CategoryForm = ({ categoryId, isCreate, refreshData, hideDrawer }) => {
             }}
             ref={register({ required: true })}
           />
-          <h6>Ativo?</h6>
-          <Switch
-            name="isActive"
-            defaultChecked={checked}
-            onChange={() => setChecked(!checked)}
-          />
 
           <br />
-          <Button color="primary" variant="contained" type="submit">
-            Salvar
-          </Button>
+          <div className="button-row">
+            <Button color="primary" variant="contained" type="submit">
+              Salvar
+            </Button>
+
+            {allowDelete && (
+              <Button
+                color="primary"
+                variant="contained"
+                type="submit"
+                onClick={deleteCategory}
+              >
+                Deletar
+              </Button>
+            )}
+          </div>
         </form>
       </Box>
     );
