@@ -22,6 +22,13 @@ const Config_PG = () => {
               podem receber.
             </h5>
           </NavCard>
+
+          <NavCard to="/c/condition">
+            <h3>Condições de produto</h3>
+            <h5>
+              Consulte e gerencie as diferentes condições de seus produtos.
+            </h5>
+          </NavCard>
         </CardsWrapper>
       </Main>
     </>

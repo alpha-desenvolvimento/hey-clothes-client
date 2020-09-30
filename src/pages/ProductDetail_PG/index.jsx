@@ -107,6 +107,8 @@ const ProductDetail_PG = () => {
   };
 
   useEffect(() => {
+    fetchAndSetData();
+
     if (window.location.pathname == "/p/create") {
       setIsCreate(true);
       setCurrentProduct({
@@ -114,12 +116,13 @@ const ProductDetail_PG = () => {
         description: "",
         price: "",
         Brand: "",
-        category: 1,
+        // category: 1,
+        // condition: 1,
         imgA: "",
         imgB: "",
         imgC: "",
         imgD: "",
-        provider: 1,
+        // provider: 1,
       });
       setIsLoading(false);
     } else {
@@ -135,28 +138,29 @@ const ProductDetail_PG = () => {
           description: "",
           price: "",
           Brand: "",
-          category: 1,
+          // category: 'asdasdasdasds',
           imgA: "",
           imgB: "",
           imgC: "",
           imgD: "",
-          provider: 1,
+          // provider: false,
+          // condition: false,
         });
       } else {
         let url = `${process.env.REACT_APP_API_URL}/api/products/${prodId}`;
-
+        
         axios
-          .get(url)
-          .then((resp) => {
-            console.log("resp", resp);
-            setCurrentProduct(resp.data[0]);
-          })
-          .then(() => {
-            fetchAndSetData();
-          })
-          .then(() => {
-            setIsLoading(false);
-          });
+        .get(url)
+        .then((resp) => {
+          console.log("resp", resp);
+          setCurrentProduct(resp.data[0]);
+        })
+        .then(() => {
+          // fetchAndSetData();
+        })
+        .then(() => {
+          setIsLoading(false);
+        });
       }
     }
   }, [prodId]);
@@ -169,11 +173,11 @@ const ProductDetail_PG = () => {
           <Box height="80vh">
             <Loading />
           </Box>
-        ) : categories.lenght < 1 ? (
+        ) : categories.lenght < 0 ? (
           <CantFind thing="categorias" link="/c/category" />
-        ) : providers.lenght < 1 ? (
+        ) : providers.lenght < 0 ? (
           <CantFind thing="fornecedores" link="/c/provider" />
-        ) : conditions.lenght < 1 ? (
+        ) : conditions.lenght < 0 ? (
           <CantFind thing="Condições" link="/c/condition" />
         ) : (
           <ProductForm

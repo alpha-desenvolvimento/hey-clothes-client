@@ -11,7 +11,7 @@ import Config from "./pages/Configurations_PG";
 import Categories from "./pages/Categories_PG";
 import Providers from "./pages/Providers_PG";
 import ResetPassword from "./pages/ResetPassword_PG";
-// import Mock from "./pages/Mock_PG";
+import Condition from "./pages/Condition_PG";
 
 function Routes() {
   return (
@@ -28,9 +28,11 @@ function Routes() {
 
         <PrivateRoute exact path="/c/category" component={Categories} />
         <PrivateRoute exact path="/c/provider" component={Providers} />
+        <PrivateRoute exact path="/c/condition" component={Condition} />
 
         <PrivateRoute exact path="/c/category/:id" component={Categories} />
         <PrivateRoute exact path="/c/provider/:id" component={Providers} />
+        <PrivateRoute exact path="/c/condition/:id" component={Condition} />
 
         {/* <PrivateRoute exact path="/Mock" component={Mock}/> */}
         <Route exact path="/resetPassword/:token" component={ResetPassword} />

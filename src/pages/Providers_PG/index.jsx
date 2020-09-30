@@ -142,7 +142,7 @@ const Providers_PG = () => {
         closeUrl="/c/provider"
       >
         <ProviderForm
-          hideDrawer={hideDrawer}
+          hideDrawer={hideAndClearCurrentProvider}
           refreshData={fetchPageData}
           providerId={providerId}
           isCreate={isCreate}
