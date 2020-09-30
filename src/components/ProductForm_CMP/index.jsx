@@ -184,7 +184,8 @@ const ProductForm = ({
           autoComplete="off"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <ha4>{isCreate ? `Novo Produto` : currentProduct.name}</ha4>
+          <p>Produto:</p>
+          <h4>{isCreate ? `Novo Produto` : currentProduct.name}</h4>
           {currentProduct.isActive == 0 && (
             <SoldProd currentProduct={currentProduct} />
           )}
