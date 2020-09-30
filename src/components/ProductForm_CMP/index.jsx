@@ -49,7 +49,14 @@ const SoldProd = ({ currentProduct }) => {
     </>
   );
 };
-const ProductForm = ({ isCreate, currentProduct, categories, providers }) => {
+
+const ProductForm = ({
+  isCreate,
+  currentProduct,
+  categories,
+  providers,
+  conditions,
+}) => {
   const { currentUser } = useContext(AuthContext);
   const { handleSubmit, control } = useForm();
 
@@ -238,7 +245,8 @@ const ProductForm = ({ isCreate, currentProduct, categories, providers }) => {
               </MenuItem>
             ))}
           </Controller>
-          <div className="provider">
+
+          <Box className="provider">
             <Controller
               as={TextField}
               control={control}
@@ -269,7 +277,28 @@ const ProductForm = ({ isCreate, currentProduct, categories, providers }) => {
                 </span>
               </Link>
             )}
-          </div>
+          </Box>
+
+          <Controller
+            as={TextField}
+            control={control}
+            select
+            variant="outlined"
+            label="Condição"
+            name="condition"
+            defaultValue={() => {
+              if (currentProduct)
+                return currentProduct.condition || conditions[0].id;
+              return conditions[0].id;
+            }}
+          >
+            {conditions.map((condition, index) => (
+              <MenuItem key={"condition-" + index} value={condition.id}>
+                {condition.name}
+              </MenuItem>
+            ))}
+          </Controller>
+
           <h4>Fotos do Produto</h4>
           <Grid
             justify="center"
