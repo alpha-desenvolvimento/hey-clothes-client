@@ -76,8 +76,8 @@ const ProductForm = ({
       soldAt,
     } = formData;
 
-    console.log("recievedAt", recievedAt);
     console.log("soldAt", soldAt);
+    console.log("recievedAt > soldAt", recievedAt > soldAt);
 
     if (!name || name == "") {
       swal({
@@ -125,7 +125,6 @@ const ProductForm = ({
         return false;
       }
     }
-
 
     return true;
   };
@@ -208,229 +207,241 @@ const ProductForm = ({
             <SoldProd currentProduct={currentProduct} />
           )}
 
-          <Controller
-            as={TextField}
-            control={control}
-            variant="outlined"
-            label="Nome do Produto"
-            name="name"
-            defaultValue={currentProduct.name || ""}
-          />
-
-          <Controller
-            as={TextField}
-            control={control}
-            variant="outlined"
-            multiline
-            label="Descrição do Produto"
-            name="description"
-            defaultValue={currentProduct.description || ""}
-          />
-
-          <Controller
-            as={CurrencyTextField}
-            control={control}
-            variant="outlined"
-            label="Preço do Produto"
-            name="price"
-            currencySymbol="R$"
-            minimumValue="0"
-            outputFormat="string"
-            decimalCharacter=","
-            digitGroupSeparator="."
-            defaultValue={currentProduct.price || 0}
-          />
-          <Controller
-            as={TextField}
-            control={control}
-            variant="outlined"
-            label="Marca"
-            name="brand"
-            defaultValue={currentProduct.brand || ""}
-          />
-
-          <Controller
-            as={TextField}
-            control={control}
-            select
-            variant="outlined"
-            label="Categoria"
-            name="category"
-            defaultValue={() => {
-              try {
-                return currentProduct.category;
-              } catch (error) {
-                return categories[0].id;
-              }
-            }}
+          <Box
+            display="flex"
+            flexDirection="row"
+            justifyContent="space-between"
           >
-            {categories.map((category, index) => (
-              <MenuItem key={"category-" + index} value={category.id}>
-                {category.name}
-              </MenuItem>
-            ))}
-          </Controller>
+            <Box width="48%">
+              <Controller
+                as={TextField}
+                control={control}
+                variant="outlined"
+                label="Nome do Produto"
+                name="name"
+                defaultValue={currentProduct.name || ""}
+              />
 
-          <Box className="provider">
-            <Controller
-              as={TextField}
-              control={control}
-              select
-              variant="outlined"
-              label="Fornecedor"
-              name="provider"
-              defaultValue={() => {
-                try {
-                  return currentProduct.provider;
-                } catch (error) {
-                  return providers[0].id;
-                }
-              }}
-            >
-              {providers.map((provider, index) => (
-                <MenuItem key={"provider-" + index} value={provider.id}>
-                  {provider.name}
-                </MenuItem>
-              ))}
-            </Controller>
-            {currentProduct.provider && (
-              <Link
-                to={`/c/provider/${currentProduct.provider}`}
-                className="link-provider"
-                target="_blank"
+              <Controller
+                as={TextField}
+                control={control}
+                variant="outlined"
+                multiline
+                label="Descrição do Produto"
+                name="description"
+                defaultValue={currentProduct.description || ""}
+              />
+
+              <Controller
+                as={CurrencyTextField}
+                control={control}
+                variant="outlined"
+                label="Preço do Produto"
+                name="price"
+                currencySymbol="R$"
+                minimumValue="0"
+                outputFormat="string"
+                decimalCharacter=","
+                digitGroupSeparator="."
+                defaultValue={currentProduct.price || 0}
+              />
+              <Controller
+                as={TextField}
+                control={control}
+                variant="outlined"
+                label="Marca"
+                name="brand"
+                defaultValue={currentProduct.brand || ""}
+              />
+
+              <Controller
+                as={TextField}
+                control={control}
+                select
+                variant="outlined"
+                label="Categoria"
+                name="category"
+                defaultValue={() => {
+                  try {
+                    return currentProduct.category;
+                  } catch (error) {
+                    return categories[0].id;
+                  }
+                }}
               >
-                <span>
-                  Acessar fornecedor <FiExternalLink />
-                </span>
-              </Link>
-            )}
+                {categories.map((category, index) => (
+                  <MenuItem key={"category-" + index} value={category.id}>
+                    {category.name}
+                  </MenuItem>
+                ))}
+              </Controller>
+
+              <Box className="provider">
+                <Controller
+                  as={TextField}
+                  control={control}
+                  select
+                  variant="outlined"
+                  label="Fornecedor"
+                  name="provider"
+                  defaultValue={() => {
+                    try {
+                      return currentProduct.provider;
+                    } catch (error) {
+                      return providers[0].id;
+                    }
+                  }}
+                >
+                  {providers.map((provider, index) => (
+                    <MenuItem key={"provider-" + index} value={provider.id}>
+                      {provider.name}
+                    </MenuItem>
+                  ))}
+                </Controller>
+                {currentProduct.provider && (
+                  <Link
+                    to={`/c/provider/${currentProduct.provider}`}
+                    className="link-provider"
+                    target="_blank"
+                  >
+                    <span>
+                      Acessar fornecedor <FiExternalLink />
+                    </span>
+                  </Link>
+                )}
+              </Box>
+
+              <Controller
+                as={TextField}
+                control={control}
+                select
+                variant="outlined"
+                label="Condição"
+                name="condition"
+                defaultValue={() => {
+                  try {
+                    console.log(currentProduct);
+                    return currentProduct.condition;
+                  } catch (error) {
+                    console.log("conditions", conditions);
+                    return conditions[0].id;
+                  }
+                }}
+              >
+                {conditions.map((condition, index) => (
+                  <MenuItem key={"condition-" + index} value={condition.id}>
+                    {condition.name}
+                  </MenuItem>
+                ))}
+              </Controller>
+            </Box>
+
+            <Box width="48%">
+              <h4>Fotos do Produto</h4>
+              <Grid
+                justify="center"
+                cols={2}
+                container
+                wrap="wrap"
+                direction="row"
+                spacing={3}
+              >
+                <Grid item sm>
+                  <ProductPhoto imageUrl={currentProduct.imgA} />
+
+                  <Controller
+                    as={TextField}
+                    control={control}
+                    label="foto 1"
+                    variant="outlined"
+                    name="imgA"
+                    defaultValue={currentProduct.imgA || ""}
+                  />
+                </Grid>
+
+                <Grid item sm>
+                  <ProductPhoto imageUrl={currentProduct.imgB} />
+                  <Controller
+                    as={TextField}
+                    control={control}
+                    label="foto 2"
+                    variant="outlined"
+                    name="imgB"
+                    defaultValue={currentProduct.imgB || ""}
+                  />
+                </Grid>
+
+                <Grid item sm>
+                  <ProductPhoto imageUrl={currentProduct.imgC} />
+                  <Controller
+                    as={TextField}
+                    control={control}
+                    label="foto 3"
+                    variant="outlined"
+                    name="imgC"
+                    defaultValue={currentProduct.imgC || ""}
+                  />
+                </Grid>
+
+                <Grid item sm>
+                  <ProductPhoto imageUrl={currentProduct.imgD} />
+                  <Controller
+                    as={TextField}
+                    control={control}
+                    label="foto 4"
+                    variant="outlined"
+                    name="imgD"
+                    defaultValue={currentProduct.imgD || ""}
+                  />
+                </Grid>
+              </Grid>
+
+              <MuiPickersUtilsProvider locale={ptBrLocale} utils={DateFnsUtils}>
+                <Controller
+                  as={KeyboardDatePicker}
+                  control={control}
+                  name="recievedAt"
+                  variant="inline"
+                  format="dd/MM/yyyy"
+                  autoOk
+                  invalidDateMessage="Informe uma data válida"
+                  disableFuture
+                  animateYearScrolling
+                  label="Data de entrada"
+                  defaultValue={
+                    currentProduct.recievedAt
+                      ? new Date(currentProduct.recievedAt)
+                      : null
+                  }
+                  KeyboardButtonProps={{
+                    "aria-label": "Mudar data de entrada",
+                  }}
+                />
+                <Controller
+                  as={KeyboardDatePicker}
+                  control={control}
+                  name="soldAt"
+                  format="dd/MM/yyyy"
+                  autoOk
+                  disableFuture
+                  invalidDateMessage="Informe uma data válida"
+                  animateYearScrolling
+                  label="Data de saída"
+                  defaultValue={
+                    currentProduct.soldAt
+                      ? new Date(currentProduct.soldAt)
+                      : null
+                  }
+                  KeyboardButtonProps={{
+                    "aria-label": "Mudar data de saída",
+                  }}
+                />
+              </MuiPickersUtilsProvider>
+              <Button color="primary" variant="contained" type="submit">
+                Salvar
+              </Button>
+            </Box>
           </Box>
-
-          <Controller
-            as={TextField}
-            control={control}
-            select
-            variant="outlined"
-            label="Condição"
-            name="condition"
-            defaultValue={() => {
-              try {
-                console.log(currentProduct);
-                return currentProduct.condition;
-              } catch (error) {
-                console.log("conditions", conditions);
-                return conditions[0].id;
-              }
-            }}
-          >
-            {conditions.map((condition, index) => (
-              <MenuItem key={"condition-" + index} value={condition.id}>
-                {condition.name}
-              </MenuItem>
-            ))}
-          </Controller>
-
-          <h4>Fotos do Produto</h4>
-          <Grid
-            justify="center"
-            cols={2}
-            container
-            wrap="wrap"
-            direction="row"
-            spacing={3}
-          >
-            <Grid item sm>
-              <ProductPhoto imageUrl={currentProduct.imgA} />
-
-              <Controller
-                as={TextField}
-                control={control}
-                label="foto 1"
-                variant="outlined"
-                name="imgA"
-                defaultValue={currentProduct.imgA || ""}
-              />
-            </Grid>
-
-            <Grid item sm>
-              <ProductPhoto imageUrl={currentProduct.imgB} />
-              <Controller
-                as={TextField}
-                control={control}
-                label="foto 2"
-                variant="outlined"
-                name="imgB"
-                defaultValue={currentProduct.imgB || ""}
-              />
-            </Grid>
-
-            <Grid item sm>
-              <ProductPhoto imageUrl={currentProduct.imgC} />
-              <Controller
-                as={TextField}
-                control={control}
-                label="foto 3"
-                variant="outlined"
-                name="imgC"
-                defaultValue={currentProduct.imgC || ""}
-              />
-            </Grid>
-
-            <Grid item sm>
-              <ProductPhoto imageUrl={currentProduct.imgD} />
-              <Controller
-                as={TextField}
-                control={control}
-                label="foto 4"
-                variant="outlined"
-                name="imgD"
-                defaultValue={currentProduct.imgD || ""}
-              />
-            </Grid>
-          </Grid>
-
-          <MuiPickersUtilsProvider locale={ptBrLocale} utils={DateFnsUtils}>
-            <Controller
-              as={KeyboardDatePicker}
-              control={control}
-              name="recievedAt"
-              variant="inline"
-              format="dd/MM/yyyy"
-              autoOk
-              invalidDateMessage="Informe uma data válida"
-              disableFuture
-              animateYearScrolling
-              label="Data de entrada"
-              defaultValue={
-                currentProduct.recievedAt
-                  ? new Date(currentProduct.recievedAt)
-                  : null
-              }
-              KeyboardButtonProps={{
-                "aria-label": "Mudar data de entrada",
-              }}
-            />
-            <Controller
-              as={KeyboardDatePicker}
-              control={control}
-              name="soldAt"
-              format="dd/MM/yyyy"
-              autoOk
-              disableFuture
-              invalidDateMessage="Informe uma data válida"
-              animateYearScrolling
-              label="Data de saída"
-              defaultValue={
-                currentProduct.soldAt ? new Date(currentProduct.soldAt) : null
-              }
-              KeyboardButtonProps={{
-                "aria-label": "Mudar data de saída",
-              }}
-            />
-          </MuiPickersUtilsProvider>
-          <Button color="primary" variant="contained" type="submit">
-            Salvar
-          </Button>
         </form>
       </Box>
     )

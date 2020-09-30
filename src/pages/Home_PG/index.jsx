@@ -14,7 +14,9 @@ const Home_PG = () => {
   }
   return (
     <Main>
-      <Img src={LargeLogo} alt="logo" />
+      <h1 style={{ textAlign: "center" }}>
+        HeyClothes! - Controle de produtos
+      </h1>
       <div>
         <LoginForm
           className="form-wrapper"
