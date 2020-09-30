@@ -1,8 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Link } from "react-router-dom";
+import { FiX } from "react-icons/fi";
 
-import { Overlay, DrawerBody } from "./styles";
+import { Overlay, DrawerBody, CloseIcon } from "./styles";
 
 const Drawer = ({ isOpen, hide, children, closeUrl }) => {
   return isOpen
@@ -13,9 +14,14 @@ const Drawer = ({ isOpen, hide, children, closeUrl }) => {
               <Overlay />
             </Link>
           ) : (
-            <Overlay onClick={hide}/>
+            <Overlay onClick={hide} />
           )}
-          <DrawerBody>{children}</DrawerBody>
+          <DrawerBody>
+            <CloseIcon>
+              <FiX onClick={hide} />
+            </CloseIcon>
+            {children}
+          </DrawerBody>
         </>,
         document.body
       )

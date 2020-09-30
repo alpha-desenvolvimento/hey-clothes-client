@@ -15,7 +15,13 @@ export const Overlay = styled.div`
 
   background: #00000090;
 `;
+export const CloseIcon = styled.h5`
+  text-align: right;
 
+  svg {
+    cursor: pointer;
+  }
+`;
 export const DrawerBody = styled.div`
   position: fixed;
   right: 0;
