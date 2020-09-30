@@ -174,11 +174,7 @@ const ProductForm = ({
         });
       });
   };
-  function Title() {
-    if (isCreate) return <h4>Novo Produto</h4>;
-
-    return <h4>{currentProduct.name}</h4>;
-  }
+  
   return (
     currentProduct && (
       <Box padding="2rem" fontSize="2.4rem">
@@ -187,10 +183,11 @@ const ProductForm = ({
           autoComplete="off"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <Title />
+          <ha4>{isCreate ? `Novo Produto`: currentProduct.name}</ha4>
           {currentProduct.isActive == 0 && (
             <SoldProd currentProduct={currentProduct} />
           )}
+          
           <Controller
             as={TextField}
             control={control}
