@@ -3,7 +3,6 @@ import React from "react";
 import Fab from "@material-ui/core/Fab";
 import { FiPlus } from "react-icons/fi";
 import { makeStyles } from "@material-ui/core/styles";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { mediaQuery } from "../../styles/global";
 
 const CreateButton = ({ href, variant, text }) => {

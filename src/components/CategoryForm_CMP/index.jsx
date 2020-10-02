@@ -4,15 +4,7 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 import swal from "sweetalert";
 
-import {
-  Checkbox,
-  Button,
-  TextField,
-  Box,
-  FormControlLabel,
-  FormGroup,
-  Switch,
-} from "@material-ui/core";
+import { Button, TextField, Box, Switch } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 import Loading from "../MaterialLoading_CMP";
@@ -138,8 +130,7 @@ const CategoryForm = ({ categoryId, isCreate, refreshData, hideDrawer }) => {
     }).then((resp) => {
       if (resp) {
         axios.post(url, { id: currentCategory.id }).then((resp) => {
-
-          console.log('resp',resp);
+          console.log("resp", resp);
           if (resp.data == true) {
             swal({
               text: "Categoria de produto removida com sucesso!",
@@ -176,10 +167,7 @@ const CategoryForm = ({ categoryId, isCreate, refreshData, hideDrawer }) => {
             />
           </div>
 
-      
-            
-            
-            <Controller
+          <Controller
             as={TextField}
             control={control}
             variant="outlined"

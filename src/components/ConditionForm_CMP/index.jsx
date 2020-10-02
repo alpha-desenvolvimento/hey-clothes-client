@@ -3,16 +3,8 @@ import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import swal from "sweetalert";
-import { Form } from "./styles";
-import {
-  Checkbox,
-  Button,
-  TextField,
-  Box,
-  FormControlLabel,
-  FormGroup,
-  Switch,
-} from "@material-ui/core";
+
+import { Button, TextField, Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 import Loading from "../MaterialLoading_CMP";
