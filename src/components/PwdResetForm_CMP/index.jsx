@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 
 import Button from "../Button_CMP";
-import { FormWrapper, Input, Label, Wrapper, ForgotPwdText } from "./styles";
+import { FormWrapper, Input, Label } from "./styles";
 import { useState } from "react";
 
 const PwdResetForm = () => {

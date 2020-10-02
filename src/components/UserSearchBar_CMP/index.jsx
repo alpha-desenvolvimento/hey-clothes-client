@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useHistory, Redirect } from "react-router-dom";
 
-import { FiSearch, FiFilter } from "react-icons/fi";
+import { FiSearch } from "react-icons/fi";
 import {
   MainContainer,
   SearchInputContainer,
@@ -11,10 +10,8 @@ import {
   SubmitButton,
 } from "./styles";
 // import { useForm } from "react-hook-form";
-import HerokuServer from "../../API/HerokuServer";
 
 const UserSearchBar = () => {
-  const history = useHistory();
   const [values, setValues] = useState({});
 
   useEffect(() => {});
