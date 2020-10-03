@@ -7,6 +7,7 @@ import { FiTag } from "react-icons/fi";
 import NavBar, { Main } from "../../components/NavBar_CMP";
 import Drawer, { useDrawerUtils } from "../../components/Drawer_CMP";
 import Spinner from "../../components/LoadingSpinner_CMP";
+import Table from "../../components/Table_CMP";
 
 import CategoryForm from "../../components/CategoryForm_CMP";
 import CreateButton from "../../components/CreateButton_CMP";
@@ -131,6 +132,7 @@ const Categories_PG = () => {
             </CardContainer>
           </>
         )}
+        
       </Main>
 
       <Drawer
@@ -144,9 +146,15 @@ const Categories_PG = () => {
           categoryId={categoryId}
           isCreate={isCreate}
         />
+        <Table
+         categoryId={categoryId}
+         isCreate={isCreate}
+          
+        />
       </Drawer>
     </>
   );
 };
 
 export default Categories_PG;
+
