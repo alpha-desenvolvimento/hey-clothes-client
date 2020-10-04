@@ -27,24 +27,24 @@ function createData(name, price) {
 
 const BasicTable = ({providerId,isCreate}) => {
   const classes = useStyles();
-  const [currentCategory, setCurrentCategory] = useState(true);
+  const [currentProvider, setCurrentProvider] = useState(true);
   const [currentProducts, setCurrentProducts] = useState(true);
-  const [isLoadingCategory, setIsLoadingCategory] = useState(true);
+  const [isLoadingProvider, setIsLoadingProvider] = useState(true);
   const [checked, setChecked] = useState(true);
   const [allowDelete, setAllowDelete] = useState(false);
 
   
   const fetchAndSetData = () => {
-    setIsLoadingCategory(true);
-    let idProvider = parseInt(providerId);
+    setIsLoadingProvider(true);
+    
    
     let url = `${process.env.REACT_APP_API_URL}/api/provider/${providerId}`;
-    console.log(providerId)
+  
     axios
       .get(url)
       .then((resp) => {
         // resp.header. TODO coloda o erro que vem no header
-        setCurrentCategory(resp.data)
+        setCurrentProvider(resp.data)
         prods = resp.data.products
         console.log(prods)
         setChecked(resp.data.isActive == 1);
@@ -54,7 +54,7 @@ const BasicTable = ({providerId,isCreate}) => {
         console.log(err);
       })
       .finally(() => {
-        setIsLoadingCategory(false);
+        setIsLoadingProvider(false);
       });
       
     }

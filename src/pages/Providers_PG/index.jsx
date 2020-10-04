@@ -10,7 +10,7 @@ import { FiPhone } from "react-icons/fi";
 import ProviderForm from "../../components/ProviderForm_CMP";
 import CreateButton from "../../components/CreateButton_CMP";
 import SearchBar from "../../components/SearchBar_CMP";
-import Table from "../../components/CategoryTable_CMP";
+import Table from "../../components/ProviderTable_CMP";
 
 
 import { CardContainer, Card, CardDetails, CardText } from "./styles";
