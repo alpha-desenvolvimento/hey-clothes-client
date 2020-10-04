@@ -10,6 +10,8 @@ import { FiPhone } from "react-icons/fi";
 import ProviderForm from "../../components/ProviderForm_CMP";
 import CreateButton from "../../components/CreateButton_CMP";
 import SearchBar from "../../components/SearchBar_CMP";
+import Table from "../../components/CategoryTable_CMP";
+
 
 import { CardContainer, Card, CardDetails, CardText } from "./styles";
 import Spinner from "../../components/LoadingSpinner_CMP";
@@ -139,13 +141,18 @@ const Providers_PG = () => {
       <Drawer
         isOpen={isOpen}
         hide={hideAndClearCurrentProvider}
-        closeUrl="/c/provider"
+        closeUrl="/c/provider/"
       >
         <ProviderForm
           hideDrawer={hideAndClearCurrentProvider}
           refreshData={fetchPageData}
           providerId={providerId}
           isCreate={isCreate}
+        />
+
+      <Table
+         providerId={providerId}
+         isCreate={isCreate}
         />
       </Drawer>
     </>

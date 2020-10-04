@@ -7,7 +7,6 @@ import { FiTag } from "react-icons/fi";
 import NavBar, { Main } from "../../components/NavBar_CMP";
 import Drawer, { useDrawerUtils } from "../../components/Drawer_CMP";
 import Spinner from "../../components/LoadingSpinner_CMP";
-import Table from "../../components/CategoryTable_CMP";
 
 import CategoryForm from "../../components/CategoryForm_CMP";
 import CreateButton from "../../components/CreateButton_CMP";
@@ -32,7 +31,7 @@ const Categories_PG = () => {
 
     const urlParams = { paramList: [["name", "catName"]] };
 
-    let url = `${process.env.REACT_APP_API_URL}/api/category/list`;
+    let url = `${process.env.REACT_APP_API_URL}/api/conditions/list`;
     url += getUrlParams(urlParams);
 
     axios
@@ -91,7 +90,7 @@ const Categories_PG = () => {
     <>
       <NavBar />
       <Main>
-        <CreateButton
+      <CreateButton
           text="Criar nova categoria"
           href="/c/category?action=create"
         />
@@ -132,7 +131,6 @@ const Categories_PG = () => {
             </CardContainer>
           </>
         )}
-        
       </Main>
 
       <Drawer
@@ -141,15 +139,10 @@ const Categories_PG = () => {
         closeUrl="/c/category"
       >
         <CategoryForm
-          hideDrawer={hideAndClearCurrentCategory}
+          hideDrawer={hideDrawer}
           refreshData={fetchPageData}
           categoryId={categoryId}
           isCreate={isCreate}
-        />
-        <Table
-         categoryId={categoryId}
-         isCreate={isCreate}
-          
         />
       </Drawer>
     </>
@@ -158,3 +151,40 @@ const Categories_PG = () => {
 
 export default Categories_PG;
 
+/*<Table>
+          <tr>
+            <th className="h3-font-size">Categoria</th>
+            <th className="h3-font-size">Ativo</th>
+          </tr>
+          {categories && (
+            <>
+              {categories.map((category, index) => (
+                <tr className="h5-font-size" key={category.id}>
+                  <td>
+                    <span className="h6-font-size">{`${category.id}. `}</span>
+                    {category.name}
+                    <FiEdit
+                      className="icon p-font-size"
+                      onClick={() => {
+                        history.push(`/c/category/${category.id}`);
+                        window.location.reload(false);
+                      }}
+                    />
+                  </td>
+                  <td>
+                    {category.isActive == 1 ? (
+                      <>
+                        <FiTag style={{ color: "green" }} /> Ativo
+                      </>
+                    ) : (
+                      <>
+                        <FiTag style={{ color: "red" }} /> Inativo
+                      </>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </>
+          )}
+        </Table>
+        */
