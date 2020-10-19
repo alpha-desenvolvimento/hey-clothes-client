@@ -115,8 +115,22 @@ const ProductForm = ({
       });
 
       return false;
+    } else if (recievedAt > new Date()) {
+      swal({
+        text: "Data de recebimento não pode ser maior que a atual",
+        icon: "error",
+      });
+
+      return false;
     } else if (soldAt) {
-      if (recievedAt > soldAt) {
+      if (soldAt > new Date()) {
+        swal({
+          text: "Data de saída não pode ser maior que a atual",
+          icon: "error",
+        });
+
+        return false;
+      } else if (recievedAt > soldAt) {
         swal({
           text: "Data de saída não pode ser menor que a data de entrada!",
           icon: "error",
@@ -404,7 +418,6 @@ const ProductForm = ({
                   variant="inline"
                   format="dd/MM/yyyy"
                   autoOk
-                  invalidDateMessage="Informe uma data válida"
                   disableFuture
                   animateYearScrolling
                   label="Data de entrada"
@@ -424,7 +437,6 @@ const ProductForm = ({
                   format="dd/MM/yyyy"
                   autoOk
                   disableFuture
-                  invalidDateMessage="Informe uma data válida"
                   animateYearScrolling
                   label="Data de saída"
                   defaultValue={

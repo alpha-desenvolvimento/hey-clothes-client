@@ -10,8 +10,6 @@ import { FiPhone } from "react-icons/fi";
 import ProviderForm from "../../components/ProviderForm_CMP";
 import CreateButton from "../../components/CreateButton_CMP";
 import SearchBar from "../../components/SearchBar_CMP";
-import Table from "../../components/ProviderTable_CMP";
-
 
 import { CardContainer, Card, CardDetails, CardText } from "./styles";
 import Spinner from "../../components/LoadingSpinner_CMP";
@@ -150,10 +148,6 @@ const Providers_PG = () => {
           isCreate={isCreate}
         />
 
-      <Table
-         providerId={providerId}
-         isCreate={isCreate}
-        />
       </Drawer>
     </>
   );

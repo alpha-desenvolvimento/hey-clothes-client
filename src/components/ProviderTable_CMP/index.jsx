@@ -8,6 +8,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import RelatedProductsTable from "../RelatedProduct_CMP";
 
 import axios from "axios";
 
@@ -77,8 +78,8 @@ const BasicTable = ({providerId,isCreate}) => {
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell align="right">Price</TableCell>
+            <TableCell>Produtos relacionados</TableCell>
+            {/* <TableCell align="right">Price</TableCell> */}
             
           </TableRow>
         </TableHead>
@@ -90,7 +91,7 @@ const BasicTable = ({providerId,isCreate}) => {
               <TableCell component="th" scope="row">
                 {product.name}
               </TableCell>
-              <TableCell align="right">{product.price}</TableCell>
+              {/* <TableCell align="right">{product.price}</TableCell> */}
               {/* <TableCell align="right">{product.price}</TableCell> */}
               
             </TableRow>
