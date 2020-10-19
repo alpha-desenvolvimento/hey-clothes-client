@@ -10,11 +10,12 @@ import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
 import Loading from "../MaterialLoading_CMP";
+import RelatedProduct_CMP from "../RelatedProduct_CMP";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     "& .MuiTextField-root": {
-      margin: "1rem",
+      margin: "1rem 0",
       width: "100%",
     },
   },
@@ -23,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
 const ProviderForm = ({ providerId, isCreate, refreshData, hideDrawer }) => {
   const { register, handleSubmit, errors, control } = useForm();
   const [currentProvider, setCurrentProvider] = useState(null);
+  const [relatedProducts, setRelatedProducts] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const history = useHistory();
 
@@ -34,7 +36,9 @@ const ProviderForm = ({ providerId, isCreate, refreshData, hideDrawer }) => {
       .get(url)
       .then((resp) => {
         console.log("resp", resp);
-        // resp.header. TODO coloda o erro que vem no header
+
+        if (resp.data.products) setRelatedProducts(resp.data.products);
+
         setCurrentProvider(resp.data);
       })
       .catch((err) => {
@@ -60,9 +64,57 @@ const ProviderForm = ({ providerId, isCreate, refreshData, hideDrawer }) => {
     console.log(currentProvider);
   }, []);
 
+  function validateForm(formData) {
+    console.log(formData);
+
+    if (formData.name == "") {
+      swal({
+        text: "Informe o nome do fornecedor",
+        icon: "error",
+      });
+      return false;
+    }
+
+    if (formData.name.length > 80) {
+      swal({
+        text: "Nome deve possuir no máximo 80 caracteres",
+        icon: "error",
+      });
+      return false;
+    }
+
+    if (formData.email != undefined && formData.email.length > 50) {
+      swal({
+        text: "E-Mail deve possuir no máximo 50 caracteres",
+        icon: "error",
+      });
+      return false;
+    }
+
+    if (formData.endereco != undefined && formData.endereco.length > 300) {
+      swal({
+        text: "Endereço deve possuir no máximo 300 caracteres",
+        icon: "error",
+      });
+      return false;
+    }
+
+    if (formData.phone != undefined && formData.phone.length > 15) {
+      swal({
+        text: "Telefone deve possuir no máximo 15 caracteres",
+        icon: "error",
+      });
+      return false;
+    }
+
+    return true;
+  }
+
   const onSubmit = (formData) => {
     const action = isCreate ? "create" : "update";
     const url = `${process.env.REACT_APP_API_URL}/api/provider/${action}`;
+
+    if (!validateForm(formData)) return null;
 
     const id = !isCreate && currentProvider.id;
 
@@ -106,7 +158,7 @@ const ProviderForm = ({ providerId, isCreate, refreshData, hideDrawer }) => {
             type="text"
             defaultValue={currentProvider.name}
             name="name"
-            ref={register({ required: true, maxLength: 80 })}
+            // ref={register({ required: true, maxLength: 80 })}
           />
 
           <Controller
@@ -117,7 +169,7 @@ const ProviderForm = ({ providerId, isCreate, refreshData, hideDrawer }) => {
             type="text"
             defaultValue={currentProvider.phone}
             name="phone"
-            ref={register({ required: true, maxLength: 15 })}
+            // ref={register({ required: true, maxLength: 15 })}
           />
 
           <Controller
@@ -128,7 +180,7 @@ const ProviderForm = ({ providerId, isCreate, refreshData, hideDrawer }) => {
             type="email"
             defaultValue={currentProvider.email}
             name="email"
-            ref={register()}
+            // ref={register()}
           />
 
           <Controller
@@ -140,13 +192,14 @@ const ProviderForm = ({ providerId, isCreate, refreshData, hideDrawer }) => {
             type="text"
             defaultValue={currentProvider.endereco}
             name="endereco"
-            ref={register()}
+            // ref={register()}
           />
 
           <Button color="primary" variant="contained" type="submit">
             Salvar
           </Button>
         </form>
+        {!isCreate && <RelatedProduct_CMP products={relatedProducts} />}
       </Box>
     );
   }
