@@ -18,6 +18,15 @@ const useStyles = makeStyles((theme) => ({
       margin: "1rem 0",
       width: "100%",
     },
+    "& .button-row": {
+      display: "flex",
+      flexWrap: "wrap",
+      justifyContent: "center",
+
+      "& button": {
+        margin: "1rem 3rem",
+      },
+    },
   },
 }));
 
@@ -27,6 +36,7 @@ const ProviderForm = ({ providerId, isCreate, refreshData, hideDrawer }) => {
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const history = useHistory();
+  const [allowDelete, setAllowDelete] = useState(false);
 
   const classes = useStyles();
 
@@ -40,6 +50,7 @@ const ProviderForm = ({ providerId, isCreate, refreshData, hideDrawer }) => {
         if (resp.data.products) setRelatedProducts(resp.data.products);
 
         setCurrentProvider(resp.data);
+        setAllowDelete(!resp.data.hasProduct);
       })
       .catch((err) => {
         console.log(err);
@@ -139,6 +150,39 @@ const ProviderForm = ({ providerId, isCreate, refreshData, hideDrawer }) => {
     });
   };
 
+  const deleteProvider = (event) => {
+    event.preventDefault();
+
+    const url = `${process.env.REACT_APP_API_URL}/api/provider/delete`;
+
+    swal({
+      text:
+        "Confirmar exclusão do fornecedor de produto? Essa ação não pode ser cancelada",
+      icon: "warning",
+      buttons: true,
+    }).then((resp) => {
+      if (resp) {
+        axios.post(url, { id: currentProvider.id }).then((resp) => {
+          console.log("resp", resp);
+          if (resp.data == true) {
+            swal({
+              text: "Fornecedor de produto removido com sucesso!",
+              icon: "success",
+            });
+            hideDrawer();
+            refreshData();
+            fetchAndSetData();
+          } else {
+            swal({
+              text: "Erro ao remover Fornecedor",
+              icon: "error",
+            });
+          }
+        });
+      }
+    });
+  };
+
   function sucessLoad() {
     return (
       <Box padding="2rem" fontSize="2.4rem">
@@ -158,7 +202,6 @@ const ProviderForm = ({ providerId, isCreate, refreshData, hideDrawer }) => {
             type="text"
             defaultValue={currentProvider.name}
             name="name"
-            // ref={register({ required: true, maxLength: 80 })}
           />
 
           <Controller
@@ -169,7 +212,6 @@ const ProviderForm = ({ providerId, isCreate, refreshData, hideDrawer }) => {
             type="text"
             defaultValue={currentProvider.phone}
             name="phone"
-            // ref={register({ required: true, maxLength: 15 })}
           />
 
           <Controller
@@ -180,7 +222,6 @@ const ProviderForm = ({ providerId, isCreate, refreshData, hideDrawer }) => {
             type="email"
             defaultValue={currentProvider.email}
             name="email"
-            // ref={register()}
           />
 
           <Controller
@@ -192,12 +233,27 @@ const ProviderForm = ({ providerId, isCreate, refreshData, hideDrawer }) => {
             type="text"
             defaultValue={currentProvider.endereco}
             name="endereco"
-            // ref={register()}
           />
 
-          <Button color="primary" variant="contained" type="submit">
+          {/* <Button color="primary" variant="contained" type="submit">
             Salvar
-          </Button>
+          </Button> */}
+          <div className="button-row">
+            <Button color="primary" variant="contained" type="submit">
+              Salvar
+            </Button>
+
+            {allowDelete && (
+              <Button
+                color="primary"
+                variant="contained"
+                type="submit"
+                onClick={deleteProvider}
+              >
+                Deletar
+              </Button>
+            )}
+          </div>
         </form>
         {!isCreate && <RelatedProduct_CMP products={relatedProducts} />}
       </Box>
