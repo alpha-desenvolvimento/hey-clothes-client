@@ -28,7 +28,7 @@ const UserForm = ({ userID, isCreate, refreshData, hideDrawer }) => {
 
   const isValidUser = async (formData) => {
     const { userName, userEmail, userPassword, confirmPassword } = formData;
-    console.log(userPassword.length);
+
     if (!userName || userName == "") {
       swal({
         text: "Informe um nome para o usuário",
@@ -102,8 +102,6 @@ const UserForm = ({ userID, isCreate, refreshData, hideDrawer }) => {
   };
 
   useEffect(() => {
-    console.log("userID", userID);
-
     if (isCreate) {
       setCurrentUser({
         name: "",
@@ -117,8 +115,9 @@ const UserForm = ({ userID, isCreate, refreshData, hideDrawer }) => {
 
   const onSubmit = async (formData) => {
     const action = isCreate ? "create" : "update";
-    console.log("action", isCreate);
     const url = `${process.env.REACT_APP_API_URL}/api/users/${action}`;
+
+    console.log("formData", formData);
 
     if ((await isValidUser(formData)) == false) return;
 
@@ -138,22 +137,23 @@ const UserForm = ({ userID, isCreate, refreshData, hideDrawer }) => {
         formData.userPassword,
     };
 
-    console.log("data onSubmit", { id, name, email, password });
+    // console.log("data onSubmit", { id, name, email, password });
 
     isCreate // isActive não pode ser 0 no create se não o js acha que é "false" na query
       ? axios
           .post(url, { name, email, password, isActive: 1 })
           .then((resp) => {
-            console.log("updatedUser resp", resp);
-            hideDrawer();
-            refreshData();
-            fetchAndSetData();
-          })
-          .then(() => {
-            swal({
-              text: `Usuário criado sucesso`,
-              icon: "success",
-            });
+            if (!resp.data) {
+              swal({
+                text: `Erro ao criar novo usuário, verifique as informações ou se já existe um usuário com o email informado e tente novamente`,
+                icon: "error",
+              });
+            } else {
+              swal({
+                text: `Usuário criado sucesso`,
+                icon: "success",
+              });
+            }
           })
           .catch((error) => {
             swal({
@@ -161,20 +161,28 @@ const UserForm = ({ userID, isCreate, refreshData, hideDrawer }) => {
               icon: "error",
               dangerMode: true,
             });
+          })
+          .finally(() => {
+            hideDrawer();
+            refreshData();
+            fetchAndSetData();
           })
       : axios
           .post(url, userToSend)
           .then((resp) => {
             console.log("updatedUser resp", resp);
-            hideDrawer();
-            refreshData();
-            fetchAndSetData();
-          })
-          .then(() => {
-            swal({
-              text: `Usuário Atualizado sucesso`,
-              icon: "success",
-            });
+
+            if (!resp.data) {
+              swal({
+                text: `Erro ao atualizar usuário, verifique as informações ou se já existe um usuário com o email informado e tente novamente`,
+                icon: "error",
+              });
+            } else {
+              swal({
+                text: `Usuário atualizado sucesso`,
+                icon: "success",
+              });
+            }
           })
           .catch((error) => {
             swal({
@@ -182,6 +190,11 @@ const UserForm = ({ userID, isCreate, refreshData, hideDrawer }) => {
               icon: "error",
               dangerMode: true,
             });
+          })
+          .finally(() => {
+            hideDrawer();
+            refreshData();
+            fetchAndSetData();
           });
   };
 
