@@ -60,9 +60,57 @@ const ProviderForm = ({ providerId, isCreate, refreshData, hideDrawer }) => {
     console.log(currentProvider);
   }, []);
 
+  function validateForm(formData) {
+    console.log(formData);
+
+    if (formData.name == '') {
+      swal({
+        text: "Informe o nome do fornecedor",
+        icon: "error",
+      });
+      return false;
+    }
+
+    if (formData.name.length > 80) {
+      swal({
+        text: "Nome deve possuir no máximo 80 caracteres",
+        icon: "error",
+      });
+      return false;
+    }
+
+    if (formData.email != undefined && formData.email.length > 50) {
+      swal({
+        text: "E-Mail deve possuir no máximo 50 caracteres",
+        icon: "error",
+      });
+      return false;
+    }
+
+    if (formData.endereco != undefined && formData.endereco.length > 300) {
+      swal({
+        text: "Endereço deve possuir no máximo 300 caracteres",
+        icon: "error",
+      });
+      return false;
+    }
+
+    if (formData.phone != undefined && formData.phone.length > 15) {
+      swal({
+        text: "Telefone deve possuir no máximo 15 caracteres",
+        icon: "error",
+      });
+      return false;
+    }
+
+    return true;
+  }
+
   const onSubmit = (formData) => {
     const action = isCreate ? "create" : "update";
     const url = `${process.env.REACT_APP_API_URL}/api/provider/${action}`;
+
+    if (!validateForm(formData)) return null;
 
     const id = !isCreate && currentProvider.id;
 
