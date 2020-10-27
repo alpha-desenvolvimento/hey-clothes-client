@@ -7,6 +7,7 @@ export const Wrapper = styled.div`
   padding: 2.4rem;
   min-height: 100vh;
   width: 100%;
+  overflow-x: hidden;
 
   ${mediaQuery[1]} {
     padding: 4.8rem;
@@ -48,6 +49,10 @@ export const Main = styled.main`
     & > * {
       width: 50%;
     }
+
+    & > * > section > h1 {
+      font-size: 12rem;
+    }
   }
 
   & > * {
@@ -56,21 +61,19 @@ export const Main = styled.main`
     flex-direction: column;
   }
 
-  & > * > section > h1 {
-    font-size: 12rem;
-  }
-
   & > * > section > h3 {
-    margin: -2rem 2rem;
+    font-weight: 300;
+    line-height: 1em;
+    margin: -2rem 2rem 2rem;
   }
 
   & > * > div {
     flex-direction: column;
     display: flex;
-    height: 4.8rem;
   }
 
-  & > * > div > * {
+  & > * > div > a,
+  span {
     display: inline-flex;
     align-items: center;
     margin-top: 1.2rem;
@@ -83,5 +86,12 @@ export const Main = styled.main`
 
   & > * > div > * > svg {
     margin-right: 1.2rem;
+  }
+`;
+
+export const DivWithOverflowHidden = styled.div`
+  overflow: hidden;
+  & > * {
+    overflow: hidden;
   }
 `;

@@ -1,7 +1,13 @@
 import React from "react";
 import { FiArrowRight, FiMail, FiPhone, FiMap } from "react-icons/fi";
 
-import { Wrapper, Header, StyledLink as Link, Main } from "./styles";
+import {
+  Wrapper,
+  Header,
+  StyledLink as Link,
+  Main,
+  DivWithOverflowHidden,
+} from "./styles";
 import LandingSVG from "../../components/LandingSVG_CMP";
 
 const Landing = () => {
@@ -34,9 +40,9 @@ const Landing = () => {
           </div>
         </div>
 
-        <div>
+        <DivWithOverflowHidden>
           <LandingSVG />
-        </div>
+        </DivWithOverflowHidden>
       </Main>
     </Wrapper>
   );
