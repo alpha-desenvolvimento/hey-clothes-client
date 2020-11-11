@@ -139,7 +139,7 @@ const Providers_PG = () => {
       <Drawer
         isOpen={isOpen}
         hide={hideAndClearCurrentProvider}
-        closeUrl="/c/provider"
+        closeUrl="/c/provider/"
       >
         <ProviderForm
           hideDrawer={hideAndClearCurrentProvider}
@@ -147,6 +147,7 @@ const Providers_PG = () => {
           providerId={providerId}
           isCreate={isCreate}
         />
+
       </Drawer>
     </>
   );

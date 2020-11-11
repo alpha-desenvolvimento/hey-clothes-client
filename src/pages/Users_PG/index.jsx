@@ -111,17 +111,17 @@ const Users_PG = () => {
                       active={user.isActive}
                       key={"Card-" + user.id}
                     >
-                      <CardDetails>
+                      {/* <CardDetails> */}
                         {/* <CardText>Id: {user.id}</CardText> */}
-                        <CardText active={user.isActive} svg="right">
+                        {/* <CardText active={user.isActive} svg="right">
                           {user.isActive == 0 ? (
                             <span>inativo</span>
                           ) : (
                             <span>ativo</span>
                           )}
                           <FiUser />
-                        </CardText>
-                      </CardDetails>
+                        </CardText> */}
+                      {/* </CardDetails> */}
                       <CardText primary>{user.name}</CardText>
                       <CardDetails>
                         <CardText greyscale active={user.isActive} svg="left">

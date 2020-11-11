@@ -3,6 +3,7 @@ import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import swal from "sweetalert";
+import RelatedProduct_CMP from "../RelatedProduct_CMP";
 
 import { Button, TextField, Box, Switch } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -41,6 +42,7 @@ const CategoryForm = ({ categoryId, isCreate, refreshData, hideDrawer }) => {
   const [currentCategory, setCurrentCategory] = useState(null);
   const [isLoadingCategory, setIsLoadingCategory] = useState(true);
   const [checked, setChecked] = useState(true);
+  const [relatedProducts, setRelatedProducts] = useState([]);
   const [allowDelete, setAllowDelete] = useState(false);
 
   const classes = useStyles();
@@ -54,10 +56,11 @@ const CategoryForm = ({ categoryId, isCreate, refreshData, hideDrawer }) => {
       .get(url)
       .then((resp) => {
         console.log("resp", resp);
-        // resp.header. TODO coloda o erro que vem no header
+
         setCurrentCategory(resp.data);
         setChecked(resp.data.isActive == 1);
         setAllowDelete(!resp.data.hasProduct);
+        if (resp.data.products) setRelatedProducts(resp.data.products);
       })
       .catch((err) => {
         console.log(err);
@@ -198,6 +201,7 @@ const CategoryForm = ({ categoryId, isCreate, refreshData, hideDrawer }) => {
             )}
           </div>
         </form>
+        {!isCreate && <RelatedProduct_CMP products={relatedProducts} />}
       </Box>
     );
   }

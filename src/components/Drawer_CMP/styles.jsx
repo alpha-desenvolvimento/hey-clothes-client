@@ -26,12 +26,13 @@ export const DrawerBody = styled.div`
   position: fixed;
   right: 0;
   top: 0;
-  z-index: 1100;
+  z-index: 1110;
 
   overflow-y: auto;
   width: 90%;
   height: 100%;
-  background: #c4c4c4;
+  /* background: #c4c4c4; */
+  background: #F2f2f2;
   padding: 2rem;
 
   ${mediaQuery[0]} {
