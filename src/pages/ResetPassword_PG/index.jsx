@@ -39,7 +39,6 @@ const ResetPassword = () => {
 
   const handleSave = async (formValues) => {
     const { pwd, pwdConfirm } = formValues;
-    // setFormError("");
 
     if (pwd != pwdConfirm) {
       return swal("Confirmação de senha diferente da senha informada!");
@@ -119,7 +118,6 @@ const ResetPassword = () => {
   }
 
   function selectContent() {
-    // return finish();
     if (!token) return urlDontHasToken();
     if (tokenUsed) return finish();
     if (token && !tokenUsed && resetInfo) return form();

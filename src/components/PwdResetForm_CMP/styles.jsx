@@ -34,8 +34,6 @@ export const Input = styled.input`
 
   font-family: "Montserrat", sans-serif;
   font-size: 2.4rem;
-  // color: #f2f2f299;
-
   padding: 10px;
 
   border: 0;

@@ -41,10 +41,7 @@ export default class UrlController_CLS {
       .split("&")
       .forEach((param) => (urlParamsResponse[param.split("=")[0]] = null));
 
-    for (const key in urlParamsResponse) {
-      if (key == "") continue;
-      // urlParamsResponse[key] = urlParams.get(key);
-    }
+    for (const key in urlParamsResponse) if (key == "") continue;
 
     return urlParamsResponse;
   }

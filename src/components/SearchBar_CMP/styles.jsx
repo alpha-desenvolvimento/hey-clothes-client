@@ -14,12 +14,10 @@ export const MainContainer = styled.form`
   position: fixed;
   top: 0;
   width: 100vw;
-  /* width: calc(100vw - 8rem); */
   right: 0;
   background-color: rgb(255 255 255 / 0.1);
   padding: 3vh 1rem 3vh 2rem;
   height: 10rem;
-  /* backdrop-filter: blur(5px); */
 
   ${mediaQuery[0]} {
     padding: 3vh 8rem 3vh 16rem;
@@ -30,7 +28,6 @@ export const SearchInputContainer = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  /* border-bottom: 1px solid black; */
   flex-wrap: wrap;
 
   position: relative;
@@ -47,7 +44,6 @@ export const SearchInput = styled.input`
   border: 0;
   border-radius: 100px;
   background-color: rgb(255 255 255 / 0.8);
-  /* backdrop-filter: blur(5px); */
 `;
 
 export const FilterContainer = styled.div``;

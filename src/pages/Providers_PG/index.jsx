@@ -38,8 +38,6 @@ const Providers_PG = () => {
     axios
       .get(url)
       .then((resp) => {
-        console.log("resp", resp);
-        // resp.header. TODO coloda o erro que vem no header
         setProviders(resp.data);
       })
       .catch((err) => {
@@ -63,7 +61,6 @@ const Providers_PG = () => {
 
       console.log(action);
 
-      // if (!actionExecuted)
       switch (action) {
         case "create":
           console.log("is create");
@@ -119,7 +116,6 @@ const Providers_PG = () => {
                         handleProvider(provider.id);
                       }}
                     >
-                      {/* <CardText>Id: {provider.id}</CardText> */}
                       <CardText primary>{provider.name}</CardText>
                       <CardDetails>
                         <CardText>

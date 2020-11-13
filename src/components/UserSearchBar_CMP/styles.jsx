@@ -13,7 +13,6 @@ export const MainContainer = styled.form`
   position: fixed;
   top: 0;
   width: 100vw;
-  /* width: calc(100vw - 8rem); */
   right: 0;
   background-color: rgb(255 255 255 / 0.7);
   padding: 3vh 10vw;
@@ -24,7 +23,6 @@ export const SearchInputContainer = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  /* border-bottom: 1px solid black; */
   flex-wrap: wrap;
 
   position: relative;

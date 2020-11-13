@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from "react";
 
-import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
+import { makeStyles } from "@material-ui/core/styles";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
 import RelatedProductsTable from "../RelatedProduct_CMP";
 
 import axios from "axios";
 
-
-let prods = []
+let prods = [];
 const useStyles = makeStyles({
   table: {
     minWidth: 250,
@@ -21,12 +20,10 @@ const useStyles = makeStyles({
 });
 
 function createData(name, price) {
-  return { name, price};
+  return { name, price };
 }
 
-
-
-const BasicTable = ({providerId,isCreate}) => {
+const BasicTable = ({ providerId, isCreate }) => {
   const classes = useStyles();
   const [currentProvider, setCurrentProvider] = useState(true);
   const [currentProducts, setCurrentProducts] = useState(true);
@@ -34,22 +31,18 @@ const BasicTable = ({providerId,isCreate}) => {
   const [checked, setChecked] = useState(true);
   const [allowDelete, setAllowDelete] = useState(false);
 
-  
   const fetchAndSetData = () => {
     setIsLoadingProvider(true);
-    
-   
+
     let url = `${process.env.REACT_APP_API_URL}/api/provider/${providerId}`;
-  
+
     axios
       .get(url)
       .then((resp) => {
-        // resp.header. TODO coloda o erro que vem no header
-        setCurrentProvider(resp.data)
-        prods = resp.data.products
-        console.log(prods)
+        setCurrentProvider(resp.data);
+        prods = resp.data.products;
+        console.log(prods);
         setChecked(resp.data.isActive == 1);
-        // setAllowDelete(!resp.data.hasProduct);
       })
       .catch((err) => {
         console.log(err);
@@ -57,21 +50,20 @@ const BasicTable = ({providerId,isCreate}) => {
       .finally(() => {
         setIsLoadingProvider(false);
       });
-      
-    }
+  };
 
-    useEffect(() => {
-        if (isCreate) {
-          setCurrentProducts({
-            name: "",
-            isActive: 1,
-          });
-          setChecked(true);
-        } else {
-            fetchAndSetData();
-            console.log("cheguei aqui")
-        }
-      }, []);
+  useEffect(() => {
+    if (isCreate) {
+      setCurrentProducts({
+        name: "",
+        isActive: 1,
+      });
+      setChecked(true);
+    } else {
+      fetchAndSetData();
+      console.log("cheguei aqui");
+    }
+  }, []);
 
   return (
     <TableContainer component={Paper}>
@@ -79,34 +71,24 @@ const BasicTable = ({providerId,isCreate}) => {
         <TableHead>
           <TableRow>
             <TableCell>Produtos relacionados</TableCell>
-            {/* <TableCell align="right">Price</TableCell> */}
-            
           </TableRow>
         </TableHead>
         <TableBody>
-            {prods && (
-                <>
-          {prods.map(product => (
-            <TableRow key={product.name}>
-              <TableCell component="th" scope="row">
-                {product.name}
-              </TableCell>
-              {/* <TableCell align="right">{product.price}</TableCell> */}
-              {/* <TableCell align="right">{product.price}</TableCell> */}
-              
-            </TableRow>
-          ))
-            }
-          </>
+          {prods && (
+            <>
+              {prods.map((product) => (
+                <TableRow key={product.name}>
+                  <TableCell component="th" scope="row">
+                    {product.name}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </>
           )}
         </TableBody>
       </Table>
     </TableContainer>
   );
-
-
-}
-
-
+};
 
 export default BasicTable;

@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 
 const stockImage =
-  "https://www.creativefabrica.com/wp-content/uploads/2018/11/Clean-clothes-icon-by-rudezstudio-580x386.jpg";
+  "https:www.creativefabrica.com/wp-content/uploads/2018/11/Clean-clothes-icon-by-rudezstudio-580x386.jpg";
 
 const ProductCard = ({ product }) => {
   const useStyles = makeStyles({
@@ -59,9 +59,6 @@ const ProductCard = ({ product }) => {
       return <p>R$ {price}</p>;
     }
     return <></>;
-    //  {
-    //   product.price = "";
-    // } else
   };
 
   return (

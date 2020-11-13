@@ -31,7 +31,6 @@ export const DrawerBody = styled.div`
   overflow-y: auto;
   width: 90%;
   height: 100%;
-  /* background: #c4c4c4; */
   background: #F2f2f2;
   padding: 2rem;
 

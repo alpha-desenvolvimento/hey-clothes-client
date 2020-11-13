@@ -45,7 +45,6 @@ const ConditionForm = ({ conditionId, isCreate, refreshData, hideDrawer }) => {
       .then((resp) => {
         console.log("resp", resp);
         setAllowDelete(!resp.data.hasProduct);
-        // resp.header. TODO coloda o erro que vem no header
         setCurrentCondition(resp.data);
       })
       .catch((err) => {

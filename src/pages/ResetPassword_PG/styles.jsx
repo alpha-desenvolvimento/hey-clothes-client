@@ -3,7 +3,6 @@ import colors from "../../styles/colors";
 import { mediaQuery } from "../../styles/global";
 
 const mainBgColor = `rgba(${colors.primary.rgb.r},${colors.primary.rgb.g},${colors.primary.rgb.b},0.3)`;
-// const formBgColor = `rgba(${colors.secondary.rgb.r},${colors.secondary.rgb.g},${colors.secondary.rgb.b}, 1)`;
 
 export const Img = styled.img`
   display: block;
@@ -30,7 +29,6 @@ export const Main = styled.main`
   padding: 2.4rem;
 
   .form-wrapper {
-    /*background-color: ${colors.secondary.hex};*/
     background-color: #625656;
     color: ${colors.white.hex};
   }
@@ -65,7 +63,6 @@ export const Input = styled.input`
 
   font-family: "Montserrat", sans-serif;
   font-size: 2.4rem;
-  /* color: #f2f2f299; */
 
   padding: 10px;
 
@@ -102,9 +99,6 @@ export const Loader = styled.div`
     }
   }
 
-  border: 16px solid #f3f3f3; /* Light grey */
-  border-top: 11px solid #5d2e8c; /* Blue */
-  border-bottom: 11px solid #5d2e8c; /* Blue */
   border-radius: 50%;
   width: 8rem;
   height: 8rem;

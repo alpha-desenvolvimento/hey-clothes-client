@@ -40,11 +40,9 @@ const BasicTable = ({categoryId,isCreate}) => {
       .get(url)
       .then((resp) => {
         console.log(resp.data.products)
-        // resp.header. TODO coloda o erro que vem no header
         setCurrentCategory(resp.data)
         prods = resp.data.products
         setChecked(resp.data.isActive == 1);
-        // setAllowDelete(!resp.data.hasProduct);
       })
       .catch((err) => {
         console.log(err);
@@ -85,7 +83,6 @@ const BasicTable = ({categoryId,isCreate}) => {
                 {product.name}
               </TableCell>
               <TableCell align="right">{product.price}</TableCell>
-              {/* <TableCell align="right">{product.price}</TableCell> */}
               
             </TableRow>
           ))

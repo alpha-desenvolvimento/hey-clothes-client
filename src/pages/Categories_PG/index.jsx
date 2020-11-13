@@ -38,7 +38,6 @@ const Categories_PG = () => {
       .get(url)
       .then((resp) => {
         console.log("resp", resp);
-        // resp.header. TODO coloda o erro que vem no header
         setCategories(resp.data);
       })
       .catch((err) => {
@@ -114,7 +113,6 @@ const Categories_PG = () => {
                     >
                       <CardText primary>{category.name}</CardText>
                       <CardDetails>
-                        {/* <CardText>Id: {category.id}</CardText> */}
                         <CardText>
                           {category.isActive == 0 ? (
                             <span>inativo</span>

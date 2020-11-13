@@ -35,7 +35,6 @@ function Routes() {
         <PrivateRoute exact path="/c/provider/:id" component={Providers} />
         <PrivateRoute exact path="/c/condition/:id" component={Condition} />
 
-        {/* <PrivateRoute exact path="/Mock" component={Mock}/> */}
         <Route exact path="/resetPassword/:token" component={ResetPassword} />
         <Route exact path="/resetPassword/" component={ResetPassword} />
         <Route exact path="/login" component={Home} />

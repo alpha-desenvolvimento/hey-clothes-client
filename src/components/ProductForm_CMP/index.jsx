@@ -373,17 +373,6 @@ const ProductForm = ({
                     </MenuItem>
                   ))}
                 </Controller>
-                {/* {currentProduct.provider && (
-                  <Link
-                    to={`/c/provider/${currentProduct.provider}`}
-                    className="link-provider"
-                    target="_blank"
-                  >
-                    <span>
-                      Acessar fornecedor <FiExternalLink />
-                    </span>
-                  </Link>
-                )} */}
               </Box>
 
               <Controller

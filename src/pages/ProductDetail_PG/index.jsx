@@ -128,7 +128,6 @@ const ProductDetail_PG = () => {
         imgB: "",
         imgC: "",
         imgD: "",
-        // condition: 1, category: 1, provider: 1,
       });
       setIsLoading(false);
     } else {
@@ -136,7 +135,6 @@ const ProductDetail_PG = () => {
       const urlParams = new URLSearchParams(queryString);
       const action = urlParams.get("action");
       setIsLoading(true);
-      // const { action } = UrlUtils.getUrlParamsValues();
 
       if (action == "create") {
         setCurrentProduct({
@@ -144,13 +142,10 @@ const ProductDetail_PG = () => {
           description: "",
           price: "",
           Brand: "",
-          // category: 'asdasdasdasds',
           imgA: "",
           imgB: "",
           imgC: "",
           imgD: "",
-          // provider: false,
-          // condition: false,
         });
       } else {
         let url = `${process.env.REACT_APP_API_URL}/api/products/${prodId}`;

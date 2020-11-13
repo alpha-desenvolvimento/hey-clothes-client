@@ -37,12 +37,9 @@ const Categories_PG = () => {
     axios
       .get(url)
       .then((resp) => {
-        console.log("resp", resp);
-        // resp.header. TODO coloda o erro que vem no header
         setCategories(resp.data);
       })
       .catch((err) => {
-        console.log(err);
         setIsBadRequest(true);
       })
       .finally(() => {
@@ -90,7 +87,7 @@ const Categories_PG = () => {
     <>
       <NavBar />
       <Main>
-      <CreateButton
+        <CreateButton
           text="Criar nova categoria"
           href="/c/category?action=create"
         />
@@ -114,7 +111,6 @@ const Categories_PG = () => {
                     >
                       <CardText primary>{category.name}</CardText>
                       <CardDetails>
-                        {/* <CardText>Id: {category.id}</CardText> */}
                         <CardText>
                           {category.isActive == 0 ? (
                             <span>inativo</span>
@@ -150,41 +146,3 @@ const Categories_PG = () => {
 };
 
 export default Categories_PG;
-
-/*<Table>
-          <tr>
-            <th className="h3-font-size">Categoria</th>
-            <th className="h3-font-size">Ativo</th>
-          </tr>
-          {categories && (
-            <>
-              {categories.map((category, index) => (
-                <tr className="h5-font-size" key={category.id}>
-                  <td>
-                    <span className="h6-font-size">{`${category.id}. `}</span>
-                    {category.name}
-                    <FiEdit
-                      className="icon p-font-size"
-                      onClick={() => {
-                        history.push(`/c/category/${category.id}`);
-                        window.location.reload(false);
-                      }}
-                    />
-                  </td>
-                  <td>
-                    {category.isActive == 1 ? (
-                      <>
-                        <FiTag style={{ color: "green" }} /> Ativo
-                      </>
-                    ) : (
-                      <>
-                        <FiTag style={{ color: "red" }} /> Inativo
-                      </>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </>
-          )}
-        </Table>
-        */

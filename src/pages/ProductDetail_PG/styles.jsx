@@ -43,19 +43,15 @@ export const Form = styled.form`
   flex-direction: column;
 `;
 
-export const Input = styled.input`
-  /* font-size: 3.6rem; */
-`;
+export const Input = styled.input``;
 
 export const Label = styled.label`
-  /* font-size: 2.4rem; */
   padding-left: 1.5rem;
   font-size: ${textSize.medium}em;
   margin-top: calc(${textSize.small}em / 2.5);
 `;
 
 export const IdText = styled.span`
-  /* font-size: ${fontSize.p}em;*/
   font-size: ${textSize.small}em;
 `;
 

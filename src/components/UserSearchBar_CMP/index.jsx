@@ -9,7 +9,6 @@ import {
   Hr,
   SubmitButton,
 } from "./styles";
-// import { useForm } from "react-hook-form";
 
 const UserSearchBar = () => {
   const [values, setValues] = useState({});
@@ -26,16 +25,6 @@ const UserSearchBar = () => {
 
   function handleSubmit(event) {
     event.preventDefault();
-
-    // var uri = "/p?action=search";
-
-    // for (const key in values)
-    //   if (values[key] && values[key] != "") uri += `&${key}=${values[key]}`;
-
-    // console.log(uri);
-
-    // history.push(uri);
-    // window.location.reload(false);
   }
 
   return (

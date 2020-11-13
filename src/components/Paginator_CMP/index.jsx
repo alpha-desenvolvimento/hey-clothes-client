@@ -52,8 +52,6 @@ const Paginator = ({
   function setPage(value) {
     const urlParams = new URLSearchParams(window.location.search);
 
-    // const nextPage = parseInt(urlParams.get("page") || 1) + value;
-
     urlParams.set("page", value);
 
     window.history.pushState(null, null, `?${urlParams.toString()}`);

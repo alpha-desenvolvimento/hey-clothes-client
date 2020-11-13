@@ -42,7 +42,6 @@ const Users_PG = () => {
     axios
       .get(url)
       .then((resp) => {
-        // console.log("resp", resp);
         setUsers(resp.data);
       })
       .catch((err) => {
@@ -111,17 +110,6 @@ const Users_PG = () => {
                       active={user.isActive}
                       key={"Card-" + user.id}
                     >
-                      {/* <CardDetails> */}
-                        {/* <CardText>Id: {user.id}</CardText> */}
-                        {/* <CardText active={user.isActive} svg="right">
-                          {user.isActive == 0 ? (
-                            <span>inativo</span>
-                          ) : (
-                            <span>ativo</span>
-                          )}
-                          <FiUser />
-                        </CardText> */}
-                      {/* </CardDetails> */}
                       <CardText primary>{user.name}</CardText>
                       <CardDetails>
                         <CardText greyscale active={user.isActive} svg="left">

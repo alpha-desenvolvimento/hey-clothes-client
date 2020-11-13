@@ -11,9 +11,12 @@ import {
   Main,
 } from "./styles";
 
-import HerokuServer from "../../API/HerokuServer";
-
 const NavBar = () => {
+  function logoff(){
+    window.localStorage.removeItem("section");
+    window.location.reload(false);
+  }
+
   return (
     <Nav>
       <NavItemsWrapper>
@@ -39,7 +42,7 @@ const NavBar = () => {
         </NavItem>
 
         <NavItem>
-          <NavLink onClick={HerokuServer.Auth.logoff} to="/">
+          <NavLink onClick={logoff} to="/">
             <FiLogOut />
             <LinkText>Sair</LinkText>
           </NavLink>

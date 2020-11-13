@@ -235,9 +235,6 @@ const ProviderForm = ({ providerId, isCreate, refreshData, hideDrawer }) => {
             name="endereco"
           />
 
-          {/* <Button color="primary" variant="contained" type="submit">
-            Salvar
-          </Button> */}
           <div className="button-row">
             <Button color="primary" variant="contained" type="submit">
               Salvar

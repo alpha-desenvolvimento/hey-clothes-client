@@ -1,8 +1,6 @@
 import React, { useContext } from "react";
 import { Redirect } from "react-router-dom";
 
-// Conversar em #geral
-
 async function user(args = { user: null, pwd: null }) {
   const { user, pwd } = args;
 

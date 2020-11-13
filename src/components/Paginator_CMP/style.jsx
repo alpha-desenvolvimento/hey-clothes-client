@@ -9,8 +9,6 @@ export const Main = styled.main`
   justify-content: center;
 
   width: 100%;
-  /* ${mediaQuery[0]} {
-  } */
 `;
 
 export const Arrow = styled.div`

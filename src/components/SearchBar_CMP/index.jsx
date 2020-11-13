@@ -11,9 +11,6 @@ import {
   SubmitButton,
 } from "./styles";
 
-// import { useForm } from "react-hook-form";
-// import HerokuServer from "../../API/HerokuServer";
-
 const ProductSearchBar = ({ handleFetchData, ignorePagination }) => {
   const { register, handleSubmit } = useForm();
 

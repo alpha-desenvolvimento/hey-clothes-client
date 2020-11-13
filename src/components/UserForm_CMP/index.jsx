@@ -137,8 +137,6 @@ const UserForm = ({ userID, isCreate, refreshData, hideDrawer }) => {
         formData.userPassword,
     };
 
-    // console.log("data onSubmit", { id, name, email, password });
-
     isCreate // isActive não pode ser 0 no create se não o js acha que é "false" na query
       ? axios
           .post(url, { name, email, password, isActive: 1 })
@@ -245,21 +243,6 @@ const UserForm = ({ userID, isCreate, refreshData, hideDrawer }) => {
             type="password"
             defaultValue=""
           />
-
-          {/* 
-          
-          TODO: descomenta isso e faz ir pra o back
-
-          <h6>Ativo?</h6>
-          <Controller
-            as={Switch}
-            control={control}
-            name="isActive"
-            defaultValue={checked}
-            defaultChecked={checked}
-            onChange={() => setChecked(!checked)}
-          />
-          <br /> */}
 
           <Button color="primary" variant="contained" type="submit">
             Salvar
